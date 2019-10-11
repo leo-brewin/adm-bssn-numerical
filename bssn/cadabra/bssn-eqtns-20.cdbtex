@@ -1,0 +1,21 @@
+\chardef\thehashcode=\catcode`\#	 % save catcode of hash (probably 6)
+\catcode`\#=11			             % set catcode for hash to be a letter (11)
+\cdbtag{eq20.00}{%
+\partial_{t}{{\bar{\Gamma}}^{i}}%
+}
+\cdbtag{eq20.01}{%
+-2{\bar{A}}^{i j} \partial_{j}{N}+2N \left({\bar{\Gamma}}^{i}{}_{j k} {\bar{A}}^{k j} - \frac{2}{3}{\bar{g}}^{i j} \partial_{j}{{{\rm tr} K}}+6{\bar{A}}^{i j} \partial_{j}{\phi}\right)%
+}
+\cdbtag{eq20.02}{%
+-2{\bar{A}}^{i j} \partial_{j}{N}+2N \left(\frac{1}{2}{\bar{g}}^{i e} \left(\partial_{j}{{\bar{g}}_{e k}}+\partial_{k}{{\bar{g}}_{j e}}-\partial_{e}{{\bar{g}}_{j k}}\right) {\bar{A}}^{k j} - \frac{2}{3}{\bar{g}}^{i j} \partial_{j}{{{\rm tr} K}}+6{\bar{A}}^{i j} \partial_{j}{\phi}\right)%
+}
+\cdbtag{eq20.03}{%
+-2{\bar{A}}^{i a} \partial_{a}{N}+N {\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{b}{{\bar{g}}_{c a}}+N {\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{b c}}-N {\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{b a}} - \frac{4}{3}N {\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}+12N {\bar{A}}^{i a} \partial_{a}{\phi}%
+}
+\cdbtag{eq20.04}{%
+-2{\bar{A}}^{i a} \partial_{a}{N}+2N {\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{b c}}-N {\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{4}{3}N {\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}+12N {\bar{A}}^{i a} \partial_{a}{\phi}%
+}
+\cdbtag{eq20.99}{%
+-2{\bar{A}}^{i a} \partial_{a}{N}+2N {\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{b c}}-N {\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{4}{3}N {\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}+12N {\bar{A}}^{i a} \partial_{a}{\phi}%
+}
+\catcode`\#=\thehashcode          % restore original catcode for hash

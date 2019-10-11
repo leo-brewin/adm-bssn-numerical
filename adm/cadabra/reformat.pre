@@ -1,0 +1,10 @@
+# pre-process the foo.c file
+#-----------------------------------
+s!\t!   !g # convert tabs to three spaces
+s/ +,/,/g  # remove leading spaces before ,
+s/\( +/(/g # remove leading spaces after (
+s/ +\)/)/g # remove leading spaces before )
+#-----------------------------------
+s/0\.31415926535897932385e1/Pi/g # default value of Pi in Maple
+#-----------------------------------
+s/sympyN/N/g # recover N

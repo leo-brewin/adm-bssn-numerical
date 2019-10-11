@@ -1,0 +1,202 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+\lstset{gobble=2}
+
+\IfFileExists{adm-eqtns.cdbtex}{\input{adm-eqtns.cdbtex}}{Where is {\tt adm-eqtns.cdbtex}?}
+
+% =======================================================================================
+\section*{The ADM evolution equations. Code generation.}
+
+The job here is to take the ADM equations in the form
+\begin{dgroup*}
+   \begin{dmath*} \cdb{dotgab.lhs} = \Cdb*{dotgab.101} \end{dmath*}
+   \begin{dmath*} \cdb{dotKab.lhs} = \Cdb*{dotKab.101} \end{dmath*}
+   \begin{dmath*} \cdb{dotN.lhs}   = \Cdb*{dotN.101}   \end{dmath*}
+   \begin{dmath*} \cdb{Ham.lhs}    = \Cdb*{Ham.101}    \end{dmath*}
+   \begin{dmath*} \cdb{Mom.lhs}    = \Cdb*{Mom.101}    \end{dmath*}
+\end{dgroup*}
+%
+where
+%
+\begin{dgroup*}
+   \begin{dmath*} \cdb{Rab.lhs} = \Cdb*{Rab.112} \end{dmath*}
+   \begin{dmath*} \cdb{R.lhs}   = \Cdb*{R.110} \end{dmath*}
+   \begin{dmath*} \cdb{Nab.lhs} = \Cdb*{Nab.102} \end{dmath*}
+   \begin{dmath*} \cdb{Mom.lhs} = \Cdb*{Mom.110}   \end{dmath*}
+\end{dgroup*}
+%
+and to export the right hand sides as C-code. And that will be Cadabra's final curtain call.
+
+\clearpage
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   Rscalar = cdblib.get ('Rscalar', 'adm-eqtns.json')
+   Rab     = cdblib.get ('Rab',     'adm-eqtns.json')
+   Nab     = cdblib.get ('Nab',     'adm-eqtns.json')
+   DgabDt  = cdblib.get ('DgabDt',  'adm-eqtns.json')
+   DKabDt  = cdblib.get ('DKabDt',  'adm-eqtns.json')
+   DNDt    = cdblib.get ('DNDt',    'adm-eqtns.json')
+   Ham     = cdblib.get ('Ham',     'adm-eqtns.json')
+   Mom     = cdblib.get ('Mom',     'adm-eqtns.json')
+
+   substitute (Rab, $ \partial_{a b}{g_{c d}} -> dg_{c d a b} $)
+   substitute (Rab, $ \partial_{a}{g_{b c}}   -> dg_{b c a}   $)
+
+   # ------------------------------------------------------------------------------------
+   # Replace partial derivs with indices
+
+   def substitute_deriv (ex):
+       substitute (ex, $ \partial_{a b}{g_{c d}} -> dg_{c d a b} $)
+       substitute (ex, $ \partial_{a}{g_{b c}}   -> dg_{b c a}   $)
+       substitute (ex, $ \partial_{a}{g^{b c}}   -> dg^{b c}_{a} $)
+       substitute (ex, $ \partial_{a}{K_{b c}}   -> dK_{b c a}   $)
+       substitute (ex, $ \partial_{a b}{N}       -> dN_{a b}     $)
+       substitute (ex, $ \partial_{a}{N}         -> dN_{a}       $)
+       substitute (ex, $ N_{a b}                 -> Hess_{a b}   $)
+       return ex
+
+   Rscalar = substitute_deriv (Rscalar)
+   Rab     = substitute_deriv (Rab)
+   Nab     = substitute_deriv (Nab)
+   DgabDt  = substitute_deriv (DgabDt)
+   DKabDt  = substitute_deriv (DKabDt)
+   DNDt    = substitute_deriv (DNDt)
+   Ham     = substitute_deriv (Ham)
+   Mom     = substitute_deriv (Mom)
+
+   # ------------------------------------------------------------------------------------
+   # build rules to export Cadabra expressions to Python
+   # use known symmetries for g_{a b}, dg_{ab,c,d} etc.
+   # note: replacements must not contain underscores (reserved for subscripts),
+   #       so g_{x x} -> g_xx is not allowed
+
+   gabRule := {g_{x x} -> gxx, g_{x y} -> gxy, g_{x z} -> gxz,
+               g_{y x} -> gxy, g_{y y} -> gyy, g_{y z} -> gyz,
+               g_{z x} -> gxz, g_{z y} -> gyz, g_{z z} -> gzz}.
+
+   iabRule := {g^{x x} -> ixx, g^{x y} -> ixy, g^{x z} -> ixz,
+               g^{y x} -> ixy, g^{y y} -> iyy, g^{y z} -> iyz,
+               g^{z x} -> ixz, g^{z y} -> iyz, g^{z z} -> izz}.
+
+   d1gabRule := {dg_{x x x} -> gxxx, dg_{x y x} -> gxyx, dg_{x z x} -> gxzx,
+                 dg_{y x x} -> gxyx, dg_{y y x} -> gyyx, dg_{y z x} -> gyzx,
+                 dg_{z x x} -> gxzx, dg_{z y x} -> gyzx, dg_{z z x} -> gzzx,
+
+                 dg_{x x y} -> gxxy, dg_{x y y} -> gxyy, dg_{x z y} -> gxzy,
+                 dg_{y x y} -> gxyy, dg_{y y y} -> gyyy, dg_{y z y} -> gyzy,
+                 dg_{z x y} -> gxzy, dg_{z y y} -> gyzy, dg_{z z y} -> gzzy,
+
+                 dg_{x x z} -> gxxz, dg_{x y z} -> gxyz, dg_{x z z} -> gxzz,
+                 dg_{y x z} -> gxyz, dg_{y y z} -> gyyz, dg_{y z z} -> gyzz,
+                 dg_{z x z} -> gxzz, dg_{z y z} -> gyzz, dg_{z z z} -> gzzz}.
+
+   d1iabRule := {dg^{x x}_{x} -> ixxx, dg^{x y}_{x} -> ixyx, dg^{x z}_{x} -> ixzx,
+                 dg^{y x}_{x} -> ixyx, dg^{y y}_{x} -> iyyx, dg^{y z}_{x} -> iyzx,
+                 dg^{z x}_{x} -> ixzx, dg^{z y}_{x} -> iyzx, dg^{z z}_{x} -> izzx,
+
+                 dg^{x x}_{y} -> ixxy, dg^{x y}_{y} -> ixyy, dg^{x z}_{y} -> ixzy,
+                 dg^{y x}_{y} -> ixyy, dg^{y y}_{y} -> iyyy, dg^{y z}_{y} -> iyzy,
+                 dg^{z x}_{y} -> ixzy, dg^{z y}_{y} -> iyzy, dg^{z z}_{y} -> izzy,
+
+                 dg^{x x}_{z} -> ixxz, dg^{x y}_{z} -> ixyz, dg^{x z}_{z} -> ixzz,
+                 dg^{y x}_{z} -> ixyz, dg^{y y}_{z} -> iyyz, dg^{y z}_{z} -> iyzz,
+                 dg^{z x}_{z} -> ixzz, dg^{z y}_{z} -> iyzz, dg^{z z}_{z} -> izzz}.
+
+   d2gabRule := {dg_{x x x x} -> gxxxx, dg_{x y x x} -> gxyxx, dg_{x z x x} -> gxzxx,
+                 dg_{y x x x} -> gxyxx, dg_{y y x x} -> gyyxx, dg_{y z x x} -> gyzxx,
+                 dg_{z x x x} -> gxzxx, dg_{z y x x} -> gyzxx, dg_{z z x x} -> gzzxx,
+                 dg_{x x y x} -> gxxxy, dg_{x y y x} -> gxyxy, dg_{x z y x} -> gxzxy,
+                 dg_{y x y x} -> gxyxy, dg_{y y y x} -> gyyxy, dg_{y z y x} -> gyzxy,
+                 dg_{z x y x} -> gxzxy, dg_{z y y x} -> gyzxy, dg_{z z y x} -> gzzxy,
+                 dg_{x x z x} -> gxxxz, dg_{x y z x} -> gxyxz, dg_{x z z x} -> gxzxz,
+                 dg_{y x z x} -> gxyxz, dg_{y y z x} -> gyyxz, dg_{y z z x} -> gyzxz,
+                 dg_{z x z x} -> gxzxz, dg_{z y z x} -> gyzxz, dg_{z z z x} -> gzzxz,
+
+                 dg_{x x x y} -> gxxxy, dg_{x y x y} -> gxyxy, dg_{x z x y} -> gxzxy,
+                 dg_{y x x y} -> gxyxy, dg_{y y x y} -> gyyxy, dg_{y z x y} -> gyzxy,
+                 dg_{z x x y} -> gxzxy, dg_{z y x y} -> gyzxy, dg_{z z x y} -> gzzxy,
+                 dg_{x x y y} -> gxxyy, dg_{x y y y} -> gxyyy, dg_{x z y y} -> gxzyy,
+                 dg_{y x y y} -> gxyyy, dg_{y y y y} -> gyyyy, dg_{y z y y} -> gyzyy,
+                 dg_{z x y y} -> gxzyy, dg_{z y y y} -> gyzyy, dg_{z z y y} -> gzzyy,
+                 dg_{x x z y} -> gxxyz, dg_{x y z y} -> gxyyz, dg_{x z z y} -> gxzyz,
+                 dg_{y x z y} -> gxyyz, dg_{y y z y} -> gyyyz, dg_{y z z y} -> gyzyz,
+                 dg_{z x z y} -> gxzyz, dg_{z y z y} -> gyzyz, dg_{z z z y} -> gzzyz,
+
+                 dg_{x x x z} -> gxxxz, dg_{x y x z} -> gxyxz, dg_{x z x z} -> gxzxz,
+                 dg_{y x x z} -> gxyxz, dg_{y y x z} -> gyyxz, dg_{y z x z} -> gyzxz,
+                 dg_{z x x z} -> gxzxz, dg_{z y x z} -> gyzxz, dg_{z z x z} -> gzzxz,
+                 dg_{x x y z} -> gxxyz, dg_{x y y z} -> gxyyz, dg_{x z y z} -> gxzyz,
+                 dg_{y x y z} -> gxyyz, dg_{y y y z} -> gyyyz, dg_{y z y z} -> gyzyz,
+                 dg_{z x y z} -> gxzyz, dg_{z y y z} -> gyzyz, dg_{z z y z} -> gzzyz,
+                 dg_{x x z z} -> gxxzz, dg_{x y z z} -> gxyzz, dg_{x z z z} -> gxzzz,
+                 dg_{y x z z} -> gxyzz, dg_{y y z z} -> gyyzz, dg_{y z z z} -> gyzzz,
+                 dg_{z x z z} -> gxzzz, dg_{z y z z} -> gyzzz, dg_{z z z z} -> gzzzz}.
+
+   KabRule := {K_{x x} -> Kxx, K_{x y} -> Kxy, K_{x z} -> Kxz,
+               K_{y x} -> Kxy, K_{y y} -> Kyy, K_{y z} -> Kyz,
+               K_{z x} -> Kxz, K_{z y} -> Kyz, K_{z z} -> Kzz}.
+
+   RabRule := {R_{x x} -> Rxx, R_{x y} -> Rxy, R_{x z} -> Rxz,
+               R_{y x} -> Rxy, R_{y y} -> Ryy, R_{y z} -> Ryz,
+               R_{z x} -> Rxz, R_{z y} -> Ryz, R_{z z} -> Rzz}.
+
+   HessRule := {Hess_{x x} -> Hessxx, Hess_{x y} -> Hessxy, Hess_{x z} -> Hessxz,
+                Hess_{y x} -> Hessxy, Hess_{y y} -> Hessyy, Hess_{y z} -> Hessyz,
+                Hess_{z x} -> Hessxz, Hess_{z y} -> Hessyz, Hess_{z z} -> Hesszz}.
+
+   NaRule := {dN_{x} -> Nx, dN_{y} -> Ny, dN_{z} -> Nz}.
+
+   NabRule := {dN_{x x} -> Nxx, dN_{x y} -> Nxy, dN_{x z} -> Nxz,
+               dN_{y x} -> Nxy, dN_{y y} -> Nyy, dN_{y z} -> Nyz,
+               dN_{z x} -> Nxz, dN_{z y} -> Nyz, dN_{z z} -> Nzz}.
+
+   dKabRule := {dK_{x x x} -> Kxxx, dK_{x y x} -> Kxyx, dK_{x z x} -> Kxzx,
+                dK_{y x x} -> Kxyx, dK_{y y x} -> Kyyx, dK_{y z x} -> Kyzx,
+                dK_{z x x} -> Kxzx, dK_{z y x} -> Kyzx, dK_{z z x} -> Kzzx,
+                dK_{x x y} -> Kxxy, dK_{x y y} -> Kxyy, dK_{x z y} -> Kxzy,
+                dK_{y x y} -> Kxyy, dK_{y y y} -> Kyyy, dK_{y z y} -> Kyzy,
+                dK_{z x y} -> Kxzy, dK_{z y y} -> Kyzy, dK_{z z y} -> Kzzy,
+                dK_{x x z} -> Kxxz, dK_{x y z} -> Kxyz, dK_{x z z} -> Kxzz,
+                dK_{y x z} -> Kxyz, dK_{y y z} -> Kyyz, dK_{y z z} -> Kyzz,
+                dK_{z x z} -> Kxzz, dK_{z y z} -> Kyzz, dK_{z z z} -> Kzzz}.
+
+   allRules =   gabRule + d1gabRule + d2gabRule \
+              + iabRule + d1iabRule \
+              + KabRule + dKabRule \
+              + RabRule \
+              + HessRule + NaRule + NabRule
+
+   evaluate (Rscalar, allRules, simplify=False)
+   evaluate (Rab,     allRules, simplify=False)
+   evaluate (Nab,     allRules, simplify=False)
+
+   evaluate (DgabDt,  allRules, simplify=False)
+   evaluate (DKabDt,  allRules, simplify=False)
+
+   evaluate (DNDt,    allRules, simplify=False)
+
+   evaluate (Ham,     allRules, simplify=False)
+   evaluate (Mom,     allRules, simplify=False)
+
+   # ------------------------------------------------------------------------------------
+   # export to C-code
+
+   import writecode
+
+   writecode.cdb_write_code (Rscalar, 'R',       'ricci-scalar.c', 0)
+   writecode.cdb_write_code (Rab,     'Rab',     'ricci.c',        2)
+   writecode.cdb_write_code (DgabDt,  'dot_gab', 'dot-gab.c',      2)
+   writecode.cdb_write_code (DKabDt,  'dot_Kab', 'dot-Kab.c',      2)
+   writecode.cdb_write_code (DNDt,    'dot_N',   'dot-N.c',        0)
+   writecode.cdb_write_code (Nab,     'Hess',    'hessian.c',      2)
+
+   writecode.cdb_write_code (Ham,     'Ham',     'hamiltonian.c',  0)
+   writecode.cdb_write_code (Mom,     'Mom',     'momentum.c',     1)
+\end{cadabra}
+
+\end{document}

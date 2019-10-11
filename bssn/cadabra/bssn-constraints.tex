@@ -1,0 +1,91 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\section*{PhysRevD.67.084023 equation (19)}
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'bssn-constraints.json'
+   cdblib.create (jsonfile)
+
+   # --------------------------------------------------------------------------
+   # Hamiltonian constraint
+
+   Ham := R + K_{a b} g^{a b} K_{c d} g^{c d} - K_{a b} K_{c d} g^{a c} g^{b d}.
+                                                             # cdb(Ham.101,Ham)
+
+   Ham := R + (2/3) (trK)**2 - ABar_{a b} ABar^{a b}.        # cdb(Ham.102,Ham)
+
+\end{cadabra}
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*}
+      {\cal H}
+         = \Cdb*{Ham.101}
+         = \Cdb*{Ham.102}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\section*{PhysRevD.67.084023 equation (20)}
+
+\begin{cadabra}
+   # --------------------------------------------------------------------------
+   # Momentum constraint
+
+   confMom := 6 ABar^{i a} \partial_{a}{\phi}
+              + \partial_{a}{ABar^{i a}}
+              + ABar^{a b} GammaBar^{i}_{a b}
+              - (2/3) gBar^{i a} \partial_{a}{trK}.
+
+   defGammaBar := GammaBar^{a}_{b c} ->
+                  (1/2) gBar^{a e} (   \partial_{b}{gBar_{e c}}
+                                     + \partial_{c}{gBar_{b e}}
+                                     - \partial_{e}{gBar_{b c}}).
+
+   substitute (confMom, defGammaBar)                       # cdb(confMom.101,confMom)
+   distribute (confMom)                                    # cdb(confMom.102,confMom)
+
+   confMom = product_sort (confMom)                        # cdb(confMom.103,confMom)
+
+   rename_dummies (confMom)                                # cdb(confMom.104,confMom)
+   canonicalise   (confMom)                                # cdb(confMom.105,confMom)
+
+   foo := \partial_{a}{ABar^{i a}} -> \partial_{a}{gBar^{i c} gBar^{a d} ABar_{c d}}.
+
+   substitute   (confMom, foo)                             # cdb(confMom.106,confMom)
+   product_rule (confMom)                                  # cdb(confMom.107,confMom)
+
+   confMom = product_sort (confMom)                        # cdb(confMom.108,confMom)
+
+   rename_dummies (confMom)                                # cdb(confMom.109,confMom)
+   canonicalise   (confMom)                                # cdb(confMom.110,confMom)
+
+   cdblib.put ('Ham',Ham,jsonfile)
+   cdblib.put ('confMom',confMom,jsonfile)
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \exp(4\phi) {\cal D}^{j}
+         = \Cdb*{confMom.101}
+         = \Cdb*{confMom.102}
+         = \Cdb*{confMom.103}
+         = \Cdb*{confMom.104}
+         = \Cdb*{confMom.105}
+         = \Cdb*{confMom.106}
+         = \Cdb*{confMom.107}
+         = \Cdb*{confMom.108}
+         = \Cdb*{confMom.109}
+         = \Cdb*{confMom.110}
+   \end{dmath*}
+\end{dgroup*}
+
+\end{document}

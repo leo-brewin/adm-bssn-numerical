@@ -1,0 +1,110 @@
+Procedure set_momentum is
+   x0,  x1,  x2,  x3,  x4,  x5,  x6,  x7,  x8,  x9,  x10, x11, x12, x13, x14, x15, x16, 
+   x17, x18, x19, x20, x21, x22, x23, x24, x25, x26, x27, x28, x29, x30, x31, x32, x33, 
+   x34, x35, x36, x37, x38, x39, x40, x41, x42, x43, x44, x45, x46, x47, x48, x49, x50, 
+   x51, x52, x53, x54, x55, x56, x57, x58, x59, x60, x61, x62, x63, x64, x65, x66, x67, 
+   x68, x69, x70, x71, x72, x73, x74, x75, x76, x77, x78, x79, x80, x81, x82, x83 : Real;
+begin
+   x0  := 6.0*phi_x;
+   x1  := 6.0*phi_y;
+   x2  := 6.0*phi_z;
+   x3  := (2.0/3.0)*trK_x;
+   x4  := (2.0/3.0)*trK_y;
+   x5  := (2.0/3.0)*trK_z;
+   x6  := ABar_xx*iBar_xx;
+   x7  := ABar_xx*iBar_xy;
+   x8  := ABar_xx*iBar_xz;
+   x9  := iBar_xx*iBar_xy;
+   x10 := ABar_xxz*iBar_xz;
+   x11 := ABar_xy*iBar_xx;
+   x12 := ABar_xy*iBar_xy;
+   x13 := ABar_xy*iBar_yy;
+   x14 := ABar_xy*iBar_yz;
+   x15 := ABar_xy*iBar_xz;
+   x16 := iBar_xx*iBar_yy;
+   x17 := iBar_xx*iBar_yz;
+   x18 := iBar_xy*iBar_xz;
+   x19 := ABar_xz*iBar_xx;
+   x20 := ABar_xz*iBar_xz;
+   x21 := ABar_xz*iBar_yz;
+   x22 := ABar_xz*iBar_zz;
+   x23 := ABar_xz*iBar_xy;
+   x24 := ABar_xzz*iBar_zz;
+   x25 := ABar_yy*iBar_xy;
+   x26 := ABar_yy*iBar_yy;
+   x27 := ABar_yy*iBar_yz;
+   x28 := iBar_xy*iBar_yy;
+   x29 := iBar_xy*iBar_yz;
+   x30 := ABar_yz*iBar_xy;
+   x31 := ABar_yz*iBar_xz;
+   x32 := ABar_yz*iBar_yz;
+   x33 := ABar_yz*iBar_zz;
+   x34 := ABar_yz*iBar_yy;
+   x35 := iBar_xz*iBar_yy;
+   x36 := ABar_yzz*iBar_zz;
+   x37 := iBar_xz*iBar_yz;
+   x38 := ABar_zz*iBar_xz;
+   x39 := ABar_zz*iBar_yz;
+   x40 := ABar_zz*iBar_zz;
+   x41 := ABar_zzz*iBar_zz;
+   x42 := BBar_xx*gBar_xyx;
+   x43 := BBar_xx*gBar_xzx;
+   x44 := BBar_xy*gBar_xxy;
+   x45 := BBar_xy*iBar_xz;
+   x46 := BBar_xy*gBar_yyx;
+   x47 := BBar_xz*gBar_xxz;
+   x48 := BBar_xz*iBar_xy;
+   x49 := BBar_xz*gBar_zzx;
+   x50 := BBar_yy*gBar_xyy;
+   x51 := BBar_yy*gBar_yzy;
+   x52 := BBar_yz*iBar_xx;
+   x53 := BBar_yz*iBar_xy;
+   x54 := BBar_yz*gBar_zzy;
+   x55 := BBar_zz*gBar_xzz;
+   x56 := BBar_zz*gBar_yzz;
+   x57 := (iBar_xy ** 2);
+   x58 := (iBar_xz ** 2);
+   x59 := iBar_xx*iBar_xz;
+   x60 := (1.0/2.0)*BBar_xx;
+   x61 := gBar_xxx*x60;
+   x62 := gBar_xxy*x60;
+   x63 := gBar_xxz*x60;
+   x64 := (1.0/2.0)*BBar_yy;
+   x65 := gBar_yyx*x64;
+   x66 := gBar_yyy*x64;
+   x67 := gBar_yyz*x64;
+   x68 := (1.0/2.0)*BBar_zz;
+   x69 := gBar_zzx*x68;
+   x70 := gBar_zzy*x68;
+   x71 := gBar_zzz*x68;
+   x72 := iBar_xxx + iBar_xyy + iBar_xzz;
+   x73 := iBar_xyx + iBar_yyy + iBar_yzz;
+   x74 := iBar_xzx + iBar_yzy + iBar_zzz;
+   x75 := iBar_yy*iBar_yz;
+   x76 := BBar_xy*iBar_yz;
+   x77 := BBar_xz*iBar_yy;
+   x78 := BBar_yz*gBar_yyz;
+   x79 := (iBar_yz ** 2);
+   x80 := iBar_xy*iBar_zz;
+   x81 := BBar_xy*iBar_zz;
+   x82 := BBar_xz*iBar_yz;
+   x83 := BBar_yz*iBar_xz;
+   Mom (1) := ABar_xxx*(iBar_xx ** 2) + ABar_xxy*x9 + 2.0*ABar_xyx*x9 + ABar_xyy*x16 + ABar_xyy*x57 + ABar_xyz*x17 + ABar_xyz*x18 + 2.0*ABar_xzx*x59 + ABar_xzy*x17 + ABar_xzy*x18 + ABar_xzz*x58 + ABar_yyx*x57 + ABar_yyy*x28 + ABar_yyz*x29 + 2.0*ABar_yzx*x18 + ABar_yzy*x29 + ABar_yzy*x35 
+            + ABar_yzz*x37 + ABar_zzx*x58 + ABar_zzy*x37 + BBar_xx*x0 + BBar_xy*x1 + BBar_xz*x2 - gBar_xyz*x45 + gBar_xyz*x48 + gBar_xyz*x52 + gBar_xzy*x45 - gBar_xzy*x48 + gBar_xzy*x52 + gBar_yyz*x53 + gBar_yzx*x45 + gBar_yzx*x48 - gBar_yzx*x52 + iBar_xx*x10 + iBar_xx*x24 - iBar_xx*x3 
+            + iBar_xx*x44 + iBar_xx*x47 + iBar_xx*x50 + iBar_xx*x55 + iBar_xx*x61 - iBar_xx*x65 - iBar_xx*x69 + iBar_xxx*x12 + iBar_xxx*x20 + iBar_xxx*x6 + iBar_xxy*x13 + iBar_xxy*x21 + iBar_xxy*x7 + iBar_xxz*x14 + iBar_xxz*x22 + iBar_xxz*x8 + iBar_xy*x36 - iBar_xy*x4 + iBar_xy*x42 
+            + iBar_xy*x46 + iBar_xy*x56 - iBar_xy*x62 + iBar_xy*x66 - iBar_xy*x70 + iBar_xyx*x11 + iBar_xyx*x25 + iBar_xyx*x31 + iBar_xyy*x12 + iBar_xyy*x26 + iBar_xyy*x32 + iBar_xyz*x15 + iBar_xyz*x27 + iBar_xyz*x33 + iBar_xz*x41 + iBar_xz*x43 + iBar_xz*x49 - iBar_xz*x5 + iBar_xz*x51 
+            + iBar_xz*x54 - iBar_xz*x63 - iBar_xz*x67 + iBar_xz*x71 + iBar_xzx*x19 + iBar_xzx*x30 + iBar_xzx*x38 + iBar_xzy*x23 + iBar_xzy*x34 + iBar_xzy*x39 + iBar_xzz*x20 + iBar_xzz*x32 + iBar_xzz*x40 + x11*x73 + x12*x72 + x19*x74 + x20*x72 + x25*x73 + x30*x74 + x31*x73 
+            + x38*x74 + x6*x72;
+   Mom (2) := ABar_xxx*x9 + ABar_xxy*x57 + ABar_xyx*x16 + ABar_xyx*x57 + 2.0*ABar_xyy*x28 + ABar_xyz*x29 + ABar_xyz*x35 + ABar_xzx*x17 + ABar_xzx*x18 + 2.0*ABar_xzy*x29 + ABar_xzz*x37 + ABar_yyx*x28 + ABar_yyy*(iBar_yy ** 2) + ABar_yyz*x75 + ABar_yzx*x29 + ABar_yzx*x35 + 2.0*ABar_yzy*x75 
+            + ABar_yzz*x79 + ABar_zzx*x37 + ABar_zzy*x79 + BBar_xy*x0 + BBar_yy*x1 + BBar_yz*x2 + gBar_xyz*x53 - gBar_xyz*x76 + gBar_xyz*x77 + gBar_xzy*x53 + gBar_xzy*x76 - gBar_xzy*x77 - gBar_yzx*x53 + gBar_yzx*x76 + gBar_yzx*x77 + iBar_xy*x10 + iBar_xy*x24 - iBar_xy*x3 + iBar_xy*x44 
+            + iBar_xy*x47 + iBar_xy*x50 + iBar_xy*x55 + iBar_xy*x61 - iBar_xy*x65 - iBar_xy*x69 + iBar_xyx*x12 + iBar_xyx*x20 + iBar_xyx*x6 + iBar_xyy*x13 + iBar_xyy*x21 + iBar_xyy*x7 + iBar_xyz*x14 + iBar_xyz*x22 + iBar_xyz*x8 + iBar_yy*x36 - iBar_yy*x4 + iBar_yy*x42 + iBar_yy*x46 
+            + iBar_yy*x56 - iBar_yy*x62 + iBar_yy*x66 - iBar_yy*x70 + iBar_yy*x78 + iBar_yyx*x11 + iBar_yyx*x25 + iBar_yyx*x31 + iBar_yyy*x12 + iBar_yyy*x26 + iBar_yyy*x32 + iBar_yyz*x15 + iBar_yyz*x27 + iBar_yyz*x33 + iBar_yz*x41 + iBar_yz*x43 + iBar_yz*x49 - iBar_yz*x5 + iBar_yz*x51 
+            + iBar_yz*x54 - iBar_yz*x63 - iBar_yz*x67 + iBar_yz*x71 + iBar_yzx*x19 + iBar_yzx*x30 + iBar_yzx*x38 + iBar_yzy*x23 + iBar_yzy*x34 + iBar_yzy*x39 + iBar_yzz*x20 + iBar_yzz*x32 + iBar_yzz*x40 + x12*x73 + x13*x72 + x21*x72 + x23*x74 + x26*x73 + x32*x73 + x34*x74 
+            + x39*x74 + x7*x72;
+   Mom (3) := ABar_xxx*x59 + ABar_xxy*x18 + ABar_xxz*x58 + ABar_xyx*x17 + ABar_xyx*x18 + ABar_xyy*x29 + ABar_xyy*x35 + 2.0*ABar_xyz*x37 + ABar_xzx*iBar_xx*iBar_zz + ABar_xzx*x58 + ABar_xzy*x37 + ABar_xzy*x80 + ABar_yyx*x29 + ABar_yyy*x75 + ABar_yyz*x79 + ABar_yzx*x37 + ABar_yzx*x80 
+            + ABar_yzy*iBar_yy*iBar_zz + ABar_yzy*x79 + ABar_zzx*iBar_xz*iBar_zz + ABar_zzy*iBar_yz*iBar_zz + ABar_zzz*(iBar_zz ** 2) + BBar_xz*x0 + BBar_yz*x1 + BBar_zz*x2 - gBar_xyz*x81 + gBar_xyz*x82 + gBar_xyz*x83 + gBar_xzy*x81 - gBar_xzy*x82 + gBar_xzy*x83 + gBar_yzx*x81 
+            + gBar_yzx*x82 - gBar_yzx*x83 + 2.0*iBar_xz*x24 - iBar_xz*x3 + iBar_xz*x44 + iBar_xz*x47 + iBar_xz*x50 + iBar_xz*x55 + iBar_xz*x61 - iBar_xz*x65 - iBar_xz*x69 + iBar_xzx*x12 + iBar_xzx*x20 + iBar_xzx*x6 + iBar_xzy*x13 + iBar_xzy*x21 + iBar_xzy*x7 + iBar_xzz*x14 + iBar_xzz*x22 
+            + iBar_xzz*x8 + 2.0*iBar_yz*x36 - iBar_yz*x4 + iBar_yz*x42 + iBar_yz*x46 + iBar_yz*x56 - iBar_yz*x62 + iBar_yz*x66 - iBar_yz*x70 + iBar_yz*x78 + iBar_yzx*x11 + iBar_yzx*x25 + iBar_yzx*x31 + iBar_yzy*x12 + iBar_yzy*x26 + iBar_yzy*x32 + iBar_yzz*x15 + iBar_yzz*x27 
+            + iBar_yzz*x33 + iBar_zz*x43 + iBar_zz*x49 - iBar_zz*x5 + iBar_zz*x51 + iBar_zz*x54 - iBar_zz*x63 - iBar_zz*x67 + iBar_zz*x71 + iBar_zzx*x19 + iBar_zzx*x30 + iBar_zzx*x38 + iBar_zzy*x23 + iBar_zzy*x34 + iBar_zzy*x39 + iBar_zzz*x20 + iBar_zzz*x32 + iBar_zzz*x40 + x14*x72 
+            + x15*x73 + x20*x74 + x22*x72 + x27*x73 + x32*x74 + x33*x73 + x40*x74 + x72*x8;
+end set_momentum;

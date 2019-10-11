@@ -1,0 +1,89 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\section*{PhysRevD.62.044034 equation (11)}
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'bssn-eqtns-11.json'
+   cdblib.create (jsonfile)
+
+   # --------------------------------------------------------------------------
+
+   DtrKDt  := \partial_{t}{trK}.                 # cdb(eq11.00,DtrKDt)
+   DtrKDt  := - g^{i j} D_{i j}{N}
+              + N (ABar_{i j} ABar^{i j} + (1/3) trK**2).
+
+                                                 # cdb(eq11.01,DtrKDt)
+
+   substitute (DtrKDt, defD2)                    # cdb(eq11.02,DtrKDt)
+   substitute (DtrKDt, defGamma2GammaBar)        # cdb(eq11.03,DtrKDt)
+
+   foo := g^{a b} -> \exp(-4\phi) gBar^{a b}.
+
+   substitute (DtrKDt, foo)                      # cdb(eq11.04,DtrKDt)
+   distribute (DtrKDt)                           # cdb(eq11.05,DtrKDt)
+   eliminate_kronecker (DtrKDt)                  # cdb(eq11.06,DtrKDt)
+   canonicalise (DtrKDt)                         # cdb(eq11.07,DtrKDt)
+   substitute   (DtrKDt, defGBarSq)              # cdb(eq11.08,DtrKDt)
+
+   DtrKDt = product_sort (DtrKDt)
+
+   factor_out (DtrKDt, $\exp(-4\phi)$)           # cdb(eq11.08,DtrKDt)
+   substitute (DtrKDt, defGammaBarU)             # cdb(eq11.09,DtrKDt)
+   distribute (DtrKDt)                           # cdb(eq11.10,DtrKDt)
+
+   DtrKDt = product_sort (DtrKDt)                # cdb(eq11.11,DtrKDt)
+
+   canonicalise (DtrKDt)                         # cdb(eq11.12,DtrKDt)
+
+   foo := gBar^{b c} \partial_{a}{gBar_{b c}} -> 0.   # follows from det(g) = 1
+   bah := gBar^{e b} gBar^{f c} \partial_{a}{gBar_{b c}} -> - \partial_{a}{gBar^{e f}}.
+
+   substitute (DtrKDt, foo)                      # cdb(eq11.13,DtrKDt)
+   substitute (DtrKDt, bah)                      # cdb(eq11.14,DtrKDt)
+
+   DtrKDt = product_sort (DtrKDt)
+
+   canonicalise (DtrKDt)                         # cdb(eq11.15,DtrKDt)
+   factor_out   (DtrKDt, $\exp(-4\phi)$)         # cdb(eq11.16,DtrKDt)
+                                                 # cdb(eq11.99,DtrKDt)
+
+   cdblib.put ('DtrKDt',DtrKDt,jsonfile)
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq11.00} = \Cdb*{eq11.01}
+                    = \Cdb*{eq11.02}
+                    = \Cdb*{eq11.03}
+                    = \Cdb*{eq11.04}
+                    = \Cdb*{eq11.05}
+                    = \Cdb*{eq11.06}
+                    = \Cdb*{eq11.07}
+                    = \Cdb*{eq11.08}
+                    = \Cdb*{eq11.09}
+                    = \Cdb*{eq11.10}
+                    = \Cdb*{eq11.11}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq11.00} = \Cdb*[\hskip2cm\hfill]{eq11.12}
+                    = \Cdb*{eq11.13}
+                    = \Cdb*{eq11.14}
+                    = \Cdb*{eq11.15}
+                    = \Cdb*{eq11.16}
+   \end{dmath*}
+\end{dgroup*}
+
+\end{document}

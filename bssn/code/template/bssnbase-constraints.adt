@@ -1,0 +1,355 @@
+package body BSSNBase.Constraints is
+
+   dxdx, dydy, dzdz : Real;
+   two_dx, two_dy, two_dz : Real;
+   four_dxdy, four_dxdz, four_dydz : Real;
+
+   procedure set_constraints (point : GridPoint) is
+
+      {$include "include/local-data.ad"}
+
+      {$include "cadabra/ricci.ad"}
+      {$include "cadabra/ricci-scalar.ad"}
+
+      {$include "cadabra/hamiltonian.ad"}
+      {$include "cadabra/momentum.ad"}
+
+      procedure set_data is
+         det : Real;
+         i, j, k : Integer;
+         x, y, z : Real;
+      begin
+
+         i := point.i;
+         j := point.j;
+         k := point.k;
+
+         x := point.x;
+         y := point.y;
+         z := point.z;
+
+         Gi   := BSSNBase.Gi   (i,j,k);
+         phi  := BSSNBase.phi  (i,j,k);
+         trK  := BSSNBase.trK  (i,j,k);
+         gBar := BSSNBase.gBar (i,j,k);
+         ABar := BSSNBase.ABar (i,j,k);
+
+         iBar := symm_inverse (gBar);
+         BBar := symm_raise_indices (ABar, iBar);
+
+         -- second order centred finite differences for the conformal factor phi
+
+         declare
+            phi : ConFactGridArray renames BSSNBase.phi;
+         begin
+
+            d1phi (1) := (phi (i+1,j,k) - phi (i-1,j,k)) / (two_dx);
+            d1phi (2) := (phi (i,j+1,k) - phi (i,j-1,k)) / (two_dy);
+            d1phi (3) := (phi (i,j,k+1) - phi (i,j,k-1)) / (two_dz);
+
+            d2phi (xx) := (phi (i+1,j,k) - 2.0*phi (i,j,k) + phi (i-1,j,k)) / (dxdx);
+            d2phi (yy) := (phi (i,j+1,k) - 2.0*phi (i,j,k) + phi (i,j-1,k)) / (dydy);
+            d2phi (zz) := (phi (i,j,k+1) - 2.0*phi (i,j,k) + phi (i,j,k-1)) / (dzdz);
+
+            d2phi (xy) := (phi (i+1,j+1,k) + phi (i-1,j-1,k) - phi (i+1,j-1,k) - phi (i-1,j+1,k)) / (four_dxdy);
+            d2phi (xz) := (phi (i+1,j,k+1) + phi (i-1,j,k-1) - phi (i+1,j,k-1) - phi (i-1,j,k+1)) / (four_dxdz);
+            d2phi (yz) := (phi (i,j+1,k+1) + phi (i,j-1,k-1) - phi (i,j+1,k-1) - phi (i,j-1,k+1)) / (four_dydz);
+
+         end;
+
+         -- second order centred finite differences for trK
+
+         declare
+            trK : TraceKGridArray renames BSSNBase.trK;
+         begin
+
+            d1trK (1) := (trK (i+1,j,k) - trK (i-1,j,k)) / (two_dx);
+            d1trK (2) := (trK (i,j+1,k) - trK (i,j-1,k)) / (two_dy);
+            d1trK (3) := (trK (i,j,k+1) - trK (i,j,k-1)) / (two_dz);
+
+         end;
+
+         -- second order centred finite differences for Gi
+
+         declare
+            Gi : GammaGridArray renames BSSNBase.Gi;
+         begin
+
+            d1Gi (1) := (Gi (i+1,j,k) - Gi (i-1,j,k)) / (two_dx);
+            d1Gi (2) := (Gi (i,j+1,k) - Gi (i,j-1,k)) / (two_dy);
+            d1Gi (3) := (Gi (i,j,k+1) - Gi (i,j,k-1)) / (two_dz);
+
+         end;
+
+         -- second order centred finite differences for the 3-metric
+
+         declare
+            gBar : MetricGridArray renames BSSNBase.gBar;
+         begin
+
+            d1gBar (1) := (gBar (i+1,j,k) - gBar (i-1,j,k)) / (two_dx);
+            d1gBar (2) := (gBar (i,j+1,k) - gBar (i,j-1,k)) / (two_dy);
+            d1gBar (3) := (gBar (i,j,k+1) - gBar (i,j,k-1)) / (two_dz);
+
+            d2gBar (xx) := (gBar (i+1,j,k) - 2.0*gBar (i,j,k) + gBar (i-1,j,k)) / (dxdx);
+            d2gBar (yy) := (gBar (i,j+1,k) - 2.0*gBar (i,j,k) + gBar (i,j-1,k)) / (dydy);
+            d2gBar (zz) := (gBar (i,j,k+1) - 2.0*gBar (i,j,k) + gBar (i,j,k-1)) / (dzdz);
+
+            d2gBar (xy) := (gBar (i+1,j+1,k) + gBar (i-1,j-1,k) - gBar (i+1,j-1,k) - gBar (i-1,j+1,k)) / (four_dxdy);
+            d2gBar (xz) := (gBar (i+1,j,k+1) + gBar (i-1,j,k-1) - gBar (i+1,j,k-1) - gBar (i-1,j,k+1)) / (four_dxdz);
+            d2gBar (yz) := (gBar (i,j+1,k+1) + gBar (i,j-1,k-1) - gBar (i,j+1,k-1) - gBar (i,j-1,k+1)) / (four_dydz);
+
+         end;
+
+         -- second order centred finite differences for the ABar_{ab}
+
+         declare
+            ABar : ExtcurvGridArray renames BSSNBase.ABar;
+         begin
+
+            d1ABar (1) := (ABar (i+1,j,k) - ABar (i-1,j,k)) / (two_dx);
+            d1ABar (2) := (ABar (i,j+1,k) - ABar (i,j-1,k)) / (two_dy);
+            d1ABar (3) := (ABar (i,j,k+1) - ABar (i,j,k-1)) / (two_dz);
+
+         end;
+
+         d1iBar (1) := - symm_raise_indices (d1gBar (1), iBar);
+         d1iBar (2) := - symm_raise_indices (d1gBar (2), iBar);
+         d1iBar (3) := - symm_raise_indices (d1gBar (3), iBar);
+
+         set_3d_ricci;
+
+         set_3d_ricci_scalar;
+
+      end set_data;
+
+   begin
+
+      set_data;
+
+      set_hamiltonian;
+      set_momentum;
+
+      declare
+         i, j, k : Integer;
+      begin
+
+         i := point.i;
+         j := point.j;
+         k := point.k;
+
+         BSSNBase.Ham (i,j,k) := Ham;
+         BSSNBase.Mom (i,j,k) := Mom;
+
+      end;
+
+   end set_constraints;
+
+   function get_trABar (i, j, k : Integer) return Real is
+
+      ABar : ExtcurvPointArray;
+      gBar : MetricPointArray;
+      iBar : MetricPointArray;
+
+   begin
+
+      gBar := BSSNBase.gBar (i,j,k);
+      ABar := BSSNBase.ABar (i,j,k);
+
+      iBar := symm_inverse (gBar);
+
+      return symm_trace (ABar,iBar);
+
+   end get_trABar;
+
+   function get_trABar (point : GridPoint) return Real is
+      i, j, k : Integer;
+   begin
+
+      i := point.i;
+      j := point.j;
+      k := point.k;
+
+      return get_trABar (i, j, k);
+
+   end get_trABar;
+
+   function get_detg (i, j, k : Integer) return Real is
+   begin
+
+      return symm_det (BSSNBase.gBar (i,j,k));
+
+   end get_detg;
+
+   function get_detg (point : GridPoint) return Real is
+      i, j, k : Integer;
+   begin
+
+      i := point.i;
+      j := point.j;
+      k := point.k;
+
+      return get_detg (i, j, k);
+
+   end get_detg;
+
+   procedure set_finite_diff_factors is
+   begin
+
+      dxdx := dx * dx;
+      dydy := dy * dy;
+      dzdz := dz * dz;
+
+      two_dx := 2.0 * dx;
+      two_dy := 2.0 * dy;
+      two_dz := 2.0 * dz;
+
+      four_dxdy := 4.0 * dx * dy;
+      four_dxdz := 4.0 * dx * dz;
+      four_dydz := 4.0 * dy * dz;
+
+   end set_finite_diff_factors;
+
+   procedure set_constraints_intr is
+
+      b : Integer;
+
+   begin
+
+      for a in 1 .. interior_num loop
+
+         b := interior (a);
+
+         set_constraints (grid_point_list(b));
+
+      end loop;
+
+   end set_constraints_intr;
+
+   procedure set_constraints_bndry_ns is
+
+      b, i, j, k : Integer;
+
+   begin
+
+      -- apply periodic boundary conditions
+
+      -- north/south boundaries
+
+      for a in 1 .. north_bndry_num loop
+
+         b := north_bndry (a);
+
+         i := grid_point_list (b).i;
+         j := grid_point_list (b).j;
+         k := grid_point_list (b).k;  -- equals num_z
+
+         BSSNBase.Ham (i,j,k) := BSSNBase.Ham (i,j,2);
+         BSSNBase.Mom (i,j,k) := BSSNBase.Mom (i,j,2);
+
+      end loop;
+
+      for a in 1 .. south_bndry_num loop
+
+         b := south_bndry (a);
+
+         i := grid_point_list (b).i;
+         j := grid_point_list (b).j;
+         k := grid_point_list (b).k;  -- equals 1
+
+         BSSNBase.Ham (i,j,k) := BSSNBase.Ham (i,j,num_z-1);
+         BSSNBase.Mom (i,j,k) := BSSNBase.Mom (i,j,num_z-1);
+
+      end loop;
+
+   end set_constraints_bndry_ns;
+
+   procedure set_constraints_bndry_ew is
+
+      b, i, j, k : Integer;
+
+   begin
+
+      -- apply periodic boundary conditions
+
+      -- east/west boundaries
+
+      for a in 1 .. east_bndry_num loop
+
+         b := east_bndry (a);
+
+         i := grid_point_list (b).i;
+         j := grid_point_list (b).j;  -- equals num_y
+         k := grid_point_list (b).k;
+
+         BSSNBase.Ham (i,j,k) := BSSNBase.Ham (i,2,k);
+         BSSNBase.Mom (i,j,k) := BSSNBase.Mom (i,2,k);
+
+      end loop;
+
+      for a in 1 .. west_bndry_num loop
+
+         b := west_bndry (a);
+
+         i := grid_point_list (b).i;
+         j := grid_point_list (b).j;  -- equals 1
+         k := grid_point_list (b).k;
+
+         BSSNBase.Ham (i,j,k) := BSSNBase.Ham (i,num_y-1,k);
+         BSSNBase.Mom (i,j,k) := BSSNBase.Mom (i,num_y-1,k);
+
+      end loop;
+
+   end set_constraints_bndry_ew;
+
+   procedure set_constraints_bndry_fb is
+
+      b, i, j, k : Integer;
+
+   begin
+
+      -- apply periodic boundary conditions
+
+      -- front/back boundaries
+
+      for a in 1 .. front_bndry_num loop
+
+         b := front_bndry (a);
+
+         i := grid_point_list (b).i;  -- equals num_x
+         j := grid_point_list (b).j;
+         k := grid_point_list (b).k;
+
+         BSSNBase.Ham (i,j,k) := BSSNBase.Ham (2,j,k);
+         BSSNBase.Mom (i,j,k) := BSSNBase.Mom (2,j,k);
+
+      end loop;
+
+      for a in 1 .. back_bndry_num loop
+
+         b := back_bndry (a);
+
+         i := grid_point_list (b).i;  -- equals 1
+         j := grid_point_list (b).j;
+         k := grid_point_list (b).k;
+
+         BSSNBase.Ham (i,j,k) := BSSNBase.Ham (num_x-1,j,k);
+         BSSNBase.Mom (i,j,k) := BSSNBase.Mom (num_x-1,j,k);
+
+      end loop;
+
+   end set_constraints_bndry_fb;
+
+   procedure set_constraints is
+   begin
+
+      set_finite_diff_factors;
+
+      set_constraints_intr;
+      set_constraints_bndry_fb;
+      set_constraints_bndry_ew;
+      set_constraints_bndry_ns;
+
+   end set_constraints;
+
+end BSSNBase.Constraints;

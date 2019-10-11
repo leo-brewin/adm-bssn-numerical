@@ -1,0 +1,311 @@
+package body ADMBase.Time_Derivs is
+
+   dxdx, dydy, dzdz : Real;
+   two_dx, two_dy, two_dz : Real;
+   four_dxdy, four_dxdz, four_dydz : Real;
+
+   procedure set_time_derivatives (point : GridPoint) is
+
+      {$include "include/local-data.ad"}
+
+      {$include "cadabra/hessian.ad"}
+      {$include "cadabra/ricci.ad"}
+
+      {$include "cadabra/dot-N.ad"}
+      {$include "cadabra/dot-gab.ad"}
+      {$include "cadabra/dot-Kab.ad"}
+
+      procedure set_data is
+         det : Real;
+         i, j, k : Integer;
+         x, y, z : Real;
+      begin
+
+         i := point.i;
+         j := point.j;
+         k := point.k;
+
+         x := point.x;
+         y := point.y;
+         z := point.z;
+
+         N   := ADMBase.N (i,j,k);     -- lapse
+         gab := ADMBase.gab (i,j,k);   -- 3-metric
+         Kab := ADMBase.Kab (i,j,k);   -- extrinsic curvature
+
+         iab := symm_inverse (gab);    -- 3-metric inverse
+
+         -- second order centred finite differences for the lapse
+
+         declare
+            N : LapseGridArray renames ADMBase.N;
+         begin
+
+            d1N (1) := (N (i+1,j,k) - N (i-1,j,k)) / (two_dx);
+            d1N (2) := (N (i,j+1,k) - N (i,j-1,k)) / (two_dy);
+            d1N (3) := (N (i,j,k+1) - N (i,j,k-1)) / (two_dz);
+
+            d2N (xx) := (N (i+1,j,k) - 2.0*N (i,j,k) + N (i-1,j,k)) / (dxdx);
+            d2N (yy) := (N (i,j+1,k) - 2.0*N (i,j,k) + N (i,j-1,k)) / (dydy);
+            d2N (zz) := (N (i,j,k+1) - 2.0*N (i,j,k) + N (i,j,k-1)) / (dzdz);
+
+            d2N (xy) := (N (i+1,j+1,k) + N (i-1,j-1,k) - N (i+1,j-1,k) - N (i-1,j+1,k)) / (four_dxdy);
+            d2N (xz) := (N (i+1,j,k+1) + N (i-1,j,k-1) - N (i+1,j,k-1) - N (i-1,j,k+1)) / (four_dxdz);
+            d2N (yz) := (N (i,j+1,k+1) + N (i,j-1,k-1) - N (i,j+1,k-1) - N (i,j-1,k+1)) / (four_dydz);
+
+         end;
+
+         -- second order centred finite differences for the 3-metric
+
+         declare
+            gab : MetricGridArray renames ADMBase.gab;
+         begin
+
+            d1gab (1) := (gab (i+1,j,k) - gab (i-1,j,k)) / (two_dx);
+            d1gab (2) := (gab (i,j+1,k) - gab (i,j-1,k)) / (two_dy);
+            d1gab (3) := (gab (i,j,k+1) - gab (i,j,k-1)) / (two_dz);
+
+            d2gab (xx) := (gab (i+1,j,k) - 2.0*gab (i,j,k) + gab (i-1,j,k)) / (dxdx);
+            d2gab (yy) := (gab (i,j+1,k) - 2.0*gab (i,j,k) + gab (i,j-1,k)) / (dydy);
+            d2gab (zz) := (gab (i,j,k+1) - 2.0*gab (i,j,k) + gab (i,j,k-1)) / (dzdz);
+
+            d2gab (xy) := (gab (i+1,j+1,k) + gab (i-1,j-1,k) - gab (i+1,j-1,k) - gab (i-1,j+1,k)) / (four_dxdy);
+            d2gab (xz) := (gab (i+1,j,k+1) + gab (i-1,j,k-1) - gab (i+1,j,k-1) - gab (i-1,j,k+1)) / (four_dxdz);
+            d2gab (yz) := (gab (i,j+1,k+1) + gab (i,j-1,k-1) - gab (i,j+1,k-1) - gab (i,j-1,k+1)) / (four_dydz);
+
+         end;
+
+         d1iab (1) := - symm_raise_indices (d1gab (1), iab);
+         d1iab (2) := - symm_raise_indices (d1gab (2), iab);
+         d1iab (3) := - symm_raise_indices (d1gab (3), iab);
+
+         trK := ixx*Kxx + iyy*Kyy + izz*Kzz + 2.0*( ixy*Kxy + ixz*Kxz + iyz*Kyz );
+
+         set_3d_ricci;
+
+      end set_data;
+
+   begin
+
+      set_data;
+
+      set_3d_dot_N;
+      set_3d_dot_gab;
+      set_3d_dot_Kab;
+
+      declare
+         i, j, k : Integer;
+      begin
+
+         i := point.i;
+         j := point.j;
+         k := point.k;
+
+         ADMBase.dot_N   (i,j,k) := dot_N;     -- lapse
+         ADMBase.dot_gab (i,j,k) := dot_gab;   -- 3-metric
+         ADMBase.dot_Kab (i,j,k) := dot_Kab;   -- extrinsic curvature
+
+      end;
+
+   end set_time_derivatives;
+
+   procedure set_finite_diff_factors is
+   begin
+
+      dxdx := dx * dx;
+      dydy := dy * dy;
+      dzdz := dz * dz;
+
+      two_dx := 2.0 * dx;
+      two_dy := 2.0 * dy;
+      two_dz := 2.0 * dz;
+
+      four_dxdy := 4.0 * dx * dy;
+      four_dxdz := 4.0 * dx * dz;
+      four_dydz := 4.0 * dy * dz;
+
+   end set_finite_diff_factors;
+
+   procedure set_time_derivatives_intr (params : SlaveParams) is
+
+      b : Integer;
+
+      the_task  : Integer := params (1);
+      beg_point : Integer := params (4);
+      end_point : Integer := params (5);
+
+   begin
+
+      for a in beg_point .. end_point loop
+
+         b := interior (a);
+
+         set_time_derivatives (grid_point_list(b));
+
+      end loop;
+
+   end set_time_derivatives_intr;
+
+   procedure set_time_derivatives_bndry_ns (params : SlaveParams) is
+
+      b, i, j, k : Integer;
+
+      the_task  : Integer := params (1);
+
+      beg_north : Integer := params (8);
+      end_north : Integer := params (9);
+      beg_south : Integer := params (10);
+      end_south : Integer := params (11);
+
+   begin
+
+      -- apply periodic boundary conditions
+
+      -- north/south boundaries
+
+      for a in beg_north .. end_north loop
+
+         b := north_bndry (a);
+
+         i := grid_point_list (b).i;
+         j := grid_point_list (b).j;
+         k := grid_point_list (b).k;  -- equals num_z
+
+           dot_N (i,j,k) :=   dot_N (i,j,2);
+         dot_gab (i,j,k) := dot_gab (i,j,2);
+         dot_Kab (i,j,k) := dot_Kab (i,j,2);
+
+      end loop;
+
+      for a in beg_south .. end_south loop
+
+         b := south_bndry (a);
+
+         i := grid_point_list (b).i;
+         j := grid_point_list (b).j;
+         k := grid_point_list (b).k;  -- equals 1
+
+           dot_N (i,j,k) :=   dot_N (i,j,num_z-1);
+         dot_gab (i,j,k) := dot_gab (i,j,num_z-1);
+         dot_Kab (i,j,k) := dot_Kab (i,j,num_z-1);
+
+      end loop;
+
+   end set_time_derivatives_bndry_ns;
+
+   procedure set_time_derivatives_bndry_ew (params : SlaveParams) is
+
+      b, i, j, k : Integer;
+
+      the_task  : Integer := params (1);
+
+      beg_east  : Integer := params (12);
+      end_east  : Integer := params (13);
+      beg_west  : Integer := params (14);
+      end_west  : Integer := params (15);
+
+   begin
+
+      -- apply periodic boundary conditions
+
+      -- east/west boundaries
+
+      for a in beg_east .. end_east loop
+
+         b := east_bndry (a);
+
+         i := grid_point_list (b).i;
+         j := grid_point_list (b).j;  -- equals num_y
+         k := grid_point_list (b).k;
+
+           dot_N (i,j,k) :=   dot_N (i,2,k);
+         dot_gab (i,j,k) := dot_gab (i,2,k);
+         dot_Kab (i,j,k) := dot_Kab (i,2,k);
+
+      end loop;
+
+      for a in beg_west .. end_west loop
+
+         b := west_bndry (a);
+
+         i := grid_point_list (b).i;
+         j := grid_point_list (b).j;  -- equals 1
+         k := grid_point_list (b).k;
+
+           dot_N (i,j,k) :=   dot_N (i,num_y-1,k);
+         dot_gab (i,j,k) := dot_gab (i,num_y-1,k);
+         dot_Kab (i,j,k) := dot_Kab (i,num_y-1,k);
+
+      end loop;
+
+   end set_time_derivatives_bndry_ew;
+
+   procedure set_time_derivatives_bndry_fb (params : SlaveParams) is
+
+      b, i, j, k : Integer;
+
+      the_task  : Integer := params (1);
+
+      beg_front : Integer := params (16);
+      end_front : Integer := params (17);
+      beg_back  : Integer := params (18);
+      end_back  : Integer := params (19);
+
+   begin
+
+      -- apply periodic boundary conditions
+
+      -- front/back boundaries
+
+      for a in beg_front .. end_front loop
+
+         b := front_bndry (a);
+
+         i := grid_point_list (b).i;  -- equals num_x
+         j := grid_point_list (b).j;
+         k := grid_point_list (b).k;
+
+           dot_N (i,j,k) :=   dot_N (2,j,k);
+         dot_gab (i,j,k) := dot_gab (2,j,k);
+         dot_Kab (i,j,k) := dot_Kab (2,j,k);
+
+      end loop;
+
+      for a in beg_back .. end_back loop
+
+         b := back_bndry (a);
+
+         i := grid_point_list (b).i;  -- equals 1
+         j := grid_point_list (b).j;
+         k := grid_point_list (b).k;
+
+           dot_N (i,j,k) :=   dot_N (num_x-1,j,k);
+         dot_gab (i,j,k) := dot_gab (num_x-1,j,k);
+         dot_Kab (i,j,k) := dot_Kab (num_x-1,j,k);
+
+      end loop;
+
+   end set_time_derivatives_bndry_fb;
+
+   procedure set_time_derivatives
+   is
+      params : SlaveParams := (1,
+                               1,grid_point_num,
+                               1,interior_num,
+                               1,boundary_num,
+                               1,north_bndry_num,
+                               1,south_bndry_num,
+                               1,east_bndry_num,
+                               1,west_bndry_num,
+                               1,front_bndry_num,
+                               1,back_bndry_num);
+   begin
+
+      set_time_derivatives_intr (params);
+      set_time_derivatives_bndry_fb (params);
+      set_time_derivatives_bndry_ew (params);
+      set_time_derivatives_bndry_ns (params);
+
+   end set_time_derivatives;
+
+end ADMBase.Time_Derivs;

@@ -1,0 +1,42 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\section*{PhysRevD.62.044034 equation (20)}
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'bssn-eqtns-20.json'
+   cdblib.create (jsonfile)
+
+   # --------------------------------------------------------------------------
+
+   DGiBarDt := \partial_{t}{GammaBar^{i}}.                 # cdb(eq20.00,DGiBarDt)
+   DGiBarDt := - 2 ABar^{i j} \partial_{j}{N}
+               + 2 N (  GammaBar^{i}_{j k} ABar^{k j}
+                      - (2/3) gBar^{i j} \partial_{j}{trK}
+                      + 6 ABar^{i j} \partial_{j}{\phi}).  # cdb(eq20.01,DGiBarDt)
+
+   substitute   (DGiBarDt,defGammaBarU)                    # cdb(eq20.02,DGiBarDt)
+
+   distribute   (DGiBarDt)
+   DGiBarDt = product_sort (DGiBarDt)                      # cdb(eq20.03,DGiBarDt)
+
+   canonicalise (DGiBarDt)                                 # cdb(eq20.04,DGiBarDt)
+                                                           # cdb(eq20.99,DGiBarDt)
+
+   cdblib.put ('DGiBarDt',DGiBarDt,jsonfile)
+\end{cadabra}
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq20.00} = \Cdb*{eq20.01}
+                    = \Cdb*{eq20.02}
+                    = \Cdb*{eq20.03}
+   \end{dmath*}
+\end{dgroup*}
+
+\end{document}

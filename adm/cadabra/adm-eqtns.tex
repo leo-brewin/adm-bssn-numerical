@@ -1,0 +1,299 @@
+\documentclass[12pt]{cdblatex}
+\usepackage[final]{pdfpages}
+
+\begin{document}
+
+% =======================================================================================
+\section*{The ADM evolution equations.}
+
+The vacuum ADM equations, exactly as written in the following Cadabra code, are as follows.
+
+\IfFileExists{adm-eqtns.cdbtex}{}{Where is {\tt adm-eqtns.cdbtex}?}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb{dotgab.lhs} = \Cdb*{dotgab.101} \end{dmath*}
+   \begin{dmath*} \cdb{dotKab.lhs} = \Cdb*{dotKab.101} \end{dmath*}
+   \begin{dmath*} \cdb{dotN.lhs}   = \Cdb*{dotN.101}   \end{dmath*}
+   \begin{dmath*} \cdb{Ham.lhs}    = \Cdb*{Ham.101}    \end{dmath*}
+   \begin{dmath*} \cdb{Mom.lhs}    = \Cdb*{Mom.101}    \end{dmath*}
+\end{dgroup*}
+
+% Note that the covariant derivative for the 3-metric is usually denoted by the vertical bar
+
+Cadabra's job was to express $R_{ab}$, $R$, $N_{ab}$ and $D_c$ in terms of the ADM
+variables and their partial derivatives. It's all plain sailing from here, so cutting to
+the chase, here are the results.
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb{Rab.lhs} = \Cdb*{Rab.112} \end{dmath*}
+   \begin{dmath*} \cdb{R.lhs}   = \Cdb*{R.110} \end{dmath*}
+   \begin{dmath*} \cdb{Nab.lhs} = \Cdb*{Nab.102} \end{dmath*}
+   \begin{dmath*} \cdb{Mom.lhs} = \Cdb*{Mom.110}   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =======================================================================================
+\section*{The ADM evolution equations. The big picture.}
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'adm-eqtns.json'
+   cdblib.create (jsonfile)
+
+   # ------------------------------------------------------------------------------------
+   # generic rules for covariant derivs
+
+   deriv1 := A?_{; m}   -> \partial_{m}{A?}.                                              # cdb(deriv1.lhs,deriv1)
+   deriv2 := A?_{; m n} -> \partial_{m}{A?_{; n}} - \Gamma^{c}_{m n} A?_{; c}.            # cdb(deriv2.lhs,deriv2)
+
+   substitute (deriv2, deriv1)                                                            # cdb (deriv2.101,deriv2)
+
+   deriv3 := A?_{m n ; p} -> \partial_{p}{A?_{m n}} - \Gamma^{c}_{m p} A?_{c n}
+                                                    - \Gamma^{c}_{n p} A?_{m c}.          # cdb(deriv3.lhs,deriv3)
+
+   # ------------------------------------------------------------------------------------
+   # partial derivs of g_{ab} in terms of partial of g^{ab}
+
+   defDgab := {g^{a e} g^{b f} \partial_{c}{g_{e f}} -> - \partial_{c}{g^{a b}},
+               g^{e a} g^{b f} \partial_{c}{g_{e f}} -> - \partial_{c}{g^{a b}},
+               g^{a e} g^{f b} \partial_{c}{g_{e f}} -> - \partial_{c}{g^{a b}},
+               g^{e a} g^{f b} \partial_{c}{g_{e f}} -> - \partial_{c}{g^{a b}}}.         # cdb (defDgab.lhs,defDgab)
+
+   # ------------------------------------------------------------------------------------
+   # standard defintions
+
+   defGamma := \Gamma^{a}_{b c} ->
+               (1/2) g^{a e} (   \partial_{b}{g_{e c}}
+                               + \partial_{c}{g_{b e}}
+                               - \partial_{e}{g_{b c}}).                                  # cdb (defGamma.lhs,defGamma)
+
+   defRabcd := R^{a}_{b c d} ->
+               \partial_{c}{\Gamma^{a}_{b d}} + \Gamma^{a}_{e c} \Gamma^{e}_{b d}
+             - \partial_{d}{\Gamma^{a}_{b c}} - \Gamma^{a}_{e d} \Gamma^{e}_{b c}.        # cdb (defRabcd.lhs,defRabcd)
+
+   defRab := R_{a b} -> R^{c}_{a c b}.                                                    # cdb (defRab.lhs,defRab)
+
+   # ------------------------------------------------------------------------------------
+   # Ricci tensor
+
+   Rab := R_{a b}.                                         # cdb (Rab.lhs,Rab)
+
+   substitute     (Rab, defRab)                            # cdb (Rab.101,Rab)
+   substitute     (Rab, defRabcd)                          # cdb (Rab.102,Rab)
+   substitute     (Rab, defGamma)                          # cdb (Rab.103,Rab)
+   product_rule   (Rab)                                    # cdb (Rab.104,Rab)
+   distribute     (Rab)                                    # cdb (Rab.105,Rab)
+
+   Rab = product_sort (Rab)                                # cdb (Rab.106,Rab)
+
+   rename_dummies (Rab)                                    # cdb (Rab.107,Rab)
+   canonicalise   (Rab)                                    # cdb (Rab.108,Rab)
+   substitute     (Rab, defDgab)                           # cdb (Rab.109,Rab)
+
+   Rab = product_sort (Rab)                                # cdb (Rab.110,Rab)
+
+   rename_dummies (Rab)                                    # cdb (Rab.111,Rab)
+   canonicalise   (Rab)                                    # cdb (Rab.112,Rab)
+
+   defRab := R_{a b} -> @(Rab).
+
+   # ------------------------------------------------------------------------------------
+   # Ricci scalar
+
+   Rscalar := R.                                           # cdb (R.lhs,Rscalar)
+   Rscalar := g^{a b} R_{a b}.                             # cdb (R.101,Rscalar)
+
+   substitute     (Rscalar, defRab)                        # cdb (R.102,Rscalar)
+   distribute     (Rscalar)                                # cdb (R.103,Rscalar)
+
+   Rscalar = product_sort (Rscalar)                        # cdb (R.104,Rscalar)
+
+   rename_dummies (Rscalar)                                # cdb (R.105,Rscalar)
+   canonicalise   (Rscalar)                                # cdb (R.106,Rscalar)
+   substitute     (Rscalar, defDgab)                       # cdb (R.107,Rscalar)
+
+   Rscalar = product_sort (Rscalar)                        # cdb (R.108,Rscalar)
+
+   rename_dummies (Rscalar)                                # cdb (R.109,Rscalar)
+   canonicalise   (Rscalar)                                # cdb (R.110,Rscalar)
+
+   defRscalar := R -> @(Rscalar).
+
+   # ------------------------------------------------------------------------------------
+   # Hessian
+
+   Nab := N_{; a b}.                                       # cdb (Nab.lhs,Nab)
+
+   substitute (Nab, deriv2)                                # cdb (Nab.101,Nab)
+   substitute (Nab, defGamma)                              # cdb (Nab.102,Nab)
+
+   defHess := N_{; a b} -> @(Nab).                         # cdb (Hess.lhs,defHess)
+
+   # ------------------------------------------------------------------------------------
+   # ADM evolution equations
+
+   DgabDt := \partial_{t}{g_{a b}}.                        # cdb (dotgab.lhs,DgabDt)
+   DKabDt := \partial_{t}{K_{a b}}.                        # cdb (dotKab.lhs,DKabDt)
+   DNDt   := \partial_{t}{N}.                              # cdb (dotN.lhs,DNDt)
+
+   DgabDt := -2 N K_{a b}.                                                        # cdb (dotgab.101,DgabDt)
+   DKabDt := -N_{; a b} + N (R_{a b} + trK K_{a b} - 2 K_{a c} K_{b d} g^{c d}).  # cdb (dotKab.101,DKabDt)
+   # DNDt := -2 N trK.     # 1+log
+   # DNDt := -N*N trK.     # Harmonic
+   DNDt := 0.                                              # cdb (dotN.101,DNDt)  # Static
+
+   substitute (DKabDt,defHess)                             # cdb (dotKab.102,DKabDt)
+   distribute (DKabDt)                                     # cdb (dotKab.103,DKabDt)
+
+   # ------------------------------------------------------------------------------------
+   # The Hamiltonian contsraint
+
+   defHam := Ham     -> R + K_{a b} g^{a b} K_{c d} g^{c d} - K_{a b} K_{c d} g^{a c} g^{b d}.
+   Ham    := Ham.                                          # cdb (Ham.lhs,Ham)
+   substitute     (Ham, defHam)                            # cdb (Ham.101,Ham)
+
+   canonicalise   (Ham)                                    # cdb (Ham.102,Ham)
+
+   # ------------------------------------------------------------------------------------
+   # The momentum contsraint
+
+   defMom := Mom_{c} -> g^{a b} K_{a c ; b} - \partial_{c}{g^{a b} K_{a b}}.
+   Mom    := Mom_{c}.                                      # cdb (Mom.lhs,Mom)
+   substitute     (Mom, defMom)                            # cdb (Mom.101,Mom)
+
+   substitute     (Mom, deriv3)                            # cdb (Mom.102,Mom)
+   product_rule   (Mom)                                    # cdb (Mom.103,Mom)
+   distribute     (Mom)                                    # cdb (Mom.104,Mom)
+   substitute     (Mom, defGamma)                          # cdb (Mom.105,Mom)
+   distribute     (Mom)                                    # cdb (Mom.106,Mom)
+   substitute     (Mom, defDgab)                           # cdb (Mom.107,Mom)
+
+   Mom = product_sort (Mom)                                # cdb (Mom.108,Mom)
+
+   rename_dummies (Mom)                                    # cdb (Mom.109,Mom)
+   canonicalise   (Mom)                                    # cdb (Mom.110,Mom)
+
+   cdblib.put ('Rscalar', Rscalar, jsonfile)
+   cdblib.put ('Rab',     Rab,     jsonfile)
+   cdblib.put ('Nab',     Nab,     jsonfile)
+   cdblib.put ('DgabDt',  DgabDt,  jsonfile)
+   cdblib.put ('DKabDt',  DKabDt,  jsonfile)
+   cdblib.put ('DNDt',    DNDt,    jsonfile)
+   cdblib.put ('Ham',     Ham,     jsonfile)
+   cdblib.put ('Mom',     Mom,     jsonfile)
+
+\end{cadabra}
+
+\clearpage
+
+% =======================================================================================
+\section*{The Hessian of the lapse.}
+
+% \begin{dgroup*}[spread=5pt]
+%    \begin{dmath*}
+%       \cdb{Nab.lhs}
+%          = \Cdb*{Nab.101}
+%    \end{dmath*}
+%    \begin{dmath*}
+%       \phantom{\cdb{Nab.lhs}}
+%          = \Cdb*{Nab.102}
+%    \end{dmath*}
+% \end{dgroup*}
+
+\begin{align*}
+   \cdb{Nab.lhs}
+      &= \Cdb{Nab.101}\\
+      &= \Cdb{Nab.102}
+\end{align*}
+
+% =======================================================================================
+\section*{The Ricci curvature.}
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*}
+      \cdb{Rab.lhs}
+         = \Cdb*{Rab.101}
+         = \Cdb*{Rab.102}
+         = \Cdb*{Rab.103}
+         = \Cdb*{Rab.104}
+         = \Cdb*{Rab.105}
+         = \Cdb*{Rab.106}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*}
+      \cdb{Rab.lhs}
+         = \Cdb*{Rab.107}
+         = \Cdb*{Rab.108}
+         = \Cdb*{Rab.109}
+         = \Cdb*{Rab.110}
+         = \Cdb*{Rab.111}
+         = \Cdb*{Rab.112}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =======================================================================================
+\section*{The Ricci scalar.}
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*}
+      \cdb{R.lhs}
+         = \Cdb*{R.101}
+         = \Cdb*{R.102}
+         = \Cdb*{R.103}
+         = \Cdb*{R.104}
+         = \Cdb*{R.105}
+         = \Cdb*{R.106}
+         = \Cdb*{R.107}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*}
+      \cdb{R.lhs}
+          = \Cdb*[\hskip 2cm\hfill]{R.108}
+          = \Cdb*[\hskip 2cm\hfill]{R.109}
+          = \Cdb*{R.110}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+% =======================================================================================
+\section*{The ADM constraints.}
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*}
+      \cdb{Ham.lhs}
+         = \Cdb*{Ham.101}
+         = \Cdb*{Ham.102}
+   \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}[spread=5pt]
+   \begin{dmath*}
+      \cdb{Mom.lhs}
+         = \Cdb*{Mom.101}
+         = \Cdb*{Mom.102}
+         = \Cdb*{Mom.103}
+         = \Cdb*{Mom.104}
+         = \Cdb*{Mom.105}
+         = \Cdb*{Mom.106}
+         = \Cdb*{Mom.107}
+         = \Cdb*{Mom.108}
+         = \Cdb*{Mom.109}
+         = \Cdb*{Mom.110}
+   \end{dmath*}
+\end{dgroup*}
+
+\end{document}

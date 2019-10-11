@@ -1,0 +1,63 @@
+V "GNAT Lib v2019"
+A -O3
+A -gnatA
+A -gnatwA
+A -gnat2012
+A -mtune=core2
+A -mmacosx-version-min=10.14.0
+A -fPIC
+P ZX
+
+RN
+RV NO_FLOATING_POINT
+RV NO_IMPLEMENTATION_PRAGMAS
+RV SPARK_05
+
+U support%b		support.adb		4d89d64a NE OO PK
+
+U support%s		support.ads		c1643455 EE NE OO PK
+W gnat%s		gnat.ads		gnat.ali
+W gnat.os_lib%s		g-os_lib.ads		g-os_lib.ali
+
+D ada.ads		20190925125847 76789da1 ada%s
+D a-unccon.ads		20190925125847 0e9b276f ada.unchecked_conversion%s
+D a-uncdea.ads		20190925125847 eff36322 ada.unchecked_deallocation%s
+D gnat.ads		20190925125847 b5988c27 gnat%s
+D g-os_lib.ads		20190925125847 0db74523 gnat.os_lib%s
+D support.ads		20190925101625 ccd37176 support%s
+D support.adb		20190925101625 815aa73c support%b
+D system.ads		20190925125848 085b6ffb system%s
+D s-exctab.ads		20190925125847 54135002 system.exception_table%s
+D s-os_lib.ads		20190925125847 5703ce4c system.os_lib%s
+D s-stalib.ads		20190925125847 09bd3940 system.standard_library%s
+D s-string.ads		20190925125848 8fe54fb7 system.strings%s
+G a e
+G c Z s b [max support 9 18 none]
+G c Z s b [min support 10 18 none]
+G c Z s b [max support 12 18 none]
+G c Z s b [min support 13 18 none]
+X 4 gnat.ads
+34K9*GNAT 57e9 6|1r6 7r56
+X 5 g-os_lib.ads
+51K14*OS_Lib=51:36 6|1w11 7r61
+X 6 support.ads
+3K9*Support 15l5 15e12 7|1b14 35l5 35t12
+5F9*Real<long_long_float> 9r30 9r43 9r56 10r30 10r43 10r56 7|3r25 3r38 3r51
+. 11r25 11r38 11r51
+7U14*halt=7:68
+7i20 return_code{integer}
+9V18*max{5F9} 9>23 9>36 7|3b13 9t7
+9f23 a{5F9} 7|3b18 5r10 6r22
+9f36 b{5F9} 7|3b31 5r14 7r22
+10V18*min{5F9} 10>23 10>36 7|11b13 17t7
+10f23 a{5F9} 7|11b18 13r10 14r22
+10f36 b{5F9} 7|11b31 13r14 15r22
+12V18*max{integer} 12>23 12>39 7|19b13 25t7
+12i23 a{integer} 7|19b18 21r10 22r22
+12i39 b{integer} 7|19b34 21r14 23r22
+13V18*min{integer} 13>23 13>39 7|27b13 33t7
+13i23 a{integer} 7|27b18 29r10 30r22
+13i39 b{integer} 7|27b34 29r14 31r22
+X 10 s-os_lib.ads
+1045U14*OS_Exit 6|7r68
+

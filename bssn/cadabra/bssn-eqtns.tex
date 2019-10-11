@@ -1,0 +1,75 @@
+\documentclass[12pt]{cdblatex}
+\usepackage[final]{pdfpages}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\input{bssn-eqtns-09.cdbtex}
+\input{bssn-eqtns-10.cdbtex}
+\input{bssn-eqtns-11.cdbtex}
+\input{bssn-eqtns-12.cdbtex}
+\input{bssn-eqtns-14.cdbtex}
+\input{bssn-eqtns-20.cdbtex}
+
+\input{bssn-constraints.cdbtex}
+\input{bssn-ricci-scalar.cdbtex}
+
+\section*{The BSSN evolution equations. Pt.1}
+
+These are the equations as given in the Phys.Rev.D (62) 044034 paper.
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb{eq09.00} = \Cdb*{eq09.01} \end{dmath*}
+   \begin{dmath*} \cdb{eq10.00} = \Cdb*{eq10.01} \end{dmath*}
+   \begin{dmath*} \cdb{eq11.00} = \Cdb*{eq11.01} \end{dmath*}
+   \begin{dmath*} \cdb{eq12.00} = \Cdb*{eq12.01} \end{dmath*}
+   \begin{dmath*} \cdb{eq20.00} = \Cdb*{eq20.01} \end{dmath*}
+   \begin{dmath*} \cdb{eq14.00} = \Cdb*{eq14.01} = \Cdb*{eq14.02} \end{dmath*}
+\end{dgroup*}
+
+The next task is to rewrite the right hand sides of this set of equations
+in terms of the BSSN variables and their partial derivatives.
+
+The results are summarised on the following page.
+
+\clearpage
+
+\section*{The BSSN evolution equations. Pt.2}
+
+Notice that equation (14) contains $\partial{\bar\Gamma}^i$ but not $\bar\Gamma^i$. This is a consequence of the advice given by Alcubierre, Brugmann etal. (Phys Rev D (67) 084023,
+2nd-3rd paragraph on pg. 084023-4)
+
+\begin{quote}
+... if one wants to achieve numerical stability. In the computer code we do not use the numerically
+evolved ${\bar{\Gamma}}^i$ in all places, but we follow this rule:
+
+Partial derivatives $\partial_j {\bar{\Gamma}}^i$ are computed as finite differences
+of the independent variables ${\bar{\Gamma}}^i$ that are evolved using ...
+\end{quote}
+
+Compare equation (14) on the previous page and that on this page.
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb{eq09.00} = \Cdb*{eq09.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq10.00} = \Cdb*{eq10.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq11.00} = \Cdb*{eq11.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq12.00} = \Cdb*{eq12.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq20.00} = \Cdb*{eq20.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq14.00} = \Cdb*{eq14.99} \end{dmath*}
+\end{dgroup*}
+
+The full details of the above computations can be found on the following pages.
+
+\clearpage
+
+\includepdf[pages=1-]{./bssn-eqtns-09.pdf}
+\includepdf[pages=1-]{./bssn-eqtns-10.pdf}
+\includepdf[pages=1-]{./bssn-eqtns-11.pdf}
+\includepdf[pages=1-]{./bssn-eqtns-12.pdf}
+\includepdf[pages=1-]{./bssn-eqtns-14.pdf}
+\includepdf[pages=1-]{./bssn-eqtns-20.pdf}
+\includepdf[pages=1-]{./bssn-lapse.pdf}
+\includepdf[pages=1-]{./bssn-ricci-scalar.pdf}
+\includepdf[pages=1-]{./bssn-constraints.pdf}
+
+\end{document}

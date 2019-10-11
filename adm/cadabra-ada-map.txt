@@ -1,0 +1,37 @@
+The following lines record the progression of symbol names from the Cadabra source to the
+final Ada code. Each line documents a single object.
+
+The changes are required to accomodate the syntactic limitations of the various languages.
+Cadabra use a LaTeX like syntax for tensors that is not supported in Python and Ada. The
+first stage of the translation is to export the Cadabra names to Python. Though Python
+does understand the underscore symbol, it appears that the current version of Cadabra
+(2.1.9) does not support underscores in Python names (presumably because the underscore
+is reserved exclusively for tensor subscripts). As tempting as it might be to create a
+Python symbol such as N_ab for the second derivatives of N this will cause Cadabra much
+grief. In contrast, Ada is quite happy to accept underscores in symbol names. So I have
+introduced the underscore in the Ada names to separate the object name from the tensor
+indices. Note that this use of underscore does not denote subscripts but rather as way to
+separate the object name from the indices. Python does not understand \partial so I have
+chosen the "d" symbol to denote partial derivatives.
+
+Note that the intermediate symbols are not all that important. The important symbols are
+the Cadabra (first) and Ada (last) symbols.
+
+The following lines were copied from the file code/template/include/local-data.ad.
+
+   -- g_{p q} --> gpq --> gab (pq)
+   -- g^{p q} --> ipq --> iab (pq)
+
+   -- Kab_{p q} --> Kpq --> Kab (pq)
+   -- Rab_{p q} --> Rpq --> Rab (pq)
+
+   -- Hess_{a b} --> Hessab --> hess (ab)
+
+   -- \partial_{a}{N}   --> dN_{a}   --> Na  --> d1N (a)
+   -- \partial_{a b}{N} --> dN_{a b} --> Nab --> d2N (ab)
+
+   -- \partial_{p}{Kab_{q r}}   --> dK_{q r p}   --> Kqrp  --> d1Kab (p)(qr)
+
+   -- \partial_{p}{gab_{q r}}   --> dg_{q r p}   --> gqrp  --> d1gab (p)(qr)
+   -- \partial_{p}{gab^{q r}}   --> dg^{q r}_{p} --> iqrp  --> d1iab (p)(qr)
+   -- \partial_{p q}{gab_{r s}} --> dg_{r s p q} --> grspq --> d2gab (pq)(rs)

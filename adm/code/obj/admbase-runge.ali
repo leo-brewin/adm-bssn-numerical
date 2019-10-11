@@ -1,0 +1,183 @@
+V "GNAT Lib v2019"
+A -O3
+A -gnatA
+A -gnatwA
+A -gnat2012
+A -mtune=core2
+A -mmacosx-version-min=10.14.0
+A -fPIC
+P ZX
+
+RN
+RV NO_ALLOCATORS
+RV NO_FLOATING_POINT
+RV NO_IO
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_ELABORATION_CODE
+RV SPARK_05
+
+U admbase.runge%b	admbase-runge.adb	5c40edd7 OO PK IL
+Z ada.tags%s		a-tags.adb		a-tags.ali
+W admbase%s		admbase.adb		admbase.ali
+W support%s		support.adb		support.ali
+
+U admbase.runge%s	admbase-runge.ads	248efcb7 EE NE OO PK IL
+W admbase%s		admbase.adb		admbase.ali
+
+D ada.ads		20190925125847 76789da1 ada%s
+D a-except.ads		20190925125846 291912d5 ada.exceptions%s
+D a-ioexce.ads		20190925125846 e4a01f64 ada.io_exceptions%s
+D a-numeri.ads		20190925125846 bb51c45a ada.numerics%s
+D a-ngelfu.ads		20190925125846 55716239 ada.numerics.generic_elementary_functions%s
+D a-stream.ads		20190925125846 119b8fb3 ada.streams%s
+D a-tags.ads		20190925125847 491b781d ada.tags%s
+D a-textio.ads		20190925125847 aef4d56d ada.text_io%s
+D a-tiflio.ads		20190925125847 bf196650 ada.text_io.float_io%s
+D a-tiinio.ads		20190925125847 390edddb ada.text_io.integer_io%s
+D a-unccon.ads		20190925125847 0e9b276f ada.unchecked_conversion%s
+D a-uncdea.ads		20190925125847 eff36322 ada.unchecked_deallocation%s
+D admbase.ads		20191002040134 dc3f5677 admbase%s
+D admbase-runge.ads	20190925101625 f8b1aac0 admbase.runge%s
+D admbase-runge.adb	20190925101625 68223661 admbase.runge%b
+D gnat.ads		20190925125847 b5988c27 gnat%s
+D g-os_lib.ads		20190925125847 0db74523 gnat.os_lib%s
+D interfac.ads		20190925125847 5ab55268 interfaces%s
+D i-cstrea.ads		20190925125847 e53d8b8e interfaces.c_streams%s
+D support.ads		20190925101625 ccd37176 support%s
+D system.ads		20190925125848 085b6ffb system%s
+D s-crtl.ads		20190925125847 0ebbdb71 system.crtl%s
+D s-exctab.ads		20190925125847 54135002 system.exception_table%s
+D s-ficobl.ads		20190925125847 078245e4 system.file_control_block%s
+D s-os_lib.ads		20190925125847 5703ce4c system.os_lib%s
+D s-parame.ads		20190925125847 48ec542b system.parameters%s
+D s-secsta.ads		20190925125847 20bbe636 system.secondary_stack%s
+D s-soflin.ads		20190925125847 a7318a92 system.soft_links%s
+D s-stache.ads		20190925125847 a37c21ec system.stack_checking%s
+D s-stalib.ads		20190925125847 09bd3940 system.standard_library%s
+D s-stoele.ads		20190925125848 2dc34a04 system.storage_elements%s
+D s-string.ads		20190925125848 8fe54fb7 system.strings%s
+D s-traent.ads		20190925125848 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20190925125848 34867c83 system.unsigned_types%s
+D s-wchcon.ads		20190925125848 1b7d22d2 system.wch_con%s
+G a e
+G c Z s b [set_time_step admbase__runge 3 14 none]
+G c Z s b [set_time_step_min admbase__runge 4 14 none]
+G c Z s b [rk_step admbase__runge 6 14 none]
+G c Z s b [beg_runge_kutta admbase__runge 11 14 none]
+G c Z s b [end_runge_kutta admbase__runge 14 14 none]
+G r c none [set_time_step admbase__runge 3 14 none] [min support 10 18 none]
+G r c none [set_time_step_min admbase__runge 4 14 none] [min support 10 18 none]
+G r c none [rk_step admbase__runge 6 14 none] [Omultiply admbase 151 13 none]
+G r c none [rk_step admbase__runge 6 14 none] [Oadd admbase 150 13 none]
+G r c none [rk_step admbase__runge 6 14 none] [Omultiply admbase 156 13 none]
+G r c none [rk_step admbase__runge 6 14 none] [Oadd admbase 155 13 none]
+G r c none [end_runge_kutta admbase__runge 14 14 none] [Oadd admbase 150 13 none]
+G r c none [end_runge_kutta admbase__runge 14 14 none] [Oadd admbase 155 13 none]
+X 13 admbase.ads
+9K9*ADMBase 176e12 14|1r9 17r5 15|3r14 144r5
+17N4*max_num_x 15|7r69 8r69 9r69 17r69 18r69 19r69
+18N4*max_num_y 15|7r83 8r83 9r83 17r83 18r83 19r83
+19N4*max_num_z 15|7r97 8r97 9r97 17r97 18r97 19r97
+23A9*SlaveParams(integer)<integer> 14|9r16 12r16 15r16 15|46r16 79r16 116r16
+29A9*MetricPointArray(20|5F9)<27E9>
+30A9*MetricGridArray(29A9)<integer><integer><integer> 15|7r48 11r20 17r48
+. 21r20
+32A9*ExtcurvPointArray(20|5F9)<27E9>
+33A9*ExtcurvGridArray(32A9)<integer><integer><integer> 15|8r48 12r20 18r48
+. 22r20
+35A9*LapseGridArray(20|5F9)<integer><integer><integer> 15|9r48 13r20 19r48
+. 23r20
+42P9*MetricGridArray_ptr(30A9) 15|7r20 17r20
+43P9*ExtcurvGridArray_ptr(33A9) 15|8r20 18r20
+44P9*LapseGridArray_ptr(35A9) 15|9r20 19r20
+60a4*gab{30A9} 15|60r16 93r31 130r10
+61a4*Kab{33A9} 15|61r16 94r31 131r10
+62a4*N{35A9} 15|62r18 95r33 132r12
+64a4*dot_gab{30A9} 15|60r68 64r68 97r12
+65a4*dot_Kab{33A9} 15|61r68 65r68 98r12
+66a4*dot_N{35A9} 15|62r68 66r68 99r12
+73f4*dx{20|5F9} 15|32r44 39r48
+73f8*dy{20|5F9} 15|32r53 39r57
+73f12*dz{20|5F9} 15|32r56 39r60
+77i7*i{integer} 15|56r35 89r35 126r35
+77i10*j{integer} 15|57r35 90r35 127r35
+77i13*k{integer} 15|58r35 91r35 128r35
+81A9*GridPointList(76R9)<integer>
+89a4*grid_point_list{81A9} 15|56r15 57r15 58r15 89r15 90r15 91r15 126r15
+. 127r15 128r15
+126f4*the_time{20|5F9} 15|72m10 109r22 138m10 138r22
+133f4*courant{20|5F9} 15|32r28
+134f4*courant_min{20|5F9} 15|39r28
+140f4*time_step{20|5F9} 15|33m7 60r51 61r51 62r51 64r51 65r51 66r51 72r33
+. 138r33
+141f4*time_step_min{20|5F9} 15|40m7
+142f4*constant_time_step{20|5F9} 15|33r44 40r48
+150V14*"+"{29A9} 15|60s49 64s49 130s43
+151V14*"*"{29A9} 15|60s66 64s66
+155V14*"+"{32A9} 15|61s49 65s49 131s43
+156V14*"*"{32A9} 15|61s66 65s66
+X 14 admbase-runge.ads
+1K17*Runge 13|9k9 14|17l13 17e18 15|3b22 144l13 144t18
+3U14*set_time_step 15|29b14 34l8 34t21
+4U14*set_time_step_min 15|36b14 41l8 41t25
+6U14*rk_step 7>7 8>7 9>7 15|43b14 76l8 76t15
+7f7 ct{20|5F9} 15|44b7 60r63 61r63 62r63 72r45
+8f7 cw{20|5F9} 15|45b7 64r63 65r63 66r63
+9a7 params{13|23A9} 15|46b7 49r30 50r30 51r30
+11U14*beg_runge_kutta 12>7 15|78b14 113l8 113t23
+12a7 params{13|23A9} 15|79b7 82r30 83r30 84r30
+14U14*end_runge_kutta 15>7 15|115b14 142l8 142t23
+15a7 params{13|23A9} 15|116b7 119r30 120r30 121r30
+X 15 admbase-runge.adb
+7p4 delta_gab_ptr{13|42P9} 11r45
+8p4 delta_Kab_ptr{13|43P9} 12r45
+9p4 delta_N_ptr{13|44P9} 13r45
+11a4 delta_gab{13|30A9} 64r10 64r31 101r10 130r45
+12a4 delta_Kab{13|33A9} 65r10 65r31 102r10 131r45
+13a4 delta_N{13|35A9} 66r10 66r31 103r10 132r45
+17p4 old_gab_ptr{13|42P9} 21r45
+18p4 old_Kab_ptr{13|43P9} 22r45
+19p4 old_N_ptr{13|44P9} 23r45
+21a4 old_gab{13|30A9} 60r33 93r12 130r27
+22a4 old_Kab{13|33A9} 61r33 94r12 131r27
+23a4 old_N{13|35A9} 62r33 95r12 132r27
+27f4 old_time{20|5F9} 72r22 109m10
+30f7 courant_time_step{20|5F9} 32m7 33r25
+37f7 courant_time_step{20|5F9} 39m7 40r29
+48i7 i{integer} 56m10 60r21 60r42 60r77 61r21 61r42 61r77 62r21 62r42 62r77
+. 64r21 64r42 64r77 65r21 65r42 65r77 66r21 66r42 66r77
+48i10 j{integer} 57m10 60r23 60r44 60r79 61r23 61r44 61r79 62r23 62r44 62r79
+. 64r23 64r44 64r79 65r23 65r44 65r79 66r23 66r44 66r79
+48i13 k{integer} 58m10 60r25 60r46 60r81 61r25 61r46 61r81 62r25 62r46 62r81
+. 64r25 64r46 64r81 65r25 65r46 65r81 66r25 66r46 66r81
+49i7 the_task{integer} 70r10
+50i7 beg_point{integer} 54r16
+51i7 end_point{integer} 54r29
+54i11 b{integer} 56r32 57r32 58r32
+81i7 i{integer} 89m10 93r21 93r36 94r21 94r36 95r21 95r36 97r21 98r21 99r21
+. 101r21 102r21 103r21
+81i10 j{integer} 90m10 93r23 93r38 94r23 94r38 95r23 95r38 97r23 98r23 99r23
+. 101r23 102r23 103r23
+81i13 k{integer} 91m10 93r25 93r40 94r25 94r40 95r25 95r40 97r25 98r25 99r25
+. 101r25 102r25 103r25
+82i7 the_task{integer} 107r10
+83i7 beg_point{integer} 87r16
+84i7 end_point{integer} 87r29
+87i11 b{integer} 89r32 90r32 91r32
+118i7 i{integer} 126m10 130r15 130r36 130r56 131r15 131r36 131r56 132r15
+. 132r36 132r56
+118i10 j{integer} 127m10 130r17 130r38 130r58 131r17 131r38 131r58 132r17
+. 132r38 132r58
+118i13 k{integer} 128m10 130r19 130r40 130r60 131r19 131r40 131r60 132r19
+. 132r40 132r60
+119i7 the_task{integer} 136r10
+120i7 beg_point{integer} 124r16
+121i7 end_point{integer} 124r29
+124i11 b{integer} 126r32 127r32 128r32
+X 20 support.ads
+3K9*Support 15|1w6 1r20 20|15e12
+5F9*Real<long_long_float> 14|7r12 8r12 15|27r20 30r27 37r27 44r12 45r12
+10V18*min{5F9} 15|32s38 32s48 33s20 39s42 39s52 40s24
+

@@ -1,0 +1,194 @@
+V "GNAT Lib v2019"
+M P W=b
+A -O3
+A -gnatA
+A -gnatwA
+A -gnat2012
+A -mtune=core2
+A -mmacosx-version-min=10.14.0
+A -fPIC
+P ZX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTIONS
+RV NO_IO
+RV NO_SECONDARY_STACK
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DEFAULT_INITIALIZATION
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV SPARK_05
+
+U cdb2ada%b		cdb2ada.adb		6b9a0162 NE OO SU IL
+W ada%s			ada.ads			ada.ali
+Z ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+W support%s		support.adb		support.ali
+W support.cmdline%s	support-cmdline.adb	support-cmdline.ali
+W support.regex%s	support-regex.adb	support-regex.ali
+W support.strings%s	support-strings.adb	support-strings.ali
+Z system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+
+D ada.ads		20190925125847 76789da1 ada%s
+D a-charac.ads		20190925125846 2d3ec45b ada.characters%s
+D a-chlat1.ads		20190925125846 66457d31 ada.characters.latin_1%s
+D a-except.ads		20190925125846 291912d5 ada.exceptions%s
+D a-ioexce.ads		20190925125846 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20190925125846 119b8fb3 ada.streams%s
+D a-tags.ads		20190925125847 491b781d ada.tags%s
+D a-textio.ads		20190925125847 aef4d56d ada.text_io%s
+D a-unccon.ads		20190925125847 0e9b276f ada.unchecked_conversion%s
+D a-uncdea.ads		20190925125847 eff36322 ada.unchecked_deallocation%s
+D cdb2ada.adb		20190925101625 bf3143bc cdb2ada%b
+D gnat.ads		20190925125847 b5988c27 gnat%s
+D g-os_lib.ads		20190925125847 0db74523 gnat.os_lib%s
+D interfac.ads		20190925125847 5ab55268 interfaces%s
+D i-cstrea.ads		20190925125847 e53d8b8e interfaces.c_streams%s
+D support.ads		20190925101625 ccd37176 support%s
+D support-cmdline.ads	20190925101625 75d90c23 support.cmdline%s
+D support-regex.ads	20190925101625 41a31528 support.regex%s
+D support-strings.ads	20190925101625 82f6ffce support.strings%s
+D system.ads		20190925125848 085b6ffb system%s
+D s-crtl.ads		20190925125847 0ebbdb71 system.crtl%s
+D s-exctab.ads		20190925125847 54135002 system.exception_table%s
+D s-ficobl.ads		20190925125847 078245e4 system.file_control_block%s
+D s-os_lib.ads		20190925125847 5703ce4c system.os_lib%s
+D s-parame.ads		20190925125847 48ec542b system.parameters%s
+D s-secsta.ads		20190925125847 20bbe636 system.secondary_stack%s
+D s-soflin.ads		20190925125847 a7318a92 system.soft_links%s
+D s-stache.ads		20190925125847 a37c21ec system.stack_checking%s
+D s-stalib.ads		20190925125847 09bd3940 system.standard_library%s
+D s-stoele.ads		20190925125848 2dc34a04 system.storage_elements%s
+D s-string.ads		20190925125848 8fe54fb7 system.strings%s
+D s-traent.ads		20190925125848 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20190925125848 34867c83 system.unsigned_types%s
+D s-wchcon.ads		20190925125848 1b7d22d2 system.wch_con%s
+G a e
+G c Z b b [cdb2ada standard 8 11 none]
+G r c none [cdb2ada standard 8 11 none] [read_command_arg support__cmdline 52 13 none]
+G r c none [cdb2ada standard 8 11 none] [read_command_arg support__cmdline 57 13 none]
+G r c none [cdb2ada standard 8 11 none] [find_command_arg support__cmdline 62 13 none]
+G r c none [cdb2ada standard 8 11 none] [grep support__regex 9 13 none]
+G r c none [cdb2ada standard 8 11 none] [max support 12 18 none]
+G r c none [cdb2ada standard 8 11 none] [spc support__strings 25 13 none]
+G r c none [cdb2ada standard 8 11 none] [cut support__strings 27 13 none]
+G r c none [cdb2ada standard 8 11 none] [str support__strings 13 13 none]
+G r c none [cdb2ada standard 8 11 none] [min support 13 18 none]
+X 1 ada.ads
+16K9*Ada 20e8 11|1r6 1r53
+X 8 a-textio.ads
+57K13*Text_IO 727e16 11|1w10 1r57
+64P9*File_Type 11|22r22 23r22 72r22
+66n23*In_File{66E9} 11|90r21 120r24 258r18
+66n32*Out_File{66E9} 11|252r20
+99U14*Create 11|252s7
+114U14*Open 11|90s10 120s13 258s7
+129U14*Close 11|112s10 181s13 331s7 335s7
+258U14*New_Line 11|162s31 306s25 312s25
+459U14*Put 11|130s13 148s36 149s36 155s28 163s31 302s25 303s25 304s25 305s25
+. 308s25 309s25 310s25 311s25
+492V13*Get_Line{string} 11|99s41 139s44 266s38
+498U14*Put_Line 11|51s10 66s10 176s16 260s7 274s19
+508U14*Put_Line 11|343s7
+547X4*End_Error 11|108r21 327r18
+X 11 cdb2ada.adb
+8U11*cdb2ada 8b11 365l5 365t12
+10N4 target_line_length 217r29 219r56
+12a4 src_file_name{string} 90r30 120r33 258r27
+13a4 txt_file_name{string} 252r30
+14a4 procedure_name{string} 42r37 57r37
+16e4 symbol{character} 98r47 138r50 148r51 149r51 155r43 265r44
+21U14 rewrite_cdb 21b14 337l8 337t19 363s4
+22p7 txt{8|64P9} 51r20 66r20 130r18 148r41 149r41 155r33 162r41 163r36 176r26
+. 252m15 252r15 260r17 274r29 302r30 303r30 304r30 305r30 306r35 308r30 309r30
+. 310r30 311r30 312r35 335m14 335r14
+23p7 src{8|64P9} 258m13 258r13 266r48 331m14 331r14
+24b7 start_line{boolean} 289m19 301r25 315m22
+25b7 finished{boolean} 290m19 292r30 320m22
+26i7 this_lead_in{integer} 285m27 286m27 303r68 309r40
+27i7 break_at{integer} 296m34 299r33 317r34
+28i7 found_at{integer} 270m39 279r28 281r31
+29b7 found{boolean} 270m33 272r23
+30i7 beg_at{integer} 294m22 296r43
+31i7 end_at{integer} 295m22 296r50
+32i7 var_beg{integer} 278m19 285r51 303r50
+33i7 var_end{integer} 279m19 285r43 303r59
+34i7 rhs_beg{integer} 298m22 305r45 311r45
+35i7 rhs_end{integer} 299m22 305r54 311r54
+36i7 tail_beg{integer} 281m19 294r32 298r33 317m22 320r34
+37i7 tail_end{integer} 282m19 295r32 318m22 320r45
+38i7 max_xvars_width{integer} 114m10 286r43
+40U17 write_procedure_begin 40b17 53l11 53t32 254s7
+41a10 re_name{string} 42r53
+42a10 the_name{string} 45r19 46r16 47r16 51r38
+45i14 i{integer} 46r26 47r26
+55U17 write_procedure_end 55b17 68l11 68t30 333s7
+56a10 re_name{string} 57r53
+57a10 the_name{string} 60r19 61r16 62r16 66r32
+60i14 i{integer} 61r26 62r26
+70U17 add_declarations 70b17 185l11 185t27 256s7
+72p10 src{8|64P9} 90m16 90r16 99r51 112m17 112r17 120m19 120r19 139r54 181m20
+. 181r20
+73i10 count{integer} 127m13 146r29 152m28 152r37 156m28 161r56
+74i10 max_count{integer} 128m13 146r37
+75i10 width{integer} 122m13 148r83 151r53 155r82
+76i10 target{integer} 125m13 161r44
+77i10 lead_in{integer} 123m13 130r28 131r26 163r46 164r44
+78i10 num_chars{integer} 131m13 151m28 151r41 161r32 164m31
+79i10 tmp_xvars{integer} 133m13 144m25 144r38 147r31 160r28 172r26
+80i10 num_xvars{integer} 92m10 103m22 103r35 116r13 147r44 160r41 172r38
+81i10 max_width{integer} 93m10 104m22 104r40 114r29 122r24
+83E15 action_list 83e67 84r24
+83n31 wrote_xvar{83E15} 153r43
+83n43 wrote_type{83E15} 157r43 175r31
+83n55 wrote_space{83E15} 165r46
+84e10 last_action{83E15} 153m28 157m28 165m31 175r16
+98a19 re_numb=98:53{string} 100r58
+99a19 this_line{string} 100r47
+100a19 this_numb{string} 102r22 104r51
+138a22 re_numb=138:56{string} 140r61
+139a22 this_line{string} 140r50
+140a22 this_numb{string} 142r25 148r65 149r65 155r57
+187U17 find_equal_sign 187b17 188<10 189<10 190>10 205l11 205t26 270s16
+188b10 found{boolean} 194m10 199m16
+189i10 found_at{integer} 195m10 200m16
+190a10 this_line{string} 195r22 197r19 198r16
+197i14 i{integer} 198r27 200r28
+207U17 find_break 207b17 208<10 209>10 210>10 211>10 248l11 248t21 296s22
+208i10 found_at{integer} 219m13 220r27 224r31 225r31 233r33 236m16 236r28
+. 241m16 245m13
+209i10 beg_at{integer} 217r20 219r47 233r44
+210i10 end_at{integer} 217r13 241r28 245r25
+211a10 this_line{string} 219r31 224r20 225r20
+213b10 found{boolean} 229m19 232m19 240r20
+214b10 searching{boolean} 220m13 222r19 230m19 233m19
+265a16 re_numb=265:50{string} 268r55
+266a16 this_line{string} 267r43 268r44 270r48 274r33 296r57 303r40 305r35
+. 311r35
+267i16 this_line_len{integer} 282r31 318r34
+268a16 this_numb{string} 284r22
+341U14 Show_Usage 341b14 345l8 345t18 354s10
+349U14 initialize 349b14 357l8 357t18 361s4
+X 16 support.ads
+3K9*Support 11|3w6 3r53 4r6 4r53 5r6 5r53 6r6 6r53 16|15e12
+7U14*halt=7:68 11|344s7
+12V18*max{integer} 11|104s35
+13V18*min{integer} 11|219s26
+X 17 support-cmdline.ads
+1K17*Cmdline 11|4w14 4r61 17|76e20
+52V13*read_command_arg{string} 11|12s31 13s31 14s31
+57V13*read_command_arg{character} 11|16s34
+62V13*find_command_arg{boolean} 11|352s15 353s15
+X 18 support-regex.ads
+1K17*RegEx 11|6w14 6r61 18|45e18
+9V13*grep{string} 11|42s31 57s31 100s41 140s44 268s38
+13a19 fail{string} 11|42r65 57r65 100r70 140r73 268r67
+X 19 support-strings.ads
+3K17*Strings 11|5w14 5r61 19|67e20
+13V13*str{string} 11|148s46 155s38 303s35
+15e18 pad{character} 11|148r90 155r91 303r81
+25V13*spc{string} 11|130s23 163s41 302s35 308s35 309s35
+27V13*cut{string} 11|148s60 149s46 149s60 155s52
+

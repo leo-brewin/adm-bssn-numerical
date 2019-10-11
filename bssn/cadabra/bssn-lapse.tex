@@ -1,0 +1,26 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\section*{Lapse function}
+
+This is about as easy it gets -- choose a static lapse (which is fine for the Kasner spacetime).
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'bssn-lapse.json'
+   cdblib.create (jsonfile)
+
+   # --------------------------------------------------------------------
+
+   # DNDt := -2 N trK.  # 1+log
+   # DNDt := -N*N trK.  # Harmonic
+   DNDt := 0.           # Static lapse
+
+   cdblib.put ('DNDt',DNDt,jsonfile)
+\end{cadabra}
+
+\end{document}

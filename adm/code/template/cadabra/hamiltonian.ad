@@ -1,0 +1,28 @@
+Procedure set_hamiltonian is
+   x0,  x1,  x2,  x3,  x4,  x5,  x6,  x7,  x8,  x9,  x10, x11, x12, x13, x14, x15, x16, 
+   x17, x18, x19, x20 : Real;
+begin
+   x0  := Kxx*Kyy;
+   x1  := 2.0*ixx;
+   x2  := iyy*x1;
+   x3  := 4.0*Kyz;
+   x4  := 4.0*ixz;
+   x5  := Kyz*x4;
+   x6  := Kxx*Kzz;
+   x7  := izz*x1;
+   x8  := Kxy*iyz;
+   x9  := 4.0*Kxz;
+   x10 := Kxy*ixy;
+   x11 := Kxz*x4;
+   x12 := ixy*x9;
+   x13 := Kyy*Kzz;
+   x14 := 2.0*iyy*izz;
+   x15 := 2.0*(ixy ** 2);
+   x16 := 2.0*(ixz ** 2);
+   x17 := (Kxy ** 2);
+   x18 := (Kxz ** 2);
+   x19 := 2.0*(iyz ** 2);
+   x20 := (Kyz ** 2);
+   Ham := Kxx*ixx*iyz*x3 - Kxx*ixy*x5 - Kxy*iyy*x5 + Kxz*iyz*x5 + Kyy*iyy*x11 - Kyy*iyz*x12 - Kyz*izz*x12 + 4.0*Kzz*izz*x10 - Kzz*x4*x8 + R - ixx*x8*x9 + ixy*x3*x8 - x0*x15 + x0*x2 + x10*x11 + x13*x14 - x13*x19 - x14*x20 + x15*x17 + x16*x18 - x16*x6 - x17*x2 
+        - x18*x7 + x19*x20 + x6*x7;
+end set_hamiltonian;

@@ -1,0 +1,39 @@
+Project Common is
+
+   for Source_Dirs use ();
+
+   for Exec_dir    use "bin";
+   for Object_Dir  use "obj";
+
+   package Compiler is
+      for Default_Switches ("Ada") use ("-O3","-gnatwA","-gnat2012","-dynamic");
+      -- for Switches ("foo.adb") use Compiler'Default_Switches ("Ada") & ("-O1");
+      -- for Switches ("bah.adb") use Compiler'Default_Switches ("Ada") &
+      --   (
+      --     "-gnatqQ",  -- keep ALI files even if there are compilation errors
+      --     "-gnat12"   -- force Ada 2012
+      --     "-gnatef"   -- print full file names in errors
+      --   );
+   end Compiler;
+
+   package Builder is
+      for Default_Switches ("Ada") use ();
+   end Builder;
+
+   package Binder is
+      for Default_Switches ("ada") use ("-E","-shared");
+   end Binder;
+
+   package Linker is
+      for Default_Switches ("ada") use ("-dead_strip", "-Wl,-no_pie");
+      -- for Linker_Options use ("-lblah"); -- link with these libraries
+   end Linker;
+
+   -- run this in the directory that contains build.gpr:
+   --    gnatpp -p -P build.gpr"
+
+   package Pretty_Printer is
+      for Default_Switches ("ada") use ("-M128","--par_threshold=2","--output-dir=pretty");
+   end Pretty_Printer;
+
+end Common;

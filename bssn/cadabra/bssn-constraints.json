@@ -1,0 +1,4 @@
+{
+  "Ham": "R +  2/3 (trK)**2-ABar_{a b} ABar^{a b}",
+  "confMom": "6ABar^{i a} \\partial_{a}(\\phi) + ABar_{a b} gBar^{a c} \\partial_{c}(gBar^{i b}) + ABar_{a b} gBar^{i a} \\partial_{c}(gBar^{b c}) + gBar^{i a} gBar^{b c} \\partial_{b}(ABar_{a c}) + ABar^{a b} gBar^{i c} \\partial_{a}(gBar_{b c}) -  1/2 ABar^{a b} gBar^{i c} \\partial_{c}(gBar_{a b}) -  2/3 gBar^{i a} \\partial_{a}(trK)"
+}

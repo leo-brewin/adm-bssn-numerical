@@ -1,0 +1,3 @@
+{
+  "Rscalar": "\\exp(-4\\phi) (-8gBar^{a b} \\partial_{a b}(\\phi) + 8GammaBar^{a} \\partial_{a}(\\phi)-24gBar^{a b} \\partial_{a}(\\phi) \\partial_{b}(\\phi) +  1/4 gBar^{a b} \\partial_{a}(gBar_{c d}) \\partial_{b}(gBar^{c d}) + \\partial_{a}(GammaBar^{a}) -  1/2 gBar^{a b} \\partial_{c}(gBar_{a d}) \\partial_{b}(gBar^{c d}))"
+}

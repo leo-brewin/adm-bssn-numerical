@@ -1,0 +1,150 @@
+Procedure set_3d_dot_ABar is
+   x0,   x1,   x2,   x3,   x4,   x5,   x6,   x7,   x8,   x9,   x10,  x11,  x12,  x13,  
+   x14,  x15,  x16,  x17,  x18,  x19,  x20,  x21,  x22,  x23,  x24,  x25,  x26,  x27,  
+   x28,  x29,  x30,  x31,  x32,  x33,  x34,  x35,  x36,  x37,  x38,  x39,  x40,  x41,  
+   x42,  x43,  x44,  x45,  x46,  x47,  x48,  x49,  x50,  x51,  x52,  x53,  x54,  x55,  
+   x56,  x57,  x58,  x59,  x60,  x61,  x62,  x63,  x64,  x65,  x66,  x67,  x68,  x69,  
+   x70,  x71,  x72,  x73,  x74,  x75,  x76,  x77,  x78,  x79,  x80,  x81,  x82,  x83,  
+   x84,  x85,  x86,  x87,  x88,  x89,  x90,  x91,  x92,  x93,  x94,  x95,  x96,  x97,  
+   x98,  x99,  x100, x101, x102, x103, x104, x105, x106, x107, x108, x109, x110, x111, 
+   x112, x113, x114, x115, x116 : Real;
+begin
+   x0   := N*trK;
+   x1   := ABar_xx*ABar_xy;
+   x2   := 4.0*N;
+   x3   := iBar_xy*x2;
+   x4   := ABar_xz*x2;
+   x5   := ABar_xx*iBar_xz;
+   x6   := ABar_xy*iBar_yz;
+   x7   := 2.0*N;
+   x8   := iBar_xx*x7;
+   x9   := (ABar_xy ** 2);
+   x10  := x7*x9;
+   x11  := (ABar_xz ** 2);
+   x12  := x11*x7;
+   x13  := exp(-4.0*phi);
+   x14  := Rxx*N;
+   x15  := N_x*phi_x;
+   x16  := N_x*iBar_xy;
+   x17  := N_x*iBar_xz;
+   x18  := N_y*iBar_yy;
+   x19  := N_y*iBar_yz;
+   x20  := N_z*iBar_yz;
+   x21  := N_z*iBar_zz;
+   x22  := N_x*iBar_xx;
+   x23  := (1.0/2.0)*gBar_xxx;
+   x24  := (1.0/2.0)*gBar_xxy;
+   x25  := (1.0/2.0)*gBar_xxz;
+   x26  := (1.0/3.0)*gBar_xx;
+   x27  := N_xx*iBar_xx;
+   x28  := (2.0/3.0)*gBar_xx;
+   x29  := N_xy*iBar_xy;
+   x30  := N_xz*iBar_xz;
+   x31  := N_y*iBar_xy;
+   x32  := N_yy*iBar_yy;
+   x33  := N_yz*iBar_yz;
+   x34  := N_z*iBar_xz;
+   x35  := N_zz*iBar_zz;
+   x36  := (4.0/3.0)*gBar_xx;
+   x37  := iBar_xx*x15;
+   x38  := phi_y*x36;
+   x39  := phi_z*x36;
+   x40  := phi_x*x36;
+   x41  := iBar_xx*x14;
+   x42  := Rxy*N;
+   x43  := iBar_xy*x42;
+   x44  := Rxz*N;
+   x45  := iBar_xz*x44;
+   x46  := Ryy*N;
+   x47  := iBar_yy*x46;
+   x48  := Ryz*N;
+   x49  := iBar_yz*x48;
+   x50  := Rzz*N;
+   x51  := iBar_zz*x50;
+   x52  := N_x*(iBar_xxx + iBar_xyy + iBar_xzz);
+   x53  := N_y*(iBar_xyx + iBar_yyy + iBar_yzz);
+   x54  := N_z*(iBar_xzx + iBar_yzy + iBar_zzz);
+   x55  := ABar_yy*x7;
+   x56  := ABar_xx*iBar_xy;
+   x57  := ABar_yz*x7;
+   x58  := ABar_xy*iBar_xz;
+   x59  := ABar_xz*x7;
+   x60  := iBar_yy*x7;
+   x61  := ABar_xy*x60;
+   x62  := ABar_xz*iBar_yz;
+   x63  := iBar_zz*x7;
+   x64  := ABar_xz*x63;
+   x65  := 2.0*N_x;
+   x66  := 2.0*phi_x;
+   x67  := (1.0/2.0)*x17;
+   x68  := (1.0/2.0)*gBar_yyx;
+   x69  := (1.0/3.0)*gBar_xy;
+   x70  := (2.0/3.0)*gBar_xy;
+   x71  := (1.0/2.0)*x19;
+   x72  := (1.0/2.0)*x21;
+   x73  := (4.0/3.0)*gBar_xy;
+   x74  := phi_y*x73;
+   x75  := phi_z*x73;
+   x76  := phi_x*x73;
+   x77  := ABar_xy*x0 - ABar_yy*x61 - ABar_yz*x64 - iBar_xy*x10 - x1*x8 + x13*(-N_xy + N_y*x66 - gBar_xyz*x67 - gBar_xyz*x71 - gBar_xyz*x72 + gBar_xzy*x67 + gBar_xzy*x71 + gBar_xzy*x72 + gBar_yzx*x67 + gBar_yzx*x71 + gBar_yzx*x72 + phi_y*x65 + x16*x68 - x16*x74 - x17*x75 + x18*x68 
+         - x18*x74 - x19*x75 + x20*x68 - x20*x74 - x21*x75 + x22*x24 + x24*x31 + x24*x34 + x27*x69 + x29*x70 + x30*x70 - x31*x76 + x32*x69 + x33*x70 - x34*x76 + x35*x69 - x37*x73 - x41*x69 + x42 - x43*x70 - x45*x70 - x47*x69 - x49*x70 - x51*x69 + x52*x69 + x53*x69 
+         + x54*x69) - x5*x57 - x55*x56 - x55*x62 - x57*x6 - x58*x59;
+   x78  := ABar_xz*x8;
+   x79  := ABar_zz*x7;
+   x80  := ABar_xy*iBar_xy;
+   x81  := (1.0/2.0)*x16;
+   x82  := (1.0/3.0)*gBar_xz;
+   x83  := (2.0/3.0)*gBar_xz;
+   x84  := (1.0/2.0)*x18;
+   x85  := (1.0/2.0)*x20;
+   x86  := (4.0/3.0)*gBar_xz;
+   x87  := phi_y*x86;
+   x88  := phi_z*x86;
+   x89  := phi_x*x86;
+   x90  := -ABar_xx*x78 + ABar_xz*x0 - ABar_yz*x61 - ABar_zz*x64 - iBar_xz*x12 + x13*(-N_xz + N_z*x66 + gBar_xyz*x81 + gBar_xyz*x84 + gBar_xyz*x85 - gBar_xzy*x81 - gBar_xzy*x84 - gBar_xzy*x85 + gBar_yzx*x81 + gBar_yzx*x84 + gBar_yzx*x85 + gBar_zzx*x67 + gBar_zzx*x71 + gBar_zzx*x72 
+         + phi_z*x65 - x16*x87 - x17*x88 - x18*x87 - x19*x88 - x20*x87 - x21*x88 + x22*x25 + x25*x31 + x25*x34 + x27*x82 + x29*x83 + x30*x83 - x31*x89 + x32*x82 + x33*x83 - x34*x89 + x35*x82 - x37*x86 - x41*x82 - x43*x83 + x44 - x45*x83 - x47*x82 - x49*x83 
+         - x51*x82 + x52*x82 + x53*x82 + x54*x82) - x5*x79 - x56*x57 - x57*x62 - x59*x80 - x6*x79;
+   x91  := ABar_yz*x2;
+   x92  := iBar_yz*x91;
+   x93  := (ABar_yz ** 2);
+   x94  := x7*x93;
+   x95  := (1.0/3.0)*gBar_yy;
+   x96  := (2.0/3.0)*gBar_yy;
+   x97  := (4.0/3.0)*gBar_yy;
+   x98  := phi_y*x97;
+   x99  := phi_z*x97;
+   x100 := phi_x*x97;
+   x101 := (1.0/2.0)*x22;
+   x102 := (1.0/3.0)*gBar_yz;
+   x103 := (2.0/3.0)*gBar_yz;
+   x104 := (1.0/2.0)*x31;
+   x105 := (1.0/2.0)*x34;
+   x106 := (4.0/3.0)*gBar_yz;
+   x107 := phi_y*x106;
+   x108 := phi_z*x106;
+   x109 := phi_x*x106;
+   x110 := -ABar_xy*x78 - ABar_xz*iBar_xy*x55 - ABar_xz*iBar_xz*x57 - ABar_yy*ABar_yz*x60 - ABar_yz*ABar_zz*x63 + ABar_yz*x0 - ABar_zz*iBar_yz*x55 - iBar_yz*x94 + x13*(2.0*N_y*phi_z - N_yz + 2.0*N_z*phi_y + gBar_xyz*x101 + gBar_xyz*x104 + gBar_xyz*x105 + gBar_xzy*x101 + gBar_xzy*x104 
+         + gBar_xzy*x105 + gBar_yyz*x81 + gBar_yyz*x84 + gBar_yyz*x85 - gBar_yzx*x101 - gBar_yzx*x104 - gBar_yzx*x105 + gBar_zzy*x67 + gBar_zzy*x71 + gBar_zzy*x72 + x102*x27 + x102*x32 + x102*x35 - x102*x41 - x102*x47 - x102*x51 + x102*x52 + x102*x53 + x102*x54 + x103*x29 
+         + x103*x30 + x103*x33 - x103*x43 - x103*x45 - x103*x49 - x106*x37 - x107*x16 - x107*x18 - x107*x20 - x108*x17 - x108*x19 - x108*x21 - x109*x31 - x109*x34 + x48) - x57*x80 - x58*x79;
+   x111 := (1.0/3.0)*gBar_zz;
+   x112 := (2.0/3.0)*gBar_zz;
+   x113 := (4.0/3.0)*gBar_zz;
+   x114 := phi_y*x113;
+   x115 := phi_z*x113;
+   x116 := phi_x*x113;
+   dot_ABar (xx) := -(ABar_xx ** 2)*x8 + ABar_xx*x0 - iBar_yy*x10 - iBar_zz*x12 - x1*x3 + x13*(-N_xx + gBar_xyx*x16 + gBar_xyx*x18 + gBar_xyx*x20 + gBar_xzx*x17 + gBar_xzx*x19 + gBar_xzx*x21 + x14 + 4.0*x15 - x16*x24 - x16*x38 - x17*x25 - x17*x39 - x18*x24 - x18*x38 - x19*x25 - x19*x39 
+                    - x20*x24 - x20*x38 - x21*x25 - x21*x39 + x22*x23 + x23*x31 + x23*x34 + x26*x27 + x26*x32 + x26*x35 - x26*x41 - x26*x47 - x26*x51 + x26*x52 + x26*x53 + x26*x54 + x28*x29 + x28*x30 + x28*x33 - x28*x43 - x28*x45 - x28*x49 - x31*x40 - x34*x40 - x36*x37) 
+                    - x4*x5 - x4*x6;
+   dot_ABar (xy) := x77;
+   dot_ABar (xz) := x90;
+   dot_ABar (xy) := x77;
+   dot_ABar (yy) := -ABar_xy*ABar_yy*x3 - (ABar_yy ** 2)*x60 + ABar_yy*x0 - ABar_yy*x92 - iBar_zz*x94 + x13*(4.0*N_y*phi_y - N_yy + gBar_xyy*x22 + gBar_xyy*x31 + gBar_xyy*x34 + gBar_yyy*x81 + gBar_yyy*x84 + gBar_yyy*x85 - gBar_yyz*x67 - gBar_yyz*x71 - gBar_yyz*x72 + gBar_yzy*x17 + gBar_yzy*x19 
+                    + gBar_yzy*x21 - x100*x31 - x100*x34 - x16*x98 - x17*x99 - x18*x98 - x19*x99 - x20*x98 - x21*x99 - x22*x68 + x27*x95 + x29*x96 + x30*x96 - x31*x68 + x32*x95 + x33*x96 - x34*x68 + x35*x95 - x37*x97 - x41*x95 - x43*x96 - x45*x96 + x46 - x47*x95 - x49*x96 
+                    - x51*x95 + x52*x95 + x53*x95 + x54*x95) - x58*x91 - x8*x9;
+   dot_ABar (yz) := x110;
+   dot_ABar (xz) := x90;
+   dot_ABar (yz) := x110;
+   dot_ABar (zz) := -ABar_xz*ABar_yz*x3 - (ABar_zz ** 2)*x63 - ABar_zz*iBar_xz*x4 + ABar_zz*x0 - ABar_zz*x92 - x11*x8 + x13*(4.0*N_z*phi_z - N_zz + gBar_xzz*x22 + gBar_xzz*x31 + gBar_xzz*x34 + gBar_yzz*x16 + gBar_yzz*x18 + gBar_yzz*x20 - gBar_zzx*x101 - gBar_zzx*x104 - gBar_zzx*x105 
+                    - gBar_zzy*x81 - gBar_zzy*x84 - gBar_zzy*x85 + gBar_zzz*x67 + gBar_zzz*x71 + gBar_zzz*x72 + x111*x27 + x111*x32 + x111*x35 - x111*x41 - x111*x47 - x111*x51 + x111*x52 + x111*x53 + x111*x54 + x112*x29 + x112*x30 + x112*x33 - x112*x43 - x112*x45 - x112*x49 
+                    - x113*x37 - x114*x16 - x114*x18 - x114*x20 - x115*x17 - x115*x19 - x115*x21 - x116*x31 - x116*x34 + x50) - x60*x93;
+end set_3d_dot_ABar;

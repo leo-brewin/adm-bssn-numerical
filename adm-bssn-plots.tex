@@ -1,0 +1,61 @@
+\documentclass[12pt]{article}
+\usepackage[papersize={297mm,210mm},hmargin=2cm,tmargin=1.0cm,bmargin=1.5cm]{geometry}
+\usepackage{cdblatex}% only needed if using cdblatex macros
+\usepackage{pgfplots}
+
+\begin{document}
+
+% =======================================================================================
+\section*{Kasner evolution}
+
+\pgfplotsset{compat=newest}
+\pgfplotsset{width=0.45\textwidth,height=0.30\textwidth}
+
+\begin{tabular}{cc}
+\begin{tikzpicture}
+   \begin{axis}
+      [xmin= 0.5, xmax=11.5,
+       title={\bf Metric components},
+       xlabel=$t$, ylabel={$g_{xx}, \> g_{zz}$},
+       grid=major, grid style={dashed,gray!30},
+       legend entries = {$g_{xx}$, $g_{zz}$},
+       legend pos = north west]
+       \addplot[blue]   table [x index=0, y index=1]{adm/code/results/history.txt};
+       \addplot[red]    table [x index=0, y index=3]{adm/code/results/history.txt};
+   \end{axis}
+\end{tikzpicture}
+&
+\begin{tikzpicture}
+   \begin{axis}
+      [xmin= 0.5, xmax=11.5,
+       title={\bf Extrinsic curvatures},
+       xlabel=$t$, ylabel={$K_{xx}, \> K_{zz}$},
+       grid=major, grid style={dashed,gray!30},
+       legend entries = {$K_{xx}$, $K_{zz}$}]
+       \addplot[blue]   table [x index=0, y index=4]{adm/code/results/history.txt};
+       \addplot[red]    table [x index=0, y index=6]{adm/code/results/history.txt};
+   \end{axis}
+\end{tikzpicture}\\
+\begin{tikzpicture}
+   \begin{axis}
+      [xmin= 0.5, xmax=11.5,
+       title={\bf Hamiltonian},
+       xlabel=$t$, ylabel={$\cal H$},
+       grid=major, grid style={dashed,gray!30},
+       legend entries = {ADM, BSSN}]
+       \addplot[red]    table [x index=0, y index=7]{adm/code/results/history.txt};
+       \addplot[blue]   table [x index=0, y index=7]{bssn/code/results/history.txt};
+   \end{axis}
+\end{tikzpicture}
+&
+\hskip 1cm
+\begin{minipage}[b]{0.35\textwidth}
+   These plots show the evolution for basic ADM and BSSN data. The Kasner parameters
+   were $p_1=p_2=2/3$ and $p_3=-1/3$. The only noticeable difference between the
+   ADM and BSSN results are for the Hamiltonian.
+   \vskip 4cm
+   \hrule height 0pt
+\end{minipage}
+\end{tabular}
+
+\end{document}

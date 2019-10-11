@@ -1,0 +1,141 @@
+import cadabra2
+from cadabra2_defaults import *
+__cdbkernel__ = cadabra2.__cdbkernel__
+
+{x,y,z}::Coordinate.
+{a,b,c,d,e,f,i,j,k,l,m,n,o,p,q,r,s,u#}::Indices(position=independent,values={x,y,z}).
+
+\partial{#}::PartialDerivative.
+D{#}::Derivative.
+DBar{#}::Derivative.
+DBar{#}::LaTeXForm("{\bar{D}}").
+
+N::Depends(x,y,z).
+
+g_{a b}::Symmetric.
+g^{a b}::Symmetric.
+g_{a}^{b}::KroneckerDelta.
+g^{a}_{b}::KroneckerDelta.
+
+g_{a b}::Depends(x,y,z).
+g^{a b}::Depends(x,y,z).
+
+gBar_{a b}::Symmetric.
+gBar^{a b}::Symmetric.
+gBar_{a}^{b}::KroneckerDelta.
+gBar^{a}_{b}::KroneckerDelta.
+gBar{#}::LaTeXForm("{\bar{g}}").
+
+gBar_{a b}::Depends(x,y,z).
+gBar^{a b}::Depends(x,y,z).
+
+A_{a b}::Depends(x,y,z).
+A^{a b}::Depends(x,y,z).
+
+\phi::Depends(x,y,z).
+
+detg::Depends(x,y,z).
+detg::LaTeXForm("{g}").
+
+A_{a b}::Symmetric.
+K_{a b}::Symmetric.
+R_{a b}::Symmetric.
+
+ABar_{a b}::Symmetric.
+ABar^{a b}::Symmetric.
+ABar{#}::LaTeXForm("{\bar{A}}").
+
+RBar_{a b}::Symmetric.
+RBar{#}::LaTeXForm("{\bar{R}}").
+
+Rphi_{a b}::Symmetric.
+Rphi{#}::LaTeXForm("{R^{\phi}}").
+
+GammaBar{#}::LaTeXForm("{\bar{\Gamma}}").
+GammaBar^{a}_{b c}::TableauSymmetry(shape={2}, indices={1,2}).
+GammaBar_{a b c}::TableauSymmetry(shape={2}, indices={1,2}).
+
+trK::LaTeXForm("{{\rm tr} K}").
+
+# This is my trick to sort product terms, I use it in prefernce to Cadabra's own sort_product
+def product_sort (ex):
+    substitute (ex,$ N                            -> A001           $)
+    substitute (ex,$ trK                          -> A002           $)
+    substitute (ex,$ A_{a b}                      -> A003_{a b}     $)
+    substitute (ex,$ A^{a b}                      -> A004^{a b}     $)
+    substitute (ex,$ ABar_{a b}                   -> A005_{a b}     $)
+    substitute (ex,$ ABar^{a b}                   -> A006^{a b}     $)
+    substitute (ex,$ g_{a b}                      -> A007_{a b}     $)
+    substitute (ex,$ g^{a b}                      -> A008^{a b}     $)
+    substitute (ex,$ gBar_{a b}                   -> A009_{a b}     $)
+    substitute (ex,$ gBar^{a b}                   -> A010^{a b}     $)
+    substitute (ex,$ GammaBar^{a}                 -> A011^{a}       $)
+    substitute (ex,$ GammaBar^{a}_{b c}           -> A012^{a}_{b c} $)
+    substitute (ex,$ GammaBar_{a b c}             -> A013_{a b c}   $)
+    substitute (ex,$ \partial_{a}{N}              -> A014_{a}       $)
+    substitute (ex,$ \partial_{a b}{N}            -> A015_{a b}     $)
+    substitute (ex,$ \partial_{a}{\phi}           -> A016_{a}       $)
+    substitute (ex,$ \partial_{a b}{\phi}         -> A017_{a b}     $)
+    substitute (ex,$ \partial_{a}{GammaBar^{b}}   -> A018_{a}^{b}   $)
+    substitute (ex,$ \partial_{a}{gBar_{c d}}     -> A019_{a c d}   $)
+    substitute (ex,$ \partial_{a}{gBar^{c d}}     -> A020_{a}^{c d} $)
+    substitute (ex,$ \partial_{a b}{gBar_{c d}}   -> A021_{a b c d} $)
+    sort_product   (ex)
+    rename_dummies (ex)
+    substitute (ex,$ A001                         -> N                          $)
+    substitute (ex,$ A002                         -> trK                        $)
+    substitute (ex,$ A003_{a b}                   -> A_{a b}                    $)
+    substitute (ex,$ A004^{a b}                   -> A^{a b}                    $)
+    substitute (ex,$ A005_{a b}                   -> ABar_{a b}                 $)
+    substitute (ex,$ A006^{a b}                   -> ABar^{a b}                 $)
+    substitute (ex,$ A007_{a b}                   -> g_{a b}                    $)
+    substitute (ex,$ A008^{a b}                   -> g^{a b}                    $)
+    substitute (ex,$ A009_{a b}                   -> gBar_{a b}                 $)
+    substitute (ex,$ A010^{a b}                   -> gBar^{a b}                 $)
+    substitute (ex,$ A011^{a}                     -> GammaBar^{a}               $)
+    substitute (ex,$ A012^{a}_{b c}               -> GammaBar^{a}_{b c}         $)
+    substitute (ex,$ A013_{a b c}                 -> GammaBar_{a b c}           $)
+    substitute (ex,$ A014_{a}                     -> \partial_{a}{N}            $)
+    substitute (ex,$ A015_{a b}                   -> \partial_{a b}{N}          $)
+    substitute (ex,$ A016_{a}                     -> \partial_{a}{\phi}         $)
+    substitute (ex,$ A017_{a b}                   -> \partial_{a b}{\phi}       $)
+    substitute (ex,$ A018_{a}^{b}                 -> \partial_{a}{GammaBar^{b}} $)
+    substitute (ex,$ A019_{a c d}                 -> \partial_{a}{gBar_{c d}}   $)
+    substitute (ex,$ A020_{a}^{c d}               -> \partial_{a}{gBar^{c d}}   $)
+    substitute (ex,$ A021_{a b c d}               -> \partial_{a b}{gBar_{c d}} $)
+    return ex
+
+# --------------------------------------------------------------------
+# Metric
+
+defGBarSq := gBar_{a b} gBar^{a b} -> 3.
+
+# --------------------------------------------------------------------
+# Derivative operators for scalars
+
+defD1 := D_{a?}{A?}    -> \partial_{a?}{A?}.
+defD2 := D_{a? b?}{A?} -> \partial_{a? b?}{A?} - \Gamma^{c}_{a? b?} \partial_{c}{A?}.
+
+defDBar1 := DBar_{a?}{A?}    -> \partial_{a?}{A?}.
+defDBar2 := DBar_{a? b?}{A?} -> \partial_{a? b?}{A?} - \Gamma^{c}_{a? b?} \partial_{c}{A?}.
+
+# --------------------------------------------------------------------
+# Connections
+
+defGammaBarD := GammaBar_{a b c} -> (1/2) (   \partial_{b}{gBar_{a c}}
+                                            + \partial_{c}{gBar_{b a}}
+                                            - \partial_{a}{gBar_{b c}}).
+
+defGammaBarU := GammaBar^{a}_{b c} -> (1/2) gBar^{a e} (   \partial_{b}{gBar_{e c}}
+                                                         + \partial_{c}{gBar_{b e}}
+                                                         - \partial_{e}{gBar_{b c}}).
+
+defGiBar := GammaBar^{a}_{b c} gBar^{b c} -> GammaBar^{a}.
+
+defGamma2GammaBar := \Gamma^{a}_{b c} -> GammaBar^{a}_{b c}
+                                         + 2 gBar^{a}_{c} \partial_{b}{\phi}
+                                         + 2 gBar^{a}_{b} \partial_{c}{\phi}
+                                         - 2 gBar^{a e} gBar_{b c} \partial_{e}{\phi}.
+
+GammaBarD := GammaBar_{a b c}.
+GammaBarU := GammaBar^{a}_{b c}.

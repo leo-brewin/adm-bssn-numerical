@@ -1,0 +1,30 @@
+# it's unlikely that this file is neeeded, but just in case
+# source this file to ensure the associated files are executable
+
+chmod u+x ./build.sh
+
+chmod u+x ./adm/build.sh
+chmod u+x ./adm/cadabra/build.sh
+chmod u+x ./adm/cadabra/reformat.sh
+chmod u+x ./adm/code/admevolve.sh
+chmod u+x ./adm/code/adminitial.sh
+chmod u+x ./adm/code/build.sh
+chmod u+x ./adm/code/template/merge.sh
+
+chmod u+x ./bssn/build.sh
+chmod u+x ./bssn/cadabra/build.sh
+chmod u+x ./bssn/cadabra/reformat.sh
+chmod u+x ./bssn/code/bssnevolve.sh
+chmod u+x ./bssn/code/bssninitial.sh
+chmod u+x ./bssn/code/build.sh
+chmod u+x ./bssn/code/template/merge.sh
+
+chmod u+x ./support/build.sh
+chmod u+x ./utilities/build.sh
+
+chmod u+x ./hybrid-latex/scripts/cdbclean.sh
+chmod u+x ./hybrid-latex/scripts/cdbcopy.py
+chmod u+x ./hybrid-latex/scripts/cdblatex.sh
+chmod u+x ./hybrid-latex/scripts/cdbpostproc.py
+chmod u+x ./hybrid-latex/scripts/cdbpreproc.py
+chmod u+x ./hybrid-latex/scripts/merge-tex.py

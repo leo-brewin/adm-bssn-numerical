@@ -1,0 +1,189 @@
+\documentclass[12pt]{cdblatex}
+
+\begin{document}
+
+% =======================================================================================
+\section*{ADM and BSSN variables for the Kasner metric}
+
+A standard form of the Kasner metric is given by
+\begin{equation*}
+   ds^2 = - dt^2 + t^{2p_1} dx^2 + t^{2p_2} dy^2 + t^{2p_3} dz^2
+\end{equation*}
+where $p_1$, $p_2$ and $p_3$ are constants subject to
+\begin{align*}
+   1 &= p_1 + p_2 + p_3\\
+   1 &= p^1_1 + p^2_2 + p^3_2
+\end{align*}
+
+The following Cadabra codes compute various quantities defined in the ADM and BSSN
+formulations of the Einstein equations.
+
+All of the results are exactly as expected (what else could it give?).
+
+None of this is new -- the main point of this whole exercise is to use a familar metric
+to explore how standard computations can be implemented using Cadabra.
+
+None of these results are used by the main evolution codes (in the directories {\tt
+adm} and {\tt bssn}) other than to set the initial data (at $t=1$).
+
+The code that sets the initial data was written by hand (as opposed to the Cadabra
+codes that generates the Ada procedures used in the evolution codes).
+
+\clearpage
+
+\begin{cadabra}
+   {t,x,y,z}::Coordinate.
+   {a,b,c,d,e,f,i,j,k,l,m,n,o,p,q,r,s,u#}::Indices(position=independent,values={t,x,y,z}).
+
+   \partial{#}::PartialDerivative;
+
+   {p1,p2,p3}::Symbol.
+
+   p1::LaTeXForm("p_1").
+   p2::LaTeXForm("p_2").
+   p3::LaTeXForm("p_3").
+
+   gBar{#}::LaTeXForm("{\bar g}").
+   ABar{#}::LaTeXForm("{\bar A}").
+   Aab{#}::LaTeXForm("{A}").
+   phi::LaTeXForm("{\phi}").
+
+   g_{a b}::Metric.
+   g^{a b}::InverseMetric.
+
+   g_{a b}::Depends(\partial{#}).
+
+   # -----------------------------------------------------------------
+   # rules used when evaluating components
+
+   DtRule := {D^{t} -> 1}.      # components of d/dt, zero shift & unit lapse
+
+   gabRule := { g_{t t} = gtt,
+                g_{x x} = gxx,
+                g_{y y} = gyy,
+                g_{z z} = gzz }.
+
+   # -----------------------------------------------------------------
+   # the Kasner metric
+
+   gab := { gtt -> -1,
+            gxx -> t**(2*p1),
+            gyy -> t**(2*p2),
+            gzz -> t**(2*p3),
+            gxy -> 0,
+            gxz -> 0,
+            gyz -> 0,
+            gtx -> 0,
+            gty -> 0,
+            gtz -> 0}.
+
+   # -----------------------------------------------------------------
+   # standard definitions
+
+   Detg := g ->  gxx gyy gzz - gxx gyz gyz
+               - gxy gxy gzz + gxy gxz gyz
+               + gxz gxy gyz - gxz gxz gyy.
+
+   Gamma := \Gamma^{a}_{b c} ->
+            (1/2) g^{a e} (   \partial_{b}{g_{e c}}
+                            + \partial_{c}{g_{b e}}
+                            - \partial_{e}{g_{b c}}).
+
+   Rabcd := R^{a}_{b c d} ->
+              \partial_{c}{\Gamma^{a}_{b d}} + \Gamma^{a}_{e c} \Gamma^{e}_{b d}
+            - \partial_{d}{\Gamma^{a}_{b c}} - \Gamma^{a}_{e d} \Gamma^{e}_{b c}.
+
+
+   Rab := R_{a b} -> R^{c}_{a c b}.
+
+   Kab := K_{a b} -> - (1/2) D^{c} \partial_{c}{g_{a b}} / N.
+
+   # -----------------------------------------------------------------
+   # the BSSN variables
+
+   trK   := K          -> g^{a b} K_{a b}.
+   Aab   := Aab_{a b}  -> K_{a b} - (1/3) g_{a b} K.
+   gBar  := gBar_{a b} -> g_{a b} / (g**(1/3)).
+   ABar  := ABar_{a b} -> (K_{a b} - (1/3) g_{a b} K) / (g**(1/3)).
+   phi   := phi        -> (1/12) \log(g).
+
+   # -----------------------------------------------------------------
+   # basic objects
+
+   substitute (gabRule, gab)
+   substitute (Detg,    gab)
+
+   complete   (gabRule, $g^{a b}$)                                      # cdb(gabRule,gabRule)
+
+   substitute (Rabcd,   Gamma)
+   substitute (Rab,     Rabcd)
+
+   # -----------------------------------------------------------------
+   # convert to BSSN
+
+   substitute (gBar,  Detg)                                             # cdb (gBar.01,gBar)
+
+   substitute (Aab,   trK)                                              # cdb (Aab.01,Aab)
+   substitute (Aab,   Kab)                                              # cdb (Aab.02,Aab)
+
+   substitute (ABar,  trK)                                              # cdb (ABar.01,ABar)
+   substitute (ABar,  Kab)                                              # cdb (ABar.02,ABar)
+   substitute (ABar,  Detg)                                             # cdb (ABar.03,ABar)
+
+   substitute (phi,   Detg)                                             # cdb (phi.01,phi)
+
+   # -----------------------------------------------------------------
+   # now evaluate the components
+
+   evaluate   (gab,   gabRule+DtRule, rhsonly=True)                     # cdb (gab,gab)
+   evaluate   (Gamma, gabRule+DtRule, rhsonly=True)                     # cdb (Gamma,Gamma)
+   evaluate   (Rabcd, gabRule+DtRule, rhsonly=True)                     # cdb (Rabcd,Rabcd)
+   evaluate   (Rab,   gabRule+DtRule, rhsonly=True)                     # cdb (Rab,Rab)
+   evaluate   (Kab,   gabRule+DtRule, rhsonly=True)                     # cdb (Kab,Kab)
+   evaluate   (trK,   gabRule+DtRule, rhsonly=True)                     # cdb (trK,trK)
+
+   evaluate   (gBar,  gabRule+DtRule, rhsonly=True)                     # cdb (gBar.02,gBar)
+   evaluate   (Aab,   gabRule+DtRule, rhsonly=True)                     # cdb (Aab.03,Aab)
+   evaluate   (ABar,  gabRule+DtRule, rhsonly=True)                     # cdb (ABar.04,ABar)
+
+   evaluate   (phi,   gabRule+DtRule, rhsonly=True)                     # cdb (phi.02,phi)
+
+\end{cadabra}
+
+\begin{dgroup*}
+   \begin{dmath*} \Cdb*{gab}   \end{dmath*}
+   \begin{dmath*} \Cdb*{Gamma} \end{dmath*}
+   \begin{dmath*} \Cdb*{Rabcd} \end{dmath*}
+   \begin{dmath*} \Cdb*{Rab}   \end{dmath*}
+   \begin{dmath*} \Cdb*{Kab}   \end{dmath*}
+   \begin{dmath*} \Cdb*{trK}   \end{dmath*}
+\end{dgroup*}
+
+% \clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \Cdb*{gBar.01} \end{dmath*}
+   \begin{dmath*} \Cdb*{gBar.02} \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \Cdb*{phi.01} \end{dmath*}
+   \begin{dmath*} \Cdb*{phi.02} \end{dmath*}
+\end{dgroup*}
+
+% \clearpage
+
+\begin{dgroup*}
+   \begin{dmath*} \Cdb*{Aab.01}  \end{dmath*}
+   \begin{dmath*} \Cdb*{Aab.02}  \end{dmath*}
+   \begin{dmath*} \Cdb*{Aab.03}  \end{dmath*}
+\end{dgroup*}
+
+\begin{dgroup*}
+   \begin{dmath*} \Cdb*{ABar.01} \end{dmath*}
+   \begin{dmath*} \Cdb*{ABar.02} \end{dmath*}
+   \begin{dmath*} \Cdb*{ABar.03} \end{dmath*}
+   \begin{dmath*} \Cdb*{ABar.04} \end{dmath*}
+\end{dgroup*}
+
+\end{document}

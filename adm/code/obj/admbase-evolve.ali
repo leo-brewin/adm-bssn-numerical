@@ -1,0 +1,279 @@
+V "GNAT Lib v2019"
+A -O3
+A -gnatA
+A -gnatwA
+A -gnat2012
+A -mtune=core2
+A -mmacosx-version-min=10.14.0
+A -fPIC
+P ZX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTION_PROPAGATION
+RV NO_EXCEPTIONS
+RV NO_FLOATING_POINT
+RV NO_IO
+RV NO_SECONDARY_STACK
+RV NO_SELECT_STATEMENTS
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_TASK_HIERARCHY
+RV NO_TASKING
+RV NO_TERMINATE_ALTERNATIVES
+RV NO_DEFAULT_INITIALIZATION
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV NO_IMPLICIT_LOOPS
+RV SPARK_05
+RV MAX_SELECT_ALTERNATIVES=3
+RV MAX_TASK_ENTRIES=4
+RV MAX_TASKS=1+
+
+U admbase.evolve%b	admbase-evolve.adb	39ed455d NE OO PK IL
+W ada%s			ada.ads			ada.ali
+W ada.exceptions%s	a-except.adb		a-except.ali
+Z ada.real_time%s	a-reatim.adb		a-reatim.ali
+Z ada.tags%s		a-tags.adb		a-tags.ali
+W admbase%s		admbase.adb		admbase.ali
+W admbase.data_io%s	admbase-data_io.adb	admbase-data_io.ali
+W admbase.runge%s	admbase-runge.adb	admbase-runge.ali
+W admbase.text_io%s	admbase-text_io.adb	admbase-text_io.ali
+W admbase.time_derivs%s	admbase-time_derivs.adb	admbase-time_derivs.ali
+W support%s		support.adb		support.ali
+W support.clock%s	support-clock.adb	support-clock.ali
+W support.cmdline%s	support-cmdline.adb	support-cmdline.ali
+W support.strings%s	support-strings.adb	support-strings.ali
+W system%s		system.ads		system.ali
+Z system.img_int%s	s-imgint.adb		s-imgint.ali
+W system.multiprocessors%s  s-multip.adb	s-multip.ali
+Z system.parameters%s	s-parame.adb		s-parame.ali
+Z system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+Z system.soft_links%s	s-soflin.adb		s-soflin.ali
+Z system.task_info%s	s-tasinf.adb		s-tasinf.ali
+Z system.tasking%s	s-taskin.adb		s-taskin.ali
+Z system.tasking.rendezvous%s  s-tasren.adb	s-tasren.ali
+Z system.tasking.stages%s  s-tassta.adb		s-tassta.ali
+
+U admbase.evolve%s	admbase-evolve.ads	6c7e20a8 EE NE OO PK IL
+W admbase%s		admbase.adb		admbase.ali
+
+D ada.ads		20190925125847 76789da1 ada%s
+D a-charac.ads		20190925125846 2d3ec45b ada.characters%s
+D a-chlat1.ads		20190925125846 66457d31 ada.characters.latin_1%s
+D a-except.ads		20190925125846 291912d5 ada.exceptions%s
+D a-finali.ads		20190925125846 bf4f806b ada.finalization%s
+D a-ioexce.ads		20190925125846 e4a01f64 ada.io_exceptions%s
+D a-numeri.ads		20190925125846 bb51c45a ada.numerics%s
+D a-ngelfu.ads		20190925125846 55716239 ada.numerics.generic_elementary_functions%s
+D a-reatim.ads		20190925125846 0240fc73 ada.real_time%s
+D a-stream.ads		20190925125846 119b8fb3 ada.streams%s
+D a-tags.ads		20190925125847 491b781d ada.tags%s
+D a-textio.ads		20190925125847 aef4d56d ada.text_io%s
+D a-tiflio.ads		20190925125847 bf196650 ada.text_io.float_io%s
+D a-tiinio.ads		20190925125847 390edddb ada.text_io.integer_io%s
+D a-unccon.ads		20190925125847 0e9b276f ada.unchecked_conversion%s
+D a-uncdea.ads		20190925125847 eff36322 ada.unchecked_deallocation%s
+D admbase.ads		20191002040134 dc3f5677 admbase%s
+D admbase-data_io.ads	20190925101625 cfdf7978 admbase.data_io%s
+D admbase-evolve.ads	20190925101625 b04176df admbase.evolve%s
+D admbase-evolve.adb	20191002033540 362db386 admbase.evolve%b
+D admbase-runge.ads	20190925101625 f8b1aac0 admbase.runge%s
+D admbase-text_io.ads	20191002035850 9495cee6 admbase.text_io%s
+D admbase-time_derivs.ads  20190925101625 5fcdeb56 admbase.time_derivs%s
+D gnat.ads		20190925125847 b5988c27 gnat%s
+D g-os_lib.ads		20190925125847 0db74523 gnat.os_lib%s
+D interfac.ads		20190925125847 5ab55268 interfaces%s
+D i-c.ads		20190925125847 5421119b interfaces.c%s
+D i-cstrea.ads		20190925125847 e53d8b8e interfaces.c_streams%s
+D support.ads		20190925101625 ccd37176 support%s
+D support-clock.ads	20190925101625 69fe7931 support.clock%s
+D support-cmdline.ads	20190925101625 75d90c23 support.cmdline%s
+D support-strings.ads	20190925101625 82f6ffce support.strings%s
+D system.ads		20190925125848 085b6ffb system%s
+D s-atacco.ads		20190925125847 4c36d12f system.address_to_access_conversions%s
+D s-crtl.ads		20190925125847 0ebbdb71 system.crtl%s
+D s-exctab.ads		20190925125847 54135002 system.exception_table%s
+D s-ficobl.ads		20190925125847 078245e4 system.file_control_block%s
+D s-finroo.ads		20190925125847 4ff27390 system.finalization_root%s
+D s-imgint.ads		20190925125847 02dbe0c2 system.img_int%s
+D s-multip.ads		20190925125847 38ac9f73 system.multiprocessors%s
+D s-oscons.ads		20190925125847 e40aaf2d system.os_constants%s
+D s-osinte.ads		20190925125847 01b3ad47 system.os_interface%s
+D s-os_lib.ads		20190925125847 5703ce4c system.os_lib%s
+D s-parame.ads		20190925125847 48ec542b system.parameters%s
+D s-secsta.ads		20190925125847 20bbe636 system.secondary_stack%s
+D s-soflin.ads		20190925125847 a7318a92 system.soft_links%s
+D s-stache.ads		20190925125847 a37c21ec system.stack_checking%s
+D s-stausa.ads		20190925125848 017a0a05 system.stack_usage%s
+D s-stalib.ads		20190925125847 09bd3940 system.standard_library%s
+D s-stoele.ads		20190925125848 2dc34a04 system.storage_elements%s
+D s-string.ads		20190925125848 8fe54fb7 system.strings%s
+D s-tasinf.ads		20190925125848 801abd01 system.task_info%s
+D s-taspri.ads		20190925125848 f40ac08d system.task_primitives%s
+D s-taprop.ads		20190925125848 1dd2e1b6 system.task_primitives.operations%s
+D s-taskin.ads		20190925125848 b9d612e2 system.tasking%s
+D s-taprob.ads		20190925125848 acd6094d system.tasking.protected_objects%s
+D s-tpoben.ads		20190925125848 60ad3dae system.tasking.protected_objects.entries%s
+D s-tasren.ads		20190925125848 a67a9949 system.tasking.rendezvous%s
+D s-tassta.ads		20190925125848 cca55c94 system.tasking.stages%s
+D s-traent.ads		20190925125848 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20190925125848 34867c83 system.unsigned_types%s
+D s-wchcon.ads		20190925125848 1b7d22d2 system.wch_con%s
+G a e
+G c Z s b [evolve_data admbase__evolve 3 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [read_command_arg support__cmdline 42 13 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [beg_runge_kutta admbase__runge 11 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [set_time_derivatives_intr admbase__time_derivs 5 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [set_time_derivatives_bndry_fb admbase__time_derivs 14 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [set_time_derivatives_bndry_ew admbase__time_derivs 11 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [set_time_derivatives_bndry_ns admbase__time_derivs 8 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [rk_step admbase__runge 6 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [end_runge_kutta admbase__runge 14 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [report_elapsed_cpu support__clock 15 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [str support__strings 9 13 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [set_time_step admbase__runge 3 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [set_time_step_min admbase__runge 4 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [set_finite_diff_factors admbase__time_derivs 3 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [set_time_derivatives admbase__time_derivs 20 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [create_text_io_lists admbase__text_io 10 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [write_summary_header admbase__text_io 7 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [write_results admbase__text_io 3 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [write_summary admbase__text_io 6 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [write_history admbase__text_io 4 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [reset_elapsed_cpu support__clock 13 14 none]
+G r c none [evolve_data admbase__evolve 3 14 none] [write_summary_trailer admbase__text_io 8 14 none]
+X 1 ada.ads
+16K9*Ada 20e8 20|9r6 97r26 345r23
+X 4 a-except.ads
+54K13*Exceptions 349e19 20|9w10 97r30 345r27
+104V13*Exception_Information{string} 20|97s41 345s38
+X 12 a-textio.ads
+508U14*Put_Line 20|96s16 97s16 124s28 125s28 344s13 345s13
+X 17 admbase.ads
+9K9*ADMBase 176e12 19|1r9 5r5 20|5r6 5r53 6r6 6r53 7r6 7r53 8r6 8r53 12r14
+. 351r5
+23A9*SlaveParams(integer)<integer> 20|22r43 26r19 31r44 106r47
+90i4*grid_point_num{integer} 20|98r36 109r40 340r27 346r33
+114i4*interior_num{integer} 20|110r40
+115i4*boundary_num{integer} 20|111r40
+117i4*north_bndry_num{integer} 20|112r40
+118i4*south_bndry_num{integer} 20|113r40
+119i4*east_bndry_num{integer} 20|114r40
+120i4*west_bndry_num{integer} 20|115r40
+121i4*front_bndry_num{integer} 20|116r40
+122i4*back_bndry_num{integer} 20|117r40
+126f4*the_time{29|5F9} 20|283r21 306r49 309r19 310r14
+128f4*end_time{29|5F9} 20|306r60
+130i4*num_loop{integer} 20|98r52 280m7 281r20 305m10 305r22 306r23 308r40
+. 340r43 346r49
+131i4*max_loop{integer} 20|281r31 306r34
+136i4*print_cycle{integer} 20|308r14 308r53
+137f4*print_time{29|5F9} 20|283m7 309r28 310r25 318m13 318r27
+138f4*print_time_step{29|5F9} 20|283r32 318r40 326r16
+140f4*time_step{29|5F9} 20|306r75 309r46 322r16 326r34
+141f4*time_step_min{29|5F9} 20|322r28
+X 18 admbase-data_io.ads
+1K17*Data_IO 13e20 20|5w14 5r61
+X 19 admbase-evolve.ads
+1K17*Evolve 17|9k9 19|5l13 5e19 20|12b22 351l13 351t19
+3U14*evolve_data 20|14b14 349l8 349t19
+X 20 admbase-evolve.adb
+16b7 looping{boolean} 281m7 306m10 311r18 332r24
+18T17 SlaveTask 23l11 23e20 25b17 101l11 101t20 105r47
+19Y16 resume 41b23 45b23 46b23 47b23 48b23 49b23 53b23 54b23 55b23 56b23
+. 57b23 61b23 62b23 63b23 64b23 65b23 69b23 70b23 71b23 72b23 73b23 77b23
+. 219s28
+20Y16 pause 41b83 45b83 46b83 47b83 48b83 49b83 53b83 54b83 55b83 56b83 57b83
+. 61b83 62b83 63b83 64b83 65b83 69b83 70b83 71b83 72b83 73b83 77b83 223s28
+21Y16 release 83b23 211s28
+22Y16 set_params 22>28 31b17 33t13 192s28
+22a28 slave_params{17|23A9} 32r23
+26a10 params{17|23A9} 32m13 41r50 45r60 46r64 47r64 48r64 49r64 53r60 54r64
+. 55r64 56r64 57r64 61r60 62r64 63r64 64r64 65r58 69r60 70r64 71r64 72r64
+. 73r58 77r50
+31a29 slave_params{17|23A9}
+95r18 whoops{4|63R9} 97r64
+103i7 num_cpus{integer} 104r55
+104i7 num_slaves{integer} 105r32 106r32 120r15 125r62 150r24 152r55 155r54
+. 158r55 161r55 164r55 167r54 170r54 173r55 176r54 181r24 182r24 183r24 184r24
+. 185r24 186r24 187r24 188r24 189r24 191r22
+105a7 slave_tasks(18T17) 192r13 210r19 211r13 218r19 219r13 222r19 223r13
+106a7 slave_params(17|23A9) 136r19 137m13 140m10 141m10 142m10 143m10 144m10
+. 145m10 146m10 147m10 148m10 152m13 153m13 153r43 155m13 156m13 156r43 158m13
+. 159m13 159r43 161m13 162m13 162r43 164m13 165m13 165r44 167m13 168m13 168r43
+. 170m13 171m13 171r43 173m13 174m13 174r43 176m13 177m13 177r43 181m10 182m10
+. 183m10 184m10 185m10 186m10 187m10 188m10 189m10 192r40
+108U17 prepare_slaves 108b17 206l11 206t25 278s7
+109i10 n_point{integer} 152r47 181r43
+110i10 n_intr{integer} 155r47 182r43
+111i10 n_bndry{integer} 158r47 183r43
+112i10 n_north{integer} 161r47 184r43
+113i10 n_south{integer} 164r47 185r43
+114i10 n_east{integer} 167r47 186r43
+115i10 n_west{integer} 170r47 187r43
+116i10 n_front{integer} 173r47 188r43
+117i10 n_back{integer} 176r47 189r43
+136i14 i{integer} 137r27 137r36
+150i14 i{integer} 152r27 152r42 153r27 153r57 155r27 155r42 156r27 156r57
+. 158r27 158r42 159r27 159r57 161r27 161r42 162r27 162r57 164r27 164r42 165r27
+. 165r58 167r27 167r42 168r27 168r57 170r27 170r42 171r27 171r57 173r27 173r42
+. 174r27 174r57 176r27 176r42 177r27 177r57
+191i14 i{integer} 192r25 192r53
+208U17 release_slaves 208b17 213l11 213t25 336s7
+210i14 i{integer} 211r25
+215U17 advance_slaves 215b17 226l11 226t25 231s10 232s10 233s10 234s10 256s10
+. 265s10 272s10
+218i14 i{integer} 219r25
+222i14 i{integer} 223r25
+228U17 runge_kutta_step 228b17 258l11 258t27 267s10 268s10 269s10 270s10
+260U17 evolve_one_step 260b17 274l11 274t26 303s10
+343r15 whoops{4|63R9} 345r61
+X 21 admbase-runge.ads
+1K17*Runge 20|7w14 7r61 21|17e18
+3U14*set_time_step 20|285s7 320s13
+4U14*set_time_step_min 20|286s7
+6U14*rk_step 20|49s33 57s33 65s33 73s33
+11U14*beg_runge_kutta 20|41s33
+14U14*end_runge_kutta 20|77s33
+X 22 admbase-text_io.ads
+1K17*Text_IO 20|6w14 6r61 22|26e20
+3U14*write_results 20|295s7 314s13
+4U14*write_history 20|297s7 316s13
+6U14*write_summary 20|296s7 315s13
+7U14*write_summary_header 20|293s7
+8U14*write_summary_trailer 20|338s7
+10U14*create_text_io_lists 20|291s7
+X 23 admbase-time_derivs.ads
+1K17*Time_Derivs 20|8w14 8r61 23|22e24
+3U14*set_finite_diff_factors 20|287s7
+5U14*set_time_derivatives_intr 20|45s33 53s33 61s33 69s33
+8U14*set_time_derivatives_bndry_ns 20|48s33 56s33 64s33 72s33
+11U14*set_time_derivatives_bndry_ew 20|47s33 55s33 63s33 71s33
+14U14*set_time_derivatives_bndry_fb 20|46s33 54s33 62s33 70s33
+20U14*set_time_derivatives 20|289s7
+X 29 support.ads
+3K9*Support 20|1w6 1r53 2r6 2r53 3r6 3r53 4r6 4r53 29|15e12
+5F9*Real<long_long_float>
+7U14*halt=7:68 20|99s16 126s28 347s13
+X 30 support-clock.ads
+3K17*Clock 20|2w14 2r61 30|17e18
+13U14*reset_elapsed_cpu 20|299s7
+15U14*report_elapsed_cpu 20|98s16 340s7 346s13
+X 31 support-cmdline.ads
+1K17*Cmdline 20|3w14 3r61 31|76e20
+42V13*read_command_arg{integer} 20|104s33
+X 32 support-strings.ads
+3K17*Strings 20|4w14 4r61 32|67e20
+9V13*str{string} 20|125s58
+X 33 system.ads
+37K9*System 20|10r6 103r42 33|174e11
+X 40 s-multip.ads
+16K16*Multiprocessors 20|10w13 103r49 40|28e27
+19I9*CPU_Range<integer>
+21I12*CPU{19I9}
+25V13*Number_Of_CPUs{21I12} 20|103s65
+X 48 s-stausa.ads
+203U14*Initialize 204i<c,__gnat_stack_usage_initialize>22
+268U14*Output_Results 272i<c,__gnat_stack_usage_output_results>22
+

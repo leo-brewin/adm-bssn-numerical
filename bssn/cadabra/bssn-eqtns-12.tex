@@ -1,0 +1,124 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\section*{PhysRevD.62.044034 equation (12)}
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'bssn-eqtns-12.json'
+   cdblib.create (jsonfile)
+
+   # --------------------------------------------------------------------------
+
+   DABarDt := \partial_{t}{ABar_{i j}}.          # cdb(eq12.00,DABarDt)
+   DABarDt := N (trK ABar_{i j} - 2 ABar_{i a} ABar^{a}_{j})
+              + \exp(-4\phi) (N R_{i j} - D_{i j}{N}
+                              - (1/3) g_{i j} (N R_{a b} - D_{a b}{N}) g^{a b}).
+
+                                                 # cdb(eq12.01,DABarDt)
+
+   # --------------------------------------------------------------------------
+
+   substitute (DABarDt, defD2)                   # cdb(eq12.02,DABarDt)
+   substitute (DABarDt, defGamma2GammaBar)       # cdb(eq12.03,DABarDt)
+
+   foo := g_{a b} -> \exp(4\phi) gBar_{a b}.
+   bah := g^{a b} -> \exp(-4\phi) gBar^{a b}.
+
+   substitute (DABarDt, foo)                     # cdb(eq12.04,DABarDt)
+   substitute (DABarDt, bah)                     # cdb(eq12.05,DABarDt)
+   distribute (DABarDt)                          # cdb(eq12.06,DABarDt)
+   eliminate_kronecker (DABarDt)                 # cdb(eq12.07,DABarDt)
+   substitute (DABarDt,defGBarSq)                # cdb(eq12.08,DABarDt)
+
+   DABarDt = product_sort (DABarDt)              # cdb(eq12.09,DABarDt)
+
+   rename_dummies (DABarDt)                      # cdb(eq12.10,DABarDt)
+   canonicalise   (DABarDt)                      # cdb(eq12.11,DABarDt)
+
+   map_sympy  (DABarDt, "simplify")              # cdb(eq12.12,DABarDt)
+   factor_out (DABarDt,$\exp(-4\phi)$)           # cdb(eq12.13,DABarDt)
+
+   foo := ABar^{a}_{b} -> gBar^{a c} ABar_{c b}.
+
+   substitute (DABarDt, foo)
+
+   DABarDt = product_sort (DABarDt)              # cdb(eq12.14,DABarDt)
+
+   substitute (DABarDt,defGammaBarU)             # cdb(eq12.15,DABarDt)
+   distribute (DABarDt)
+
+   DABarDt = product_sort (DABarDt)              # cdb(eq12.16,DABarDt)
+
+   canonicalise (DABarDt)                        # cdb(eq12.17,DABarDt)
+
+   foo := gBar^{b c} \partial_{a}{gBar_{b c}} -> 0.   # follows from det(g) = 1
+   bah := gBar^{e b} gBar^{f c} \partial_{a}{gBar_{b c}} -> - \partial_{a}{gBar^{e f}}.
+
+   substitute (DABarDt,foo)                      # cdb(eq12.18,DABarDt)
+   substitute (DABarDt,bah)                      # cdb(eq12.19,DABarDt)
+
+   DABarDt = product_sort (DABarDt)
+
+   canonicalise (DABarDt)                        # cdb(eq12.20,DABarDt)
+   factor_out   (DABarDt, $\exp(-4\phi)$)        # cdb(eq12.21,DABarDt)
+
+                                                 # cdb(eq12.99,DABarDt)
+
+   cdblib.put ('DABarDt',DABarDt,jsonfile)
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq12.00} = \Cdb*{eq12.01}
+                    = \Cdb*{eq12.02}
+                    = \Cdb*{eq12.03}
+                    = \Cdb*{eq12.04}
+                    = \Cdb*{eq12.05}
+                    = \Cdb*{eq12.06}
+                    = \Cdb*{eq12.07}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq12.00} = \Cdb*{eq12.08}
+                    = \Cdb*{eq12.09}
+                    = \Cdb*{eq12.10}
+                    = \Cdb*{eq12.11}
+                    = \Cdb*{eq12.12}
+                    = \Cdb*[\hskip2cm\hfill]{eq12.13}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq12.00} = \Cdb*[\hskip2cm\hfill]{eq12.14}
+                    = \Cdb*{eq12.15}
+                    = \Cdb*[\hskip2cm\hfill]{eq12.16}
+                    = \Cdb*{eq12.17}
+                    = \Cdb*{eq12.18}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq12.00} = \Cdb*{eq12.19}
+                    = \Cdb*{eq12.20}
+                    = \Cdb*{eq12.21}
+   \end{dmath*}
+\end{dgroup*}
+
+\end{document}

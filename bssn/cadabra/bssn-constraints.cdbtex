@@ -1,0 +1,39 @@
+\chardef\thehashcode=\catcode`\#	 % save catcode of hash (probably 6)
+\catcode`\#=11			             % set catcode for hash to be a letter (11)
+\cdbtag{Ham.101}{%
+R+K_{a b} g^{a b} K_{c d} g^{c d}-K_{a b} K_{c d} g^{a c} g^{b d}%
+}
+\cdbtag{Ham.102}{%
+R+\frac{2}{3}{{{\rm tr} K}}^{2}-{\bar{A}}_{a b} {\bar{A}}^{a b}%
+}
+\cdbtag{confMom.101}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+\partial_{a}{{\bar{A}}^{i a}}+\frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i e} \left(\partial_{a}{{\bar{g}}_{e b}}+\partial_{b}{{\bar{g}}_{a e}}-\partial_{e}{{\bar{g}}_{a b}}\right) - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\cdbtag{confMom.102}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+\partial_{a}{{\bar{A}}^{i a}}+\frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i e} \partial_{a}{{\bar{g}}_{e b}}+\frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i e} \partial_{b}{{\bar{g}}_{a e}} - \frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i e} \partial_{e}{{\bar{g}}_{a b}} - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\cdbtag{confMom.103}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+\partial_{a}{{\bar{A}}^{i a}}+\frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{c b}}+\frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{b}{{\bar{g}}_{a c}} - \frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\cdbtag{confMom.104}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+\partial_{a}{{\bar{A}}^{i a}}+\frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{c b}}+\frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{b}{{\bar{g}}_{a c}} - \frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\cdbtag{confMom.105}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+\partial_{a}{{\bar{A}}^{i a}}+{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{b c}} - \frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\cdbtag{confMom.106}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+\partial_{a}\left({\bar{g}}^{i c} {\bar{g}}^{a d} {\bar{A}}_{c d}\right)+{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{b c}} - \frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\cdbtag{confMom.107}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+\partial_{a}{{\bar{g}}^{i c}} {\bar{g}}^{a d} {\bar{A}}_{c d}+{\bar{g}}^{i c} \partial_{a}{{\bar{g}}^{a d}} {\bar{A}}_{c d}+{\bar{g}}^{i c} {\bar{g}}^{a d} \partial_{a}{{\bar{A}}_{c d}}+{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{b c}} - \frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\cdbtag{confMom.108}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+{\bar{A}}_{a b} {\bar{g}}^{c b} \partial_{c}{{\bar{g}}^{i a}}+{\bar{A}}_{a b} {\bar{g}}^{i a} \partial_{c}{{\bar{g}}^{c b}}+{\bar{g}}^{c b} {\bar{g}}^{i a} \partial_{c}{{\bar{A}}_{a b}}+{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{b c}} - \frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\cdbtag{confMom.109}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+{\bar{A}}_{a b} {\bar{g}}^{c b} \partial_{c}{{\bar{g}}^{i a}}+{\bar{A}}_{a b} {\bar{g}}^{i a} \partial_{c}{{\bar{g}}^{c b}}+{\bar{g}}^{c b} {\bar{g}}^{i a} \partial_{c}{{\bar{A}}_{a b}}+{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{b c}} - \frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\cdbtag{confMom.110}{%
+6{\bar{A}}^{i a} \partial_{a}{\phi}+{\bar{A}}_{a b} {\bar{g}}^{a c} \partial_{c}{{\bar{g}}^{i b}}+{\bar{A}}_{a b} {\bar{g}}^{i a} \partial_{c}{{\bar{g}}^{b c}}+{\bar{g}}^{i a} {\bar{g}}^{b c} \partial_{b}{{\bar{A}}_{a c}}+{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{a}{{\bar{g}}_{b c}} - \frac{1}{2}{\bar{A}}^{a b} {\bar{g}}^{i c} \partial_{c}{{\bar{g}}_{a b}} - \frac{2}{3}{\bar{g}}^{i a} \partial_{a}{{{\rm tr} K}}%
+}
+\catcode`\#=\thehashcode          % restore original catcode for hash

@@ -1,0 +1,30 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\section*{PhysRevD.62.044034 equation (10)}
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'bssn-eqtns-10.json'
+   cdblib.create (jsonfile)
+
+   # --------------------------------------------------------------------------
+
+   DphiDt  := \partial_{t}{\phi}.                # cdb(eq10.00,DphiDt)
+   DphiDt  := -(1/6) N trK.                      # cdb(eq10.01,DphiDt)
+
+   canonicalise (DphiDt)                         # cdb(eq10.02,DphiDt)  # no change
+                                                 # cdb(eq10.99,DphiDt)  # no change
+
+   cdblib.put ('DphiDt',DphiDt,jsonfile)
+\end{cadabra}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb{eq10.00} = \Cdb*{eq10.02}\end{dmath*}
+\end{dgroup*}
+
+\end{document}

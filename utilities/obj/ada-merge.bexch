@@ -1,0 +1,27 @@
+[GENERATED OBJECT FILE]
+b__ada-merge.o
+[PROJECT FILES]
+/Users/leo/GitHub/leo-brewin/adm-bssn-numerical/utilities/build.gpr
+20191003052513
+/Users/leo/GitHub/leo-brewin/adm-bssn-numerical/common.gpr
+20191003053141
+[BOUND OBJECT FILES]
+/Users/leo/GitHub/leo-brewin/adm-bssn-numerical/utilities/obj/support.o
+/Users/leo/GitHub/leo-brewin/adm-bssn-numerical/utilities/obj/support-strings.o
+/Users/leo/GitHub/leo-brewin/adm-bssn-numerical/utilities/obj/support-regex.o
+/Users/leo/GitHub/leo-brewin/adm-bssn-numerical/utilities/obj/support-cmdline.o
+/Users/leo/GitHub/leo-brewin/adm-bssn-numerical/utilities/obj/ada-merge.o
+[GENERATED SOURCE FILES]
+b__ada-merge.ads
+b__ada-merge.adb
+b__ada-merge.ali
+[RESULTING OPTIONS]
+-L/Users/leo/GitHub/leo-brewin/adm-bssn-numerical/utilities/obj/
+-L/Users/leo/GitHub/leo-brewin/adm-bssn-numerical/utilities/obj/
+-L/usr/local/gnat/lib/gcc/x86_64-apple-darwin17.7.0/8.3.1/adalib/
+-shared
+-shared-libgcc
+-lgnat-2019
+[RUN PATH OPTION]
+/usr/local/gnat/lib/gcc/x86_64-apple-darwin17.7.0/8.3.1/adalib/
+/usr/local/gnat/lib

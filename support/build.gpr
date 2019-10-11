@@ -1,0 +1,13 @@
+with "../common.gpr";
+
+Project build is
+
+   for Source_Dirs use (".");
+   for Object_Dir  use Common'Object_Dir;
+
+   package Compiler renames Common.Compiler;
+   package Builder  renames Common.Builder;
+   package Binder   renames Common.Binder;
+   package Linker   renames Common.Linker;
+
+end build;

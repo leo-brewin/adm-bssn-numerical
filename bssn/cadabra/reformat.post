@@ -1,0 +1,74 @@
+# post-process the foo.ad file
+#-----------------------------------
+s%pow\(([0-9a-zA-Z/() .*+-]+), *0\.([0-9])+e1\)%(\1 ** \2)%g# convert pow(foo,0.2e1) to (foo ** 2)
+s%pow\(([0-9a-zA-Z/() .*+-]+), *([0-9])\.0\)%(\1 ** \2)%g# convert pow(foo,2.0) to (foo ** 2)
+s%pow\(([0-9a-zA-Z/() .*+-]+), *([0-9])\)%(\1 ** \2)%g# convert pow(foo,2) to (foo ** 2)
+#-----------------------------------
+# the following are not really needed -- I could rely on overloaded operators in Ada
+# the intenion is to turn all integers into reals except in powers and array indices
+# it works but it's a bit klunky
+s% +([0-9]+) *% \1%g# trim whitespace around integers, allow one leading space
+s%\(([0-9]+)\.0L *\/ *([0-9]+)\.0L\)%(\1.0/\2.0)%g# convert (1.0L/2.0L) to (1.0/2.0)
+s%([0-9]+)\.0L *\/ *([0-9]+)\.0L%(\1.0/\2.0)%g# convert 1.0L/2.0L to (1.0/2.0)
+s%\( *([+-]*)([0-9]+) *\/ *([0-9]+) *\)%\1(\2.0/\3.0)%g# convert (1/2) to (1.0/2.0)
+s%([ *+-]+)([0-9]+) *\/ *([0-9]+)%\1(\2.0/\3.0)%g# convert 1/2 to (1.0/2.0)
+s%([ (/*+-])([0-9]+)([^,.)])%\1\2.0\3%g# convert 123 to 123.0, will fail on (x-3)
+s%([(/*+-])([0-9]+)([^.])%\1\2.0\3%g# convert 123 to 123.0, cathces (x-3)
+s%\.0\.0%.0%g# convert .0.0 to .0 (should be no instances, but just in case)
+#-----------------------------------
+# add an underscores to separate the object from its indices
+s%N([xyz])%N_\1%g#
+s%Gi([xyz])%Gi_\1%g#
+s%phi([xyz])%phi_\1%g
+s%trK([xyz])%trK_\1%g
+s%gBar([xyz])%gBar_\1%g
+s%iBar([xyz])%iBar_\1%g
+s%ABar([xyz])%ABar_\1%g
+s%BBar([xyz])%BBar_\1%g
+#-----------------------------------
+# the only tensors the following would be applied to are symmetric
+# so use a compact notation
+s%\(x, x\)%(xx)%g
+s%\(x, y\)%(xy)%g
+s%\(x, z\)%(xz)%g
+s%\(y, x\)%(xy)%g
+s%\(y, y\)%(yy)%g
+s%\(y, z\)%(yz)%g
+s%\(z, x\)%(xz)%g
+s%\(z, y\)%(yz)%g
+s%\(z, z\)%(zz)%g
+#-----------------------------------
+s%\(x, x, x\)%(1)(xx)%g
+s%\(x, y, x\)%(1)(xy)%g
+s%\(x, z, x\)%(1)(xz)%g
+s%\(y, x, x\)%(1)(xy)%g
+s%\(y, y, x\)%(1)(yy)%g
+s%\(y, z, x\)%(1)(yz)%g
+s%\(z, x, x\)%(1)(xz)%g
+s%\(z, y, x\)%(1)(yz)%g
+s%\(z, z, x\)%(1)(zz)%g
+#-----------------------------------
+s%\(x, x, y\)%(2)(xx)%g
+s%\(x, y, y\)%(2)(xy)%g
+s%\(x, z, y\)%(2)(xz)%g
+s%\(y, x, y\)%(2)(xy)%g
+s%\(y, y, y\)%(2)(yy)%g
+s%\(y, z, y\)%(2)(yz)%g
+s%\(z, x, y\)%(2)(xz)%g
+s%\(z, y, y\)%(2)(yz)%g
+s%\(z, z, y\)%(2)(zz)%g
+#-----------------------------------
+s%\(x, x, z\)%(3)(xx)%g
+s%\(x, y, z\)%(3)(xy)%g
+s%\(x, z, z\)%(3)(xz)%g
+s%\(y, x, z\)%(3)(xy)%g
+s%\(y, y, z\)%(3)(yy)%g
+s%\(y, z, z\)%(3)(yz)%g
+s%\(z, x, z\)%(3)(xz)%g
+s%\(z, y, z\)%(3)(yz)%g
+s%\(z, z, z\)%(3)(zz)%g
+#-----------------------------------
+s%\(x\)%(1)%g
+s%\(y\)%(2)%g
+s%\(z\)%(3)%g
+#-----------------------------------

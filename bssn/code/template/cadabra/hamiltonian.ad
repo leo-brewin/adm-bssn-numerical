@@ -1,0 +1,4 @@
+Procedure set_hamiltonian is
+begin
+   Ham := -ABar_xx*BBar_xx - 2.0*ABar_xy*BBar_xy - 2.0*ABar_xz*BBar_xz - ABar_yy*BBar_yy - 2.0*ABar_yz*BBar_yz - ABar_zz*BBar_zz + R + (2.0/3.0)*(trK ** 2);
+end set_hamiltonian;

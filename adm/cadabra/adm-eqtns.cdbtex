@@ -1,0 +1,180 @@
+\chardef\thehashcode=\catcode`\#	 % save catcode of hash (probably 6)
+\catcode`\#=11			             % set catcode for hash to be a letter (11)
+\cdbtag{deriv1.lhs}{%
+A?_{{\vert} m} \rightarrow \partial_{m}\left(A?\right)%
+}
+\cdbtag{deriv2.lhs}{%
+A?_{{\vert} m n} \rightarrow \partial_{m}\left(A?_{{\vert} n}\right)-\Gamma^{c}{}_{m n} A?_{{\vert} c}%
+}
+\cdbtag{deriv2.101}{%
+A?_{{\vert} m n} \rightarrow \partial_{m n}\left(A?\right)-\Gamma^{c}{}_{m n} \partial_{c}\left(A?\right)%
+}
+\cdbtag{deriv3.lhs}{%
+A?_{m n {\vert} p} \rightarrow \partial_{p}\left(A?_{m n}\right)-\Gamma^{c}{}_{m p} A?_{c n}-\Gamma^{c}{}_{n p} A?_{m c}%
+}
+\cdbtag{defDgab.lhs}{%
+\left[g^{a e} g^{b f} \partial_{c}{g_{e f}} \rightarrow -\partial_{c}{g^{a b}},~\discretionary{}{}{} g^{e a} g^{b f} \partial_{c}{g_{e f}} \rightarrow -\partial_{c}{g^{a b}},~\discretionary{}{}{} g^{a e} g^{f b} \partial_{c}{g_{e f}} \rightarrow -\partial_{c}{g^{a b}},~\discretionary{}{}{} g^{e a} g^{f b} \partial_{c}{g_{e f}} \rightarrow -\partial_{c}{g^{a b}}\right]%
+}
+\cdbtag{defGamma.lhs}{%
+\Gamma^{a}{}_{b c} \rightarrow \frac{1}{2}g^{a e} \left(\partial_{b}{g_{e c}}+\partial_{c}{g_{b e}}-\partial_{e}{g_{b c}}\right)%
+}
+\cdbtag{defRabcd.lhs}{%
+R^{a}{}_{b c d} \rightarrow \partial_{c}{\Gamma^{a}{}_{b d}}+\Gamma^{a}{}_{e c} \Gamma^{e}{}_{b d}-\partial_{d}{\Gamma^{a}{}_{b c}}-\Gamma^{a}{}_{e d} \Gamma^{e}{}_{b c}%
+}
+\cdbtag{defRab.lhs}{%
+R_{a b} \rightarrow R^{c}{}_{a c b}%
+}
+\cdbtag{Rab.lhs}{%
+R_{a b}%
+}
+\cdbtag{Rab.101}{%
+R^{c}{}_{a c b}%
+}
+\cdbtag{Rab.102}{%
+\partial_{c}{\Gamma^{c}{}_{a b}}+\Gamma^{c}{}_{e c} \Gamma^{e}{}_{a b}-\partial_{b}{\Gamma^{c}{}_{a c}}-\Gamma^{c}{}_{e b} \Gamma^{e}{}_{a c}%
+}
+\cdbtag{Rab.103}{%
+\frac{1}{2}\partial_{c}\left(g^{c e} \left(\partial_{a}{g_{e b}}+\partial_{b}{g_{a e}}-\partial_{e}{g_{a b}}\right)\right)+\frac{1}{4}g^{c d} \left(\partial_{e}{g_{d c}}+\partial_{c}{g_{e d}}-\partial_{d}{g_{e c}}\right) g^{e f} \left(\partial_{a}{g_{f b}}+\partial_{b}{g_{a f}}-\partial_{f}{g_{a b}}\right) - \frac{1}{2}\partial_{b}\left(g^{c e} \left(\partial_{a}{g_{e c}}+\partial_{c}{g_{a e}}-\partial_{e}{g_{a c}}\right)\right) - \frac{1}{4}g^{c d} \left(\partial_{e}{g_{d b}}+\partial_{b}{g_{e d}}-\partial_{d}{g_{e b}}\right) g^{e f} \left(\partial_{a}{g_{f c}}+\partial_{c}{g_{a f}}-\partial_{f}{g_{a c}}\right)%
+}
+\cdbtag{Rab.104}{%
+\frac{1}{2}\partial_{c}{g^{c e}} \left(\partial_{a}{g_{e b}}+\partial_{b}{g_{a e}}-\partial_{e}{g_{a b}}\right)+\frac{1}{2}g^{c e} \partial_{c}\left(\partial_{a}{g_{e b}}+\partial_{b}{g_{a e}}-\partial_{e}{g_{a b}}\right)+\frac{1}{4}g^{c d} \left(\partial_{e}{g_{d c}}+\partial_{c}{g_{e d}}-\partial_{d}{g_{e c}}\right) g^{e f} \left(\partial_{a}{g_{f b}}+\partial_{b}{g_{a f}}-\partial_{f}{g_{a b}}\right) - \frac{1}{2}\partial_{b}{g^{c e}} \left(\partial_{a}{g_{e c}}+\partial_{c}{g_{a e}}-\partial_{e}{g_{a c}}\right) - \frac{1}{2}g^{c e} \partial_{b}\left(\partial_{a}{g_{e c}}+\partial_{c}{g_{a e}}-\partial_{e}{g_{a c}}\right) - \frac{1}{4}g^{c d} \left(\partial_{e}{g_{d b}}+\partial_{b}{g_{e d}}-\partial_{d}{g_{e b}}\right) g^{e f} \left(\partial_{a}{g_{f c}}+\partial_{c}{g_{a f}}-\partial_{f}{g_{a c}}\right)%
+}
+\cdbtag{Rab.105}{%
+\frac{1}{2}\partial_{c}{g^{c e}} \partial_{a}{g_{e b}}+\frac{1}{2}\partial_{c}{g^{c e}} \partial_{b}{g_{a e}} - \frac{1}{2}\partial_{c}{g^{c e}} \partial_{e}{g_{a b}}+\frac{1}{2}g^{c e} \partial_{c a}{g_{e b}}+\frac{1}{2}g^{c e} \partial_{c b}{g_{a e}} - \frac{1}{2}g^{c e} \partial_{c e}{g_{a b}}+\frac{1}{4}g^{c d} \partial_{e}{g_{d c}} g^{e f} \partial_{a}{g_{f b}}+\frac{1}{4}g^{c d} \partial_{e}{g_{d c}} g^{e f} \partial_{b}{g_{a f}} - \frac{1}{4}g^{c d} \partial_{e}{g_{d c}} g^{e f} \partial_{f}{g_{a b}}+\frac{1}{4}g^{c d} \partial_{c}{g_{e d}} g^{e f} \partial_{a}{g_{f b}}+\frac{1}{4}g^{c d} \partial_{c}{g_{e d}} g^{e f} \partial_{b}{g_{a f}} - \frac{1}{4}g^{c d} \partial_{c}{g_{e d}} g^{e f} \partial_{f}{g_{a b}} - \frac{1}{4}g^{c d} \partial_{d}{g_{e c}} g^{e f} \partial_{a}{g_{f b}} - \frac{1}{4}g^{c d} \partial_{d}{g_{e c}} g^{e f} \partial_{b}{g_{a f}}+\frac{1}{4}g^{c d} \partial_{d}{g_{e c}} g^{e f} \partial_{f}{g_{a b}} - \frac{1}{2}\partial_{b}{g^{c e}} \partial_{a}{g_{e c}} - \frac{1}{2}\partial_{b}{g^{c e}} \partial_{c}{g_{a e}}+\frac{1}{2}\partial_{b}{g^{c e}} \partial_{e}{g_{a c}} - \frac{1}{2}g^{c e} \partial_{b a}{g_{e c}}%%
+ - \frac{1}{2}g^{c e} \partial_{b c}{g_{a e}}+\frac{1}{2}g^{c e} \partial_{b e}{g_{a c}} - \frac{1}{4}g^{c d} \partial_{e}{g_{d b}} g^{e f} \partial_{a}{g_{f c}} - \frac{1}{4}g^{c d} \partial_{e}{g_{d b}} g^{e f} \partial_{c}{g_{a f}}+\frac{1}{4}g^{c d} \partial_{e}{g_{d b}} g^{e f} \partial_{f}{g_{a c}} - \frac{1}{4}g^{c d} \partial_{b}{g_{e d}} g^{e f} \partial_{a}{g_{f c}} - \frac{1}{4}g^{c d} \partial_{b}{g_{e d}} g^{e f} \partial_{c}{g_{a f}}+\frac{1}{4}g^{c d} \partial_{b}{g_{e d}} g^{e f} \partial_{f}{g_{a c}}+\frac{1}{4}g^{c d} \partial_{d}{g_{e b}} g^{e f} \partial_{a}{g_{f c}}+\frac{1}{4}g^{c d} \partial_{d}{g_{e b}} g^{e f} \partial_{c}{g_{a f}} - \frac{1}{4}g^{c d} \partial_{d}{g_{e b}} g^{e f} \partial_{f}{g_{a c}}%
+}
+\cdbtag{Rab.106}{%
+\frac{1}{2}\partial_{a}{g_{c b}} \partial_{d}{g^{d c}}+\frac{1}{2}\partial_{b}{g_{a c}} \partial_{d}{g^{d c}} - \frac{1}{2}\partial_{d}{g_{a b}} \partial_{c}{g^{c d}}+\frac{1}{2}g^{d c} \partial_{d a}{g_{c b}}+\frac{1}{2}g^{d c} \partial_{d b}{g_{a c}} - \frac{1}{2}g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{e d} g^{f c} \partial_{a}{g_{c b}} \partial_{f}{g_{d e}}+\frac{1}{4}g^{e d} g^{f c} \partial_{b}{g_{a c}} \partial_{f}{g_{d e}} - \frac{1}{4}g^{d c} g^{e f} \partial_{e}{g_{c d}} \partial_{f}{g_{a b}}+\frac{1}{4}g^{f e} g^{d c} \partial_{a}{g_{c b}} \partial_{f}{g_{d e}}+\frac{1}{4}g^{f e} g^{d c} \partial_{b}{g_{a c}} \partial_{f}{g_{d e}} - \frac{1}{4}g^{e d} g^{c f} \partial_{e}{g_{c d}} \partial_{f}{g_{a b}} - \frac{1}{4}g^{e f} g^{d c} \partial_{a}{g_{c b}} \partial_{f}{g_{d e}} - \frac{1}{4}g^{e f} g^{d c} \partial_{b}{g_{a c}} \partial_{f}{g_{d e}}+\frac{1}{4}g^{d e} g^{c f} \partial_{e}{g_{c d}} \partial_{f}{g_{a b}} - \frac{1}{2}\partial_{a}{g_{c d}} \partial_{b}{g^{d c}} - \frac{1}{2}\partial_{d}{g_{a c}} \partial_{b}{g^{d c}}+\frac{1}{2}\partial_{d}{g_{a c}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{d c} \partial_{b a}{g_{c d}}%%
+ - \frac{1}{2}g^{d c} \partial_{b d}{g_{a c}}+\frac{1}{2}g^{c d} \partial_{b d}{g_{a c}} - \frac{1}{4}g^{d e} g^{f c} \partial_{a}{g_{c d}} \partial_{f}{g_{e b}} - \frac{1}{4}g^{e d} g^{f c} \partial_{e}{g_{a c}} \partial_{f}{g_{d b}}+\frac{1}{4}g^{d c} g^{e f} \partial_{e}{g_{c b}} \partial_{f}{g_{a d}} - \frac{1}{4}g^{d f} g^{e c} \partial_{a}{g_{c d}} \partial_{b}{g_{e f}} - \frac{1}{4}g^{f d} g^{c e} \partial_{b}{g_{c d}} \partial_{f}{g_{a e}}+\frac{1}{4}g^{e d} g^{c f} \partial_{b}{g_{c d}} \partial_{f}{g_{a e}}+\frac{1}{4}g^{d f} g^{e c} \partial_{a}{g_{c d}} \partial_{f}{g_{e b}}+\frac{1}{4}g^{e f} g^{d c} \partial_{e}{g_{a c}} \partial_{f}{g_{d b}} - \frac{1}{4}g^{d e} g^{c f} \partial_{e}{g_{c b}} \partial_{f}{g_{a d}}%
+}
+\cdbtag{Rab.107}{%
+\frac{1}{2}\partial_{a}{g_{d b}} \partial_{c}{g^{c d}}+\frac{1}{2}\partial_{b}{g_{a d}} \partial_{c}{g^{c d}} - \frac{1}{2}\partial_{c}{g_{a b}} \partial_{d}{g^{d c}}+\frac{1}{2}g^{c d} \partial_{c a}{g_{d b}}+\frac{1}{2}g^{c d} \partial_{c b}{g_{a d}} - \frac{1}{2}g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{d e} g^{c f} \partial_{a}{g_{f b}} \partial_{c}{g_{e d}}+\frac{1}{4}g^{d e} g^{c f} \partial_{b}{g_{a f}} \partial_{c}{g_{e d}} - \frac{1}{4}g^{e f} g^{c d} \partial_{c}{g_{f e}} \partial_{d}{g_{a b}}+\frac{1}{4}g^{c d} g^{e f} \partial_{a}{g_{f b}} \partial_{c}{g_{e d}}+\frac{1}{4}g^{c d} g^{e f} \partial_{b}{g_{a f}} \partial_{c}{g_{e d}} - \frac{1}{4}g^{c e} g^{f d} \partial_{c}{g_{f e}} \partial_{d}{g_{a b}} - \frac{1}{4}g^{d c} g^{e f} \partial_{a}{g_{f b}} \partial_{c}{g_{e d}} - \frac{1}{4}g^{d c} g^{e f} \partial_{b}{g_{a f}} \partial_{c}{g_{e d}}+\frac{1}{4}g^{e c} g^{f d} \partial_{c}{g_{f e}} \partial_{d}{g_{a b}} - \frac{1}{2}\partial_{a}{g_{c d}} \partial_{b}{g^{d c}} - \frac{1}{2}\partial_{c}{g_{a d}} \partial_{b}{g^{c d}}+\frac{1}{2}\partial_{c}{g_{a d}} \partial_{b}{g^{d c}} - \frac{1}{2}g^{c d} \partial_{b a}{g_{d c}}%%
+ - \frac{1}{2}g^{c d} \partial_{b c}{g_{a d}}+\frac{1}{2}g^{d c} \partial_{b c}{g_{a d}} - \frac{1}{4}g^{d e} g^{c f} \partial_{a}{g_{f d}} \partial_{c}{g_{e b}} - \frac{1}{4}g^{c e} g^{d f} \partial_{c}{g_{a f}} \partial_{d}{g_{e b}}+\frac{1}{4}g^{e f} g^{c d} \partial_{c}{g_{f b}} \partial_{d}{g_{a e}} - \frac{1}{4}g^{c d} g^{e f} \partial_{a}{g_{f c}} \partial_{b}{g_{e d}} - \frac{1}{4}g^{c d} g^{e f} \partial_{b}{g_{e d}} \partial_{c}{g_{a f}}+\frac{1}{4}g^{d e} g^{f c} \partial_{b}{g_{f e}} \partial_{c}{g_{a d}}+\frac{1}{4}g^{d c} g^{e f} \partial_{a}{g_{f d}} \partial_{c}{g_{e b}}+\frac{1}{4}g^{c d} g^{e f} \partial_{c}{g_{a f}} \partial_{d}{g_{e b}} - \frac{1}{4}g^{e c} g^{f d} \partial_{c}{g_{f b}} \partial_{d}{g_{a e}}%
+}
+\cdbtag{Rab.108}{%
+\frac{1}{2}\partial_{a}{g_{b c}} \partial_{d}{g^{c d}}+\frac{1}{2}\partial_{b}{g_{a c}} \partial_{d}{g^{c d}} - \frac{1}{2}\partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+\frac{1}{2}g^{c d} \partial_{a c}{g_{b d}}+\frac{1}{2}g^{c d} \partial_{b c}{g_{a d}} - \frac{1}{2}g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{c d} g^{e f} \partial_{a}{g_{b c}} \partial_{d}{g_{e f}}+\frac{1}{4}g^{c d} g^{e f} \partial_{b}{g_{a c}} \partial_{d}{g_{e f}} - \frac{1}{4}g^{c d} g^{e f} \partial_{c}{g_{a b}} \partial_{d}{g_{e f}} - \frac{1}{2}\partial_{a}{g_{c d}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{f}{g_{b d}}+\frac{1}{2}g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{d}{g_{b f}} - \frac{1}{4}g^{c d} g^{e f} \partial_{a}{g_{c e}} \partial_{b}{g_{d f}}%
+}
+\cdbtag{Rab.109}{%
+\frac{1}{2}\partial_{a}{g_{b c}} \partial_{d}{g^{c d}}+\frac{1}{2}\partial_{b}{g_{a c}} \partial_{d}{g^{c d}} - \frac{1}{2}\partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+\frac{1}{2}g^{c d} \partial_{a c}{g_{b d}}+\frac{1}{2}g^{c d} \partial_{b c}{g_{a d}} - \frac{1}{2}g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{c d} g^{e f} \partial_{a}{g_{b c}} \partial_{d}{g_{e f}}+\frac{1}{4}g^{c d} g^{e f} \partial_{b}{g_{a c}} \partial_{d}{g_{e f}} - \frac{1}{4}g^{c d} g^{e f} \partial_{c}{g_{a b}} \partial_{d}{g_{e f}} - \frac{1}{2}\partial_{a}{g_{c d}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{f}{g_{b d}}+\frac{1}{2}g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{d}{g_{b f}}+\frac{1}{4}\partial_{b}{g^{c e}} \partial_{a}{g_{c e}}%
+}
+\cdbtag{Rab.110}{%
+\frac{1}{2}\partial_{a}{g_{b c}} \partial_{d}{g^{c d}}+\frac{1}{2}\partial_{b}{g_{a c}} \partial_{d}{g^{c d}} - \frac{1}{2}\partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+\frac{1}{2}g^{d c} \partial_{a d}{g_{b c}}+\frac{1}{2}g^{d c} \partial_{b d}{g_{a c}} - \frac{1}{2}g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{c f} g^{d e} \partial_{a}{g_{b c}} \partial_{f}{g_{d e}}+\frac{1}{4}g^{c f} g^{d e} \partial_{b}{g_{a c}} \partial_{f}{g_{d e}} - \frac{1}{4}g^{e f} g^{c d} \partial_{e}{g_{a b}} \partial_{f}{g_{c d}} - \frac{1}{4}\partial_{a}{g_{c d}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{e d} g^{c f} \partial_{e}{g_{a c}} \partial_{f}{g_{b d}}+\frac{1}{2}g^{e f} g^{c d} \partial_{e}{g_{a c}} \partial_{f}{g_{b d}}%
+}
+\cdbtag{Rab.111}{%
+\frac{1}{2}\partial_{a}{g_{b d}} \partial_{c}{g^{d c}}+\frac{1}{2}\partial_{b}{g_{a d}} \partial_{c}{g^{d c}} - \frac{1}{2}\partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+\frac{1}{2}g^{c d} \partial_{a c}{g_{b d}}+\frac{1}{2}g^{c d} \partial_{b c}{g_{a d}} - \frac{1}{2}g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{d c} g^{e f} \partial_{a}{g_{b d}} \partial_{c}{g_{e f}}+\frac{1}{4}g^{d c} g^{e f} \partial_{b}{g_{a d}} \partial_{c}{g_{e f}} - \frac{1}{4}g^{c d} g^{e f} \partial_{c}{g_{a b}} \partial_{d}{g_{e f}} - \frac{1}{4}\partial_{a}{g_{c d}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{c e} g^{f d} \partial_{c}{g_{a f}} \partial_{d}{g_{b e}}+\frac{1}{2}g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{d}{g_{b f}}%
+}
+\cdbtag{Rab.112}{%
+\frac{1}{2}\partial_{a}{g_{b c}} \partial_{d}{g^{c d}}+\frac{1}{2}\partial_{b}{g_{a c}} \partial_{d}{g^{c d}} - \frac{1}{2}\partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+\frac{1}{2}g^{c d} \partial_{a c}{g_{b d}}+\frac{1}{2}g^{c d} \partial_{b c}{g_{a d}} - \frac{1}{2}g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{c d} g^{e f} \partial_{a}{g_{b c}} \partial_{d}{g_{e f}}+\frac{1}{4}g^{c d} g^{e f} \partial_{b}{g_{a c}} \partial_{d}{g_{e f}} - \frac{1}{4}g^{c d} g^{e f} \partial_{c}{g_{a b}} \partial_{d}{g_{e f}} - \frac{1}{4}\partial_{a}{g_{c d}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{f}{g_{b d}}+\frac{1}{2}g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{d}{g_{b f}}%
+}
+\cdbtag{R.lhs}{%
+R%
+}
+\cdbtag{R.101}{%
+g^{a b} R_{a b}%
+}
+\cdbtag{R.102}{%
+g^{a b} \left(\frac{1}{2}\partial_{a}{g_{b c}} \partial_{d}{g^{c d}}+\frac{1}{2}\partial_{b}{g_{a c}} \partial_{d}{g^{c d}} - \frac{1}{2}\partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+\frac{1}{2}g^{c d} \partial_{a c}{g_{b d}}+\frac{1}{2}g^{c d} \partial_{b c}{g_{a d}} - \frac{1}{2}g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{c d} g^{e f} \partial_{a}{g_{b c}} \partial_{d}{g_{e f}}+\frac{1}{4}g^{c d} g^{e f} \partial_{b}{g_{a c}} \partial_{d}{g_{e f}} - \frac{1}{4}g^{c d} g^{e f} \partial_{c}{g_{a b}} \partial_{d}{g_{e f}} - \frac{1}{4}\partial_{a}{g_{c d}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{f}{g_{b d}}+\frac{1}{2}g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{d}{g_{b f}}\right)%
+}
+\cdbtag{R.103}{%
+\frac{1}{2}g^{a b} \partial_{a}{g_{b c}} \partial_{d}{g^{c d}}+\frac{1}{2}g^{a b} \partial_{b}{g_{a c}} \partial_{d}{g^{c d}} - \frac{1}{2}g^{a b} \partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+\frac{1}{2}g^{a b} g^{c d} \partial_{a c}{g_{b d}}+\frac{1}{2}g^{a b} g^{c d} \partial_{b c}{g_{a d}} - \frac{1}{2}g^{a b} g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{a b} g^{c d} g^{e f} \partial_{a}{g_{b c}} \partial_{d}{g_{e f}}+\frac{1}{4}g^{a b} g^{c d} g^{e f} \partial_{b}{g_{a c}} \partial_{d}{g_{e f}} - \frac{1}{4}g^{a b} g^{c d} g^{e f} \partial_{c}{g_{a b}} \partial_{d}{g_{e f}} - \frac{1}{4}g^{a b} \partial_{a}{g_{c d}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{a b} g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{a b} g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{f}{g_{b d}}+\frac{1}{2}g^{a b} g^{c d} g^{e f} \partial_{c}{g_{a e}} \partial_{d}{g_{b f}}%
+}
+\cdbtag{R.104}{%
+\frac{1}{2}g^{c a} \partial_{c}{g_{a b}} \partial_{d}{g^{b d}}+\frac{1}{2}g^{a c} \partial_{c}{g_{a b}} \partial_{d}{g^{b d}} - \frac{1}{2}g^{a b} \partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+\frac{1}{2}g^{c a} g^{d b} \partial_{c d}{g_{a b}}+\frac{1}{2}g^{a c} g^{d b} \partial_{c d}{g_{a b}} - \frac{1}{2}g^{a b} g^{c d} \partial_{c d}{g_{a b}}+\frac{1}{4}g^{e a} g^{b f} g^{c d} \partial_{e}{g_{a b}} \partial_{f}{g_{c d}}+\frac{1}{4}g^{a e} g^{b f} g^{c d} \partial_{e}{g_{a b}} \partial_{f}{g_{c d}} - \frac{1}{4}g^{a b} g^{e f} g^{c d} \partial_{e}{g_{a b}} \partial_{f}{g_{c d}} - \frac{1}{4}g^{c d} \partial_{c}{g_{a b}} \partial_{d}{g^{a b}} - \frac{1}{2}g^{c d} g^{a b} \partial_{c d}{g_{a b}} - \frac{1}{2}g^{a c} g^{e d} g^{b f} \partial_{e}{g_{a b}} \partial_{f}{g_{c d}}+\frac{1}{2}g^{a c} g^{e f} g^{b d} \partial_{e}{g_{a b}} \partial_{f}{g_{c d}}%
+}
+\cdbtag{R.105}{%
+\frac{1}{2}g^{a c} \partial_{a}{g_{c d}} \partial_{b}{g^{d b}}+\frac{1}{2}g^{c a} \partial_{a}{g_{c d}} \partial_{b}{g^{d b}} - \frac{1}{2}g^{c d} \partial_{a}{g_{c d}} \partial_{b}{g^{a b}}+\frac{1}{2}g^{a c} g^{b d} \partial_{a b}{g_{c d}}+\frac{1}{2}g^{c a} g^{b d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{c d} g^{a b} \partial_{a b}{g_{c d}}+\frac{1}{4}g^{a c} g^{d b} g^{e f} \partial_{a}{g_{c d}} \partial_{b}{g_{e f}}+\frac{1}{4}g^{c a} g^{d b} g^{e f} \partial_{a}{g_{c d}} \partial_{b}{g_{e f}} - \frac{1}{4}g^{c d} g^{a b} g^{e f} \partial_{a}{g_{c d}} \partial_{b}{g_{e f}} - \frac{1}{4}g^{a b} \partial_{a}{g_{c d}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{a b} g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{c d} g^{a e} g^{f b} \partial_{a}{g_{c f}} \partial_{b}{g_{d e}}+\frac{1}{2}g^{c d} g^{a b} g^{e f} \partial_{a}{g_{c e}} \partial_{b}{g_{d f}}%
+}
+\cdbtag{R.106}{%
+g^{a b} \partial_{a}{g_{b c}} \partial_{d}{g^{c d}} - \frac{1}{2}g^{a b} \partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+g^{a b} g^{c d} \partial_{a c}{g_{b d}}-g^{a b} g^{c d} \partial_{a b}{g_{c d}}+\frac{1}{2}g^{a b} g^{c d} g^{e f} \partial_{a}{g_{b c}} \partial_{d}{g_{e f}} - \frac{1}{4}g^{a b} g^{c d} g^{e f} \partial_{a}{g_{c d}} \partial_{b}{g_{e f}} - \frac{1}{4}g^{a b} \partial_{a}{g_{c d}} \partial_{b}{g^{c d}} - \frac{1}{2}g^{a b} g^{c d} g^{e f} \partial_{a}{g_{c e}} \partial_{d}{g_{b f}}+\frac{1}{2}g^{a b} g^{c d} g^{e f} \partial_{a}{g_{c e}} \partial_{b}{g_{d f}}%
+}
+\cdbtag{R.107}{%
+g^{a b} \partial_{a}{g_{b c}} \partial_{d}{g^{c d}} - \frac{1}{2}g^{a b} \partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+g^{a b} g^{c d} \partial_{a c}{g_{b d}}-g^{a b} g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}\partial_{a}{g^{a d}} g^{e f} \partial_{d}{g_{e f}} - \frac{1}{4}g^{a b} g^{c d} g^{e f} \partial_{a}{g_{c d}} \partial_{b}{g_{e f}} - \frac{1}{4}g^{a b} \partial_{a}{g_{c d}} \partial_{b}{g^{c d}}+\frac{1}{2}\partial_{d}{g^{a e}} g^{c d} \partial_{a}{g_{c e}} - \frac{1}{2}g^{a b} \partial_{b}{g^{c e}} \partial_{a}{g_{c e}}%
+}
+\cdbtag{R.108}{%
+g^{c a} \partial_{c}{g_{a b}} \partial_{d}{g^{b d}} - \frac{1}{2}g^{a b} \partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+g^{c a} g^{d b} \partial_{c d}{g_{a b}}-g^{c d} g^{a b} \partial_{c d}{g_{a b}} - \frac{1}{2}g^{a b} \partial_{d}{g_{a b}} \partial_{c}{g^{c d}} - \frac{1}{4}g^{e f} g^{a b} g^{c d} \partial_{e}{g_{a b}} \partial_{f}{g_{c d}} - \frac{3}{4}g^{c d} \partial_{c}{g_{a b}} \partial_{d}{g^{a b}}+\frac{1}{2}g^{a c} \partial_{d}{g_{a b}} \partial_{c}{g^{d b}}%
+}
+\cdbtag{R.109}{%
+g^{a c} \partial_{a}{g_{c d}} \partial_{b}{g^{d b}} - \frac{1}{2}g^{c d} \partial_{a}{g_{c d}} \partial_{b}{g^{a b}}+g^{a c} g^{b d} \partial_{a b}{g_{c d}}-g^{a b} g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{2}g^{c d} \partial_{a}{g_{c d}} \partial_{b}{g^{b a}} - \frac{1}{4}g^{a b} g^{c d} g^{e f} \partial_{a}{g_{c d}} \partial_{b}{g_{e f}} - \frac{3}{4}g^{a b} \partial_{a}{g_{c d}} \partial_{b}{g^{c d}}+\frac{1}{2}g^{c b} \partial_{a}{g_{c d}} \partial_{b}{g^{a d}}%
+}
+\cdbtag{R.110}{%
+g^{a b} \partial_{a}{g_{b c}} \partial_{d}{g^{c d}}-g^{a b} \partial_{c}{g_{a b}} \partial_{d}{g^{c d}}+g^{a b} g^{c d} \partial_{a c}{g_{b d}}-g^{a b} g^{c d} \partial_{a b}{g_{c d}} - \frac{1}{4}g^{a b} g^{c d} g^{e f} \partial_{a}{g_{c d}} \partial_{b}{g_{e f}} - \frac{3}{4}g^{a b} \partial_{a}{g_{c d}} \partial_{b}{g^{c d}}+\frac{1}{2}g^{a b} \partial_{c}{g_{a d}} \partial_{b}{g^{c d}}%
+}
+\cdbtag{Nab.lhs}{%
+N_{{\vert} a b}%
+}
+\cdbtag{Nab.101}{%
+\partial_{a b}{N}-\Gamma^{c}{}_{a b} \partial_{c}{N}%
+}
+\cdbtag{Nab.102}{%
+\partial_{a b}{N} - \frac{1}{2}g^{c e} \left(\partial_{a}{g_{e b}}+\partial_{b}{g_{a e}}-\partial_{e}{g_{a b}}\right) \partial_{c}{N}%
+}
+\cdbtag{Hess.lhs}{%
+N_{{\vert} a b} \rightarrow \partial_{a b}{N} - \frac{1}{2}g^{c e} \left(\partial_{a}{g_{e b}}+\partial_{b}{g_{a e}}-\partial_{e}{g_{a b}}\right) \partial_{c}{N}%
+}
+\cdbtag{dotgab.lhs}{%
+\partial_{t}{g_{a b}}%
+}
+\cdbtag{dotKab.lhs}{%
+\partial_{t}{K_{a b}}%
+}
+\cdbtag{dotN.lhs}{%
+\partial_{t}{N}%
+}
+\cdbtag{dotgab.101}{%
+-2N K_{a b}%
+}
+\cdbtag{dotKab.101}{%
+-N_{{\vert} a b}+N \left(R_{a b}+{{\rm tr} K} K_{a b}-2K_{a c} K_{b d} g^{c d}\right)%
+}
+\cdbtag{dotN.101}{%
+0%
+}
+\cdbtag{dotKab.102}{%
+-\partial_{a b}{N}+\frac{1}{2}g^{c e} \left(\partial_{a}{g_{e b}}+\partial_{b}{g_{a e}}-\partial_{e}{g_{a b}}\right) \partial_{c}{N}+N \left(R_{a b}+{{\rm tr} K} K_{a b}-2K_{a c} K_{b d} g^{c d}\right)%
+}
+\cdbtag{dotKab.103}{%
+-\partial_{a b}{N}+\frac{1}{2}g^{c e} \partial_{a}{g_{e b}} \partial_{c}{N}+\frac{1}{2}g^{c e} \partial_{b}{g_{a e}} \partial_{c}{N} - \frac{1}{2}g^{c e} \partial_{e}{g_{a b}} \partial_{c}{N}+N R_{a b}+N {{\rm tr} K} K_{a b}-2N K_{a c} K_{b d} g^{c d}%
+}
+\cdbtag{Ham.lhs}{%
+{\cal H}%
+}
+\cdbtag{Ham.101}{%
+R+K_{a b} g^{a b} K_{c d} g^{c d}-K_{a b} K_{c d} g^{a c} g^{b d}%
+}
+\cdbtag{Ham.102}{%
+R+K_{a b} g^{a b} K_{c d} g^{c d}-K_{a b} K_{c d} g^{a c} g^{b d}%
+}
+\cdbtag{Mom.lhs}{%
+{\cal D}_{c}%
+}
+\cdbtag{Mom.101}{%
+g^{a b} K_{a c {\vert} b}-\partial_{c}\left(g^{a b} K_{a b}\right)%
+}
+\cdbtag{Mom.102}{%
+g^{a b} \left(\partial_{b}{K_{a c}}-\Gamma^{d}{}_{a b} K_{d c}-\Gamma^{d}{}_{c b} K_{a d}\right)-\partial_{c}\left(g^{a b} K_{a b}\right)%
+}
+\cdbtag{Mom.103}{%
+g^{a b} \left(\partial_{b}{K_{a c}}-\Gamma^{d}{}_{a b} K_{d c}-\Gamma^{d}{}_{c b} K_{a d}\right)-\partial_{c}{g^{a b}} K_{a b}-g^{a b} \partial_{c}{K_{a b}}%
+}
+\cdbtag{Mom.104}{%
+g^{a b} \partial_{b}{K_{a c}}-g^{a b} \Gamma^{d}{}_{a b} K_{d c}-g^{a b} \Gamma^{d}{}_{c b} K_{a d}-\partial_{c}{g^{a b}} K_{a b}-g^{a b} \partial_{c}{K_{a b}}%
+}
+\cdbtag{Mom.105}{%
+g^{a b} \partial_{b}{K_{a c}} - \frac{1}{2}g^{a b} g^{d e} \left(\partial_{a}{g_{e b}}+\partial_{b}{g_{a e}}-\partial_{e}{g_{a b}}\right) K_{d c} - \frac{1}{2}g^{a b} g^{d e} \left(\partial_{c}{g_{e b}}+\partial_{b}{g_{c e}}-\partial_{e}{g_{c b}}\right) K_{a d}-\partial_{c}{g^{a b}} K_{a b}-g^{a b} \partial_{c}{K_{a b}}%
+}
+\cdbtag{Mom.106}{%
+g^{a b} \partial_{b}{K_{a c}} - \frac{1}{2}g^{a b} g^{d e} \partial_{a}{g_{e b}} K_{d c} - \frac{1}{2}g^{a b} g^{d e} \partial_{b}{g_{a e}} K_{d c}+\frac{1}{2}g^{a b} g^{d e} \partial_{e}{g_{a b}} K_{d c} - \frac{1}{2}g^{a b} g^{d e} \partial_{c}{g_{e b}} K_{a d} - \frac{1}{2}g^{a b} g^{d e} \partial_{b}{g_{c e}} K_{a d}+\frac{1}{2}g^{a b} g^{d e} \partial_{e}{g_{c b}} K_{a d}-\partial_{c}{g^{a b}} K_{a b}-g^{a b} \partial_{c}{K_{a b}}%
+}
+\cdbtag{Mom.107}{%
+g^{a b} \partial_{b}{K_{a c}}+\frac{1}{2}\partial_{a}{g^{d a}} K_{d c}+\frac{1}{2}\partial_{b}{g^{b d}} K_{d c}+\frac{1}{2}g^{a b} g^{d e} \partial_{e}{g_{a b}} K_{d c}+\frac{1}{2}\partial_{c}{g^{d a}} K_{a d} - \frac{1}{2}g^{a b} g^{d e} \partial_{b}{g_{c e}} K_{a d}+\frac{1}{2}g^{a b} g^{d e} \partial_{e}{g_{c b}} K_{a d}-\partial_{c}{g^{a b}} K_{a b}-g^{a b} \partial_{c}{K_{a b}}%
+}
+\cdbtag{Mom.108}{%
+g^{a b} \partial_{b}{K_{a c}}+\frac{1}{2}K_{a c} \partial_{b}{g^{a b}}+\frac{1}{2}K_{b c} \partial_{a}{g^{a b}}+\frac{1}{2}g^{a b} g^{d e} K_{d c} \partial_{e}{g_{a b}}+\frac{1}{2}K_{b a} \partial_{c}{g^{a b}} - \frac{1}{2}g^{b d} g^{e a} K_{b e} \partial_{d}{g_{c a}}+\frac{1}{2}g^{b a} g^{d e} K_{b d} \partial_{e}{g_{c a}}-K_{a b} \partial_{c}{g^{a b}}-g^{a b} \partial_{c}{K_{a b}}%
+}
+\cdbtag{Mom.109}{%
+g^{a b} \partial_{b}{K_{a c}}+\frac{1}{2}K_{a c} \partial_{b}{g^{a b}}+\frac{1}{2}K_{a c} \partial_{b}{g^{b a}}+\frac{1}{2}g^{d e} g^{a b} K_{a c} \partial_{b}{g_{d e}}+\frac{1}{2}K_{a b} \partial_{c}{g^{b a}} - \frac{1}{2}g^{a d} g^{b e} K_{a b} \partial_{d}{g_{c e}}+\frac{1}{2}g^{a e} g^{b d} K_{a b} \partial_{d}{g_{c e}}-K_{a b} \partial_{c}{g^{a b}}-g^{a b} \partial_{c}{K_{a b}}%
+}
+\cdbtag{Mom.110}{%
+g^{a b} \partial_{a}{K_{c b}}+K_{c a} \partial_{b}{g^{a b}}+\frac{1}{2}g^{a b} g^{d e} K_{c a} \partial_{b}{g_{d e}} - \frac{1}{2}K_{a b} \partial_{c}{g^{a b}}-g^{a b} \partial_{c}{K_{a b}}%
+}
+\catcode`\#=\thehashcode          % restore original catcode for hash

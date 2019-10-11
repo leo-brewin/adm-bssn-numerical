@@ -1,0 +1,170 @@
+V "GNAT Lib v2019"
+A -O3
+A -gnatA
+A -gnatwA
+A -gnat2012
+A -mtune=core2
+A -mmacosx-version-min=10.14.0
+A -fPIC
+P ZX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_FLOATING_POINT
+RV NO_IO
+RV NO_IMPLEMENTATION_PRAGMAS
+RV SPARK_05
+
+U bssnbase.initial%b	bssnbase-initial.adb	a867cec6 NE OO PK IL
+Z ada.tags%s		a-tags.adb		a-tags.ali
+W bssnbase%s		bssnbase.adb		bssnbase.ali
+W bssnbase.coords%s	bssnbase-coords.adb	bssnbase-coords.ali
+W metric%s		metric.ads		metric.ali
+W metric.kasner%s	metric-kasner.adb	metric-kasner.ali
+
+U bssnbase.initial%s	bssnbase-initial.ads	2a544e6b EE NE OO PK IL
+W bssnbase%s		bssnbase.adb		bssnbase.ali
+
+D ada.ads		20190925125847 76789da1 ada%s
+D a-except.ads		20190925125846 291912d5 ada.exceptions%s
+D a-ioexce.ads		20190925125846 e4a01f64 ada.io_exceptions%s
+D a-numeri.ads		20190925125846 bb51c45a ada.numerics%s
+D a-ngelfu.ads		20190925125846 55716239 ada.numerics.generic_elementary_functions%s
+D a-stream.ads		20190925125846 119b8fb3 ada.streams%s
+D a-tags.ads		20190925125847 491b781d ada.tags%s
+D a-textio.ads		20190925125847 aef4d56d ada.text_io%s
+D a-tiflio.ads		20190925125847 bf196650 ada.text_io.float_io%s
+D a-tiinio.ads		20190925125847 390edddb ada.text_io.integer_io%s
+D a-unccon.ads		20190925125847 0e9b276f ada.unchecked_conversion%s
+D a-uncdea.ads		20190925125847 eff36322 ada.unchecked_deallocation%s
+D bssnbase.ads		20191002040127 532fd06f bssnbase%s
+D bssnbase-coords.ads	20190925101624 b6b99442 bssnbase.coords%s
+D bssnbase-initial.ads	20190925101624 797b9e04 bssnbase.initial%s
+D bssnbase-initial.adb	20191003013013 f7b44997 bssnbase.initial%b
+D gnat.ads		20190925125847 b5988c27 gnat%s
+D g-os_lib.ads		20190925125847 0db74523 gnat.os_lib%s
+D interfac.ads		20190925125847 5ab55268 interfaces%s
+D i-cstrea.ads		20190925125847 e53d8b8e interfaces.c_streams%s
+D metric.ads		20190925101624 0950d218 metric%s
+D metric-kasner.ads	20191003013316 90118d17 metric.kasner%s
+D support.ads		20190925101625 ccd37176 support%s
+D system.ads		20190925125848 085b6ffb system%s
+D s-crtl.ads		20190925125847 0ebbdb71 system.crtl%s
+D s-exctab.ads		20190925125847 54135002 system.exception_table%s
+D s-ficobl.ads		20190925125847 078245e4 system.file_control_block%s
+D s-os_lib.ads		20190925125847 5703ce4c system.os_lib%s
+D s-parame.ads		20190925125847 48ec542b system.parameters%s
+D s-secsta.ads		20190925125847 20bbe636 system.secondary_stack%s
+D s-soflin.ads		20190925125847 a7318a92 system.soft_links%s
+D s-stache.ads		20190925125847 a37c21ec system.stack_checking%s
+D s-stalib.ads		20190925125847 09bd3940 system.standard_library%s
+D s-stoele.ads		20190925125848 2dc34a04 system.storage_elements%s
+D s-string.ads		20190925125848 8fe54fb7 system.strings%s
+D s-traent.ads		20190925125848 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20190925125848 34867c83 system.unsigned_types%s
+D s-wchcon.ads		20190925125848 1b7d22d2 system.wch_con%s
+G a e
+G c Z s b [create_data bssnbase__initial 3 14 none]
+G c Z s b [create_grid bssnbase__initial 4 14 none]
+G r c none [create_data bssnbase__initial 3 14 none] [x_coord bssnbase__coords 3 13 none]
+G r c none [create_data bssnbase__initial 3 14 none] [y_coord bssnbase__coords 4 13 none]
+G r c none [create_data bssnbase__initial 3 14 none] [z_coord bssnbase__coords 5 13 none]
+G r c none [create_data bssnbase__initial 3 14 none] [set_3d_lapse metric__kasner 9 13 none]
+G r c none [create_data bssnbase__initial 3 14 none] [set_3d_gi metric__kasner 24 13 none]
+G r c none [create_data bssnbase__initial 3 14 none] [set_3d_phi metric__kasner 20 13 none]
+G r c none [create_data bssnbase__initial 3 14 none] [set_3d_trk metric__kasner 21 13 none]
+G r c none [create_data bssnbase__initial 3 14 none] [set_3d_gbar metric__kasner 22 13 none]
+G r c none [create_data bssnbase__initial 3 14 none] [set_3d_abar metric__kasner 23 13 none]
+G r c none [create_grid bssnbase__initial 4 14 none] [x_coord bssnbase__coords 3 13 none]
+G r c none [create_grid bssnbase__initial 4 14 none] [y_coord bssnbase__coords 4 13 none]
+G r c none [create_grid bssnbase__initial 4 14 none] [z_coord bssnbase__coords 5 13 none]
+X 8 a-textio.ads
+508U14*Put_Line 16|107s10 112s10 117s10
+X 13 bssnbase.ads
+9K9*BSSNBase 200e13 15|1r9 6r5 16|3r6 3r53 5r14 123r5
+27A9*GammaPointArray(23|5F9)<integer>
+28A9*GammaGridArray(27A9)<integer><integer><integer>
+30A9*MetricPointArray(23|5F9)<25E9>
+31A9*MetricGridArray(30A9)<integer><integer><integer>
+33A9*ExtcurvPointArray(23|5F9)<25E9>
+34A9*ExtcurvGridArray(33A9)<integer><integer><integer>
+36A9*LapseGridArray(23|5F9)<integer><integer><integer>
+37A9*TraceKGridArray(23|5F9)<integer><integer><integer>
+38A9*ConFactGridArray(23|5F9)<integer><integer><integer>
+62a4*gBar{31A9} 16|25r16
+63a4*ABar{34A9} 16|26r16
+64a4*N{36A9} 16|21r19
+65a4*trK{37A9} 16|24r17
+66a4*phi{38A9} 16|23r17
+67a4*Gi{28A9} 16|22r18
+92i4*num_x{integer} 16|13r19 40r19 52r32 77r38
+92i11*num_y{integer} 16|14r22 41r22 53r32 69r32
+92i18*num_z{integer} 16|15r25 42r25 54r32 61r26
+99A9*GridPointList(94R9)<integer>
+100A9*GridIndexList(integer)<integer>
+107a4*grid_point_list{99A9} 16|50r16
+108i4*grid_point_num{integer} 16|111r10 116r15
+122a4*interior{100A9} 16|57r19
+123a4*boundary{100A9} 16|60r19
+125a4*north_bndry{100A9} 16|63r22
+126a4*south_bndry{100A9} 16|67r25
+127a4*east_bndry{100A9} 16|71r28
+128a4*west_bndry{100A9} 16|75r31
+129a4*front_bndry{100A9} 16|79r34
+130a4*back_bndry{100A9} 16|83r37
+132i4*interior_num{integer} 16|96m7 111r28
+133i4*boundary_num{integer} 16|97m7 106r10 111r43
+135i4*north_bndry_num{integer} 16|99m7 106r27
+136i4*south_bndry_num{integer} 16|100m7 106r45
+137i4*east_bndry_num{integer} 16|101m7 106r63
+138i4*west_bndry_num{integer} 16|102m7 106r80
+139i4*front_bndry_num{integer} 16|103m7 106r97
+140i4*back_bndry_num{integer} 16|104m7 106r115
+145f4*beg_time{23|5F9} 16|11r12
+X 14 bssnbase-coords.ads
+1K18*Coords 7e20 16|3w15 3r62
+3V13*x_coord{23|5F9} 16|17s21 44s21
+4V13*y_coord{23|5F9} 16|18s21 45s21
+5V13*z_coord{23|5F9} 16|19s21 46s21
+X 15 bssnbase-initial.ads
+1K18*Initial 13|9k9 15|6l14 6e21 16|5b23 123l14 123t21
+3U14*create_data 16|7b14 32l8 32t19
+4U14*create_grid 16|34b14 121l8 121t19
+X 16 bssnbase-initial.adb
+8f7 t{23|5F9} 11m7 21r46 22r46 23r46 24r46 25r46 26r46
+8f10 x{23|5F9} 17m16 21r48 22r48 23r48 24r48 25r48 26r48
+8f13 y{23|5F9} 18m16 21r50 22r50 23r50 24r50 25r50 26r50
+8f16 z{23|5F9} 19m16 21r52 22r52 23r52 24r52 25r52 26r52
+13i11 i{integer} 17r30 21r22 22r22 23r22 24r22 25r22 26r22
+14i14 j{integer} 18r30 21r24 22r24 23r24 24r24 25r24 26r24
+15i17 k{integer} 19r30 21r26 22r26 23r26 24r26 25r26 26r26
+35i7 a{integer} 48m16 48r21 50r33 57r35 60r35 63r41 67r44 71r46 75r49 79r53
+. 83r55 116r10
+35i10 b{integer} 56m19 56r24 57r29 96r23
+35i13 c{integer} 59m19 59r24 60r29 97r23
+36i7 p{integer} 62m22 62r27 63r35 99r26
+36i10 q{integer} 66m25 66r30 67r38 100r26
+36i13 r{integer} 70m28 70r33 71r40 101r26
+36i16 s{integer} 74m31 74r36 75r43 102r26
+36i19 u{integer} 78m34 78r39 79r47 103r26
+36i22 v{integer} 82m37 82r42 83r49 104r26
+37f7 x{23|5F9} 44m16 50r46
+37f10 y{23|5F9} 45m16 50r48
+37f13 z{23|5F9} 46m16 50r50
+40i11 i{integer} 44r30 50r40 52r20 52r30 77r34 81r37
+41i14 j{integer} 45r30 50r42 53r20 53r30 69r28 73r31
+42i17 k{integer} 46r30 50r44 54r20 54r30 61r22 65r25
+X 21 metric.ads
+1K9*Metric 16|1r6 1r53 21|3e11
+X 22 metric-kasner.ads
+4K16*Kasner 16|1w13 1r60 22|36e18
+9V13*set_3d_lapse{23|5F9} 16|21s32
+20V13*set_3d_phi{23|5F9} 16|23s32
+21V13*set_3d_trK{23|5F9} 16|24s32
+22V13*set_3d_gBar{13|30A9} 16|25s32
+23V13*set_3d_Abar{13|33A9} 16|26s32
+24V13*set_3d_Gi{13|27A9} 16|22s32
+X 23 support.ads
+5F9*Real<long_long_float> 16|8r20 37r17
+7U14*halt=7:68 16|108s10 113s10 118s10
+

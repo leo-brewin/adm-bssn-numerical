@@ -1,0 +1,291 @@
+V "GNAT Lib v2019"
+A -O3
+A -gnatA
+A -gnatwA
+A -gnat2012
+A -mtune=core2
+A -mmacosx-version-min=10.14.0
+A -fPIC
+P ZX
+
+RN
+RV NO_DIRECT_BOOLEAN_OPERATORS
+RV NO_EXCEPTION_HANDLERS
+RV NO_EXCEPTIONS
+RV NO_FLOATING_POINT
+RV NO_IO
+RV NO_SECONDARY_STACK
+RV NO_STANDARD_STORAGE_POOLS
+RV NO_DYNAMIC_SIZED_OBJECTS
+RV NO_IMPLEMENTATION_ASPECT_SPECIFICATIONS
+RV NO_IMPLEMENTATION_PRAGMAS
+RV SPARK_05
+
+U support.strings%b	support-strings.adb	1fcea9da NE OO PK
+W ada%s			ada.ads			ada.ali
+W ada.characters%s	a-charac.ads		a-charac.ali
+W ada.characters.handling%s  a-chahan.adb	a-chahan.ali
+Z ada.exceptions%s	a-except.adb		a-except.ali
+W ada.strings%s		a-string.ads		a-string.ali
+W ada.strings.fixed%s	a-strfix.adb		a-strfix.ali
+Z ada.tags%s		a-tags.adb		a-tags.ali
+W ada.text_io%s		a-textio.adb		a-textio.ali
+Z ada.text_io.float_aux%s  a-tiflau.adb		a-tiflau.ali
+Z ada.text_io.float_io%s
+Z ada.text_io.integer_aux%s  a-tiinau.adb	a-tiinau.ali
+Z ada.text_io.integer_io%s
+W support%s		support.adb		support.ali
+Z system.fat_llf%s	s-fatllf.ads		s-fatllf.ali
+Z system.secondary_stack%s  s-secsta.adb	s-secsta.ali
+
+U support.strings%s	support-strings.ads	2860f389 EE NE OO PK
+W ada%s			ada.ads			ada.ali
+W ada.characters%s	a-charac.ads		a-charac.ali
+W ada.characters.latin_1%s  a-chlat1.ads	a-chlat1.ali
+W support%s		support.adb		support.ali
+
+D ada.ads		20190925125847 76789da1 ada%s
+D a-charac.ads		20190925125846 2d3ec45b ada.characters%s
+D a-chahan.ads		20190925125846 1601a50f ada.characters.handling%s
+D a-chlat1.ads		20190925125846 66457d31 ada.characters.latin_1%s
+D a-except.ads		20190925125846 291912d5 ada.exceptions%s
+D a-ioexce.ads		20190925125846 e4a01f64 ada.io_exceptions%s
+D a-stream.ads		20190925125846 119b8fb3 ada.streams%s
+D a-string.ads		20190925125846 90ac6797 ada.strings%s
+D a-strfix.ads		20190925125846 86d6bc21 ada.strings.fixed%s
+D a-strmap.ads		20190925125846 e8bb714a ada.strings.maps%s
+D a-tags.ads		20190925125847 491b781d ada.tags%s
+D a-textio.ads		20190925125847 aef4d56d ada.text_io%s
+D a-tiflau.ads		20190925125847 c0393f21 ada.text_io.float_aux%s
+D a-tiflio.ads		20190925125847 bf196650 ada.text_io.float_io%s
+D a-tiflio.adb		20190925125845 fd9b1cfc ada.text_io.float_io%b
+D a-tiinau.ads		20190925125847 8114c8e4 ada.text_io.integer_aux%s
+D a-tiinio.ads		20190925125847 390edddb ada.text_io.integer_io%s
+D a-tiinio.adb		20190925125845 df9cd7af ada.text_io.integer_io%b
+D a-unccon.ads		20190925125847 0e9b276f ada.unchecked_conversion%s
+D a-uncdea.ads		20190925125847 eff36322 ada.unchecked_deallocation%s
+D gnat.ads		20190925125847 b5988c27 gnat%s
+D g-os_lib.ads		20190925125847 0db74523 gnat.os_lib%s
+D interfac.ads		20190925125847 5ab55268 interfaces%s
+D i-cstrea.ads		20190925125847 e53d8b8e interfaces.c_streams%s
+D support.ads		20190925101625 ccd37176 support%s
+D support-strings.ads	20190925101625 82f6ffce support.strings%s
+D support-strings.adb	20190925101625 33b7fdc0 support.strings%b
+D system.ads		20190925125848 085b6ffb system%s
+D s-crtl.ads		20190925125847 0ebbdb71 system.crtl%s
+D s-exctab.ads		20190925125847 54135002 system.exception_table%s
+D s-fatgen.ads		20190925125847 49cbaf86 system.fat_gen%s
+D s-fatllf.ads		20190925125847 4d5c1475 system.fat_llf%s
+D s-ficobl.ads		20190925125847 078245e4 system.file_control_block%s
+D s-os_lib.ads		20190925125847 5703ce4c system.os_lib%s
+D s-parame.ads		20190925125847 48ec542b system.parameters%s
+D s-secsta.ads		20190925125847 20bbe636 system.secondary_stack%s
+D s-soflin.ads		20190925125847 a7318a92 system.soft_links%s
+D s-stache.ads		20190925125847 a37c21ec system.stack_checking%s
+D s-stalib.ads		20190925125847 09bd3940 system.standard_library%s
+D s-stoele.ads		20190925125848 2dc34a04 system.storage_elements%s
+D s-string.ads		20190925125848 8fe54fb7 system.strings%s
+D s-traent.ads		20190925125848 005bf670 system.traceback_entries%s
+D s-unstyp.ads		20190925125848 34867c83 system.unsigned_types%s
+D s-wchcon.ads		20190925125848 1b7d22d2 system.wch_con%s
+G a e
+G c Z s b [str support__strings 5 13 none]
+G c Z s b [str support__strings 9 13 none]
+G c Z s b [str support__strings 13 13 none]
+G c Z s b [str support__strings 17 13 none]
+G c Z s b [fill_str support__strings 20 13 none]
+G c Z s b [spc support__strings 25 13 none]
+G c Z s b [cut support__strings 27 13 none]
+G c Z s b [null_string support__strings 29 19 none]
+G c Z s b [get_strlen support__strings 31 19 none]
+G c Z s b [set_strlen support__strings 33 19 none]
+G c Z s b [readstr support__strings 36 14 none]
+G c Z s b [readstr support__strings 39 14 none]
+G c Z s b [writestr support__strings 42 14 none]
+G c Z s b [writestr support__strings 45 14 none]
+G c Z s b [writestr support__strings 48 14 none]
+G c Z s b [centre support__strings 51 13 none]
+G c Z s b [trim_head support__strings 55 14 none]
+G c Z s b [trim_head support__strings 56 14 none]
+G c Z s b [trim_tail support__strings 58 14 none]
+G c Z s b [trim_tail support__strings 59 14 none]
+G c Z s b [trim support__strings 61 14 none]
+G c Z s b [trim support__strings 62 14 none]
+G c Z s b [lower_case support__strings 64 13 none]
+G c Z s b [upper_case support__strings 65 13 none]
+G c Z b b [get support__strings__real_io 52 14 9_4]
+G c Z b b [get support__strings__real_io 60 14 9_4]
+G c Z b b [put support__strings__real_io 69 14 9_4]
+G c Z b b [put support__strings__real_io 82 14 9_4]
+G c Z b b [get support__strings__real_io 93 14 9_4]
+G c Z b b [put support__strings__real_io 100 14 9_4]
+G c Z b b [get support__strings__integer_io 51 14 10_4]
+G c Z b b [get support__strings__integer_io 59 14 10_4]
+G c Z b b [put support__strings__integer_io 68 14 10_4]
+G c Z b b [put support__strings__integer_io 80 14 10_4]
+G c Z b b [get support__strings__integer_io 90 14 10_4]
+G c Z b b [put support__strings__integer_io 97 14 10_4]
+G r c none [fill_str support__strings 20 13 none] [min support 13 18 none]
+G r c none [writestr support__strings 48 14 none] [min support 13 18 none]
+G r c none [centre support__strings 51 13 none] [max support 12 18 none]
+G r c none [centre support__strings 51 13 none] [min support 13 18 none]
+G r c none [trim_head support__strings 55 14 none] [min support 13 18 none]
+G r c none [trim_head support__strings 56 14 none] [min support 13 18 none]
+G r c none [trim support__strings 61 14 none] [min support 13 18 none]
+G r c none [trim support__strings 62 14 none] [min support 13 18 none]
+X 1 ada.ads
+16K9*Ada 20e8 26|1r6 15r40 27|1r6 1r53 2r6 2r53 3r6 3r53 4r6 9r30 10r30 15r48
+. 44r48 45r61 58r40 76r49 113r28 120r32 130r23 311r14 316r14
+X 2 a-charac.ads
+16K13*Characters 18e19 26|1r10 15r44 27|4r10 15r52 44r52 45r65 58r44 76r53
+. 113r32 120r36 130r27 311r18 316r18
+X 3 a-chahan.ads
+36K24*Handling 159e28 27|4w21 311r29 316r29
+70V13*To_Lower{string} 27|311s38
+71V13*To_Upper{string} 27|316s38
+X 4 a-chlat1.ads
+18K24*Latin_1 296e27 26|1w21 15r55 27|15r63 44r63 45r76 58r55 76r64 113r43
+. 120r47 130r38
+25e4*NUL{character} 26|15r63 27|15r71 44r71 45r84 58r63 76r72 113r51 120r55
+. 130r46
+X 8 a-string.ads
+16K13*Strings 35e16 27|2w10 2r57 3r10 3r57
+33n24*Left{33E9} 27|49r34
+X 9 a-strfix.ads
+43K21*Fixed 596e22 27|3w18 3r65
+468V13*Trim{string} 27|49s17
+X 12 a-textio.ads
+57K13*Text_IO 727e16 27|1w10 1r57 9r34 10r34
+X 14 a-tiflio.ads
+46k21*Float_IO 112e25 27|9r42
+93U14*Get 27|145s7[9]
+100U14*Put 27|20s10[9] 23s13[9] 25s13[9] 27s13[9] 31s13[9] 33s13[9] 35s13[9]
+. 157s7[9]
+X 17 a-tiinio.ads
+46k21*Integer_IO 108e27 27|10r42
+90U14*Get 27|138s7[10]
+97U14*Put 27|48s10[10] 51s10[10] 151s7[10]
+X 25 support.ads
+3K9*Support 15e12 26|3r9 67r5 27|7r14 319r5
+5F9*Real<long_long_float> 26|5r27 40r36 46r37 27|9r52 12r27 142r36 155r37
+12V18*max{integer} 27|190s22 191s22 192s22 193s22 194s17 195s17
+13V18*min{integer} 27|173s21 192s29 193s29 194s24 195s24
+X 26 support-strings.ads
+3K17*Strings 25|3k9 26|67l13 67e20 27|7b22 319l13 319t20
+5V13*str{string} 5>18 6>18 27|12b13 39l8 39t11
+5f18 source{25|5F9} 27|12b18 19r10 20r22 21r18 22r18 23r25 24r21 25r25 27r25
+. 30r18 31r25 32r21 33r25 35r25
+6i18 width{integer} 27|13b18 15r27 20r29 23r32 25r32 27r32 31r32 33r32 35r32
+9V13*str{string} 9>18 10>18 27|41b13 54l8 54t11 89s26
+9i18 source{integer} 27|41b18 48r27 51r22
+10i18 width{integer} 27|42b18 44r27 47r10
+13V13*str{string} 13>18 14>18 15>18 27|56b13 71l8 71t11
+13a18 source{string} 27|56b18 62r32
+14i18 width{integer} 27|57b18 61r28 65r21 69r55
+15e18 pad{character} 27|58b18 61r49
+17V13*str{string} 17>18 18>18 27|73b13 80l8 80t11
+17e18 source{character} 27|73b18 78r22
+18i18 width{integer} 27|74b18 76r28
+20V13*fill_str{string} 20>23 21>23 22>23 27|82b13 97l8 97t16
+20i23 the_num{integer} 27|82b23 89r31
+21i23 width{integer} 27|83b23 87r30 89r40 90r21
+22e23 fill_chr{character} 27|84b23 92r33
+25V13*spc{string} 25>18 27|99b13 103l8 103t11 185s30
+25i18 width{integer} 27|99b18 100r36
+27V13*cut{string} 27>18 27|62s27 105b13 109l8 109t11 282s14 289s14 306s14
+27a18 the_line{string} 27|105b18 106r35
+29U19*null_string 29=32 27|111b14 114l8 114t19 170s7 234s15 254s7 271s15
+29a32 source{string} 27|111b27 113m7
+31V19*get_strlen{integer} 31>31 27|64s18 108s48 116b13 124l8 124t18 171s21
+. 189s28 219s25 256s25
+31a31 source{string} 27|116b25 119r16 120r20 121r22
+33U19*set_strlen 33=31 34>36 27|126b14 132l8 132t18 270s15
+33a31 source{string} 27|126b26 129r16 129r37 130m10
+34i36 length{integer} 27|127b26 129r29
+36U14*readstr 36>23 37<23 27|134b14 139l8 139t15
+36a23 source{string} 27|134b23 138r12
+37i23 target{integer} 27|135b23 138m19
+39U14*readstr 39>23 40<23 27|141b14 146l8 146t15
+39a23 source{string} 27|141b23 145r12
+40f23 target{25|5F9} 27|142b23 145m19
+42U14*writestr 42<24 43>24 27|148b14 152l8 152t16
+42a24 target{string} 27|148b24 151m12
+43i24 source{integer} 27|149b24 151r19
+45U14*writestr 45<24 46>24 27|154b14 158l8 158t16
+45a24 target{string} 27|154b24 157m12
+46f24 source{25|5F9} 27|155b24 157r19
+48U14*writestr 48<24 49>24 27|89s7 160b14 179l8 179t16 233s15
+48a24 target{string} 27|160b24 170m20 172r21 176r21 177r21 178m7
+49a24 source{string} 27|161b24 171r33 174r21 175r21 178r42
+51V13*centre{string} 51>21 52>21 53>21 27|181b13 200l8 200t14
+51a21 the_string{string} 27|181b21 189r40 197r28
+52i21 the_length{integer} 27|182b21 185r34 190r30 191r29 192r55 193r56 194r28
+. 195r28 195r39
+53i21 the_offset{integer} 27|183b21 192r44 193r45
+55U14*trim_head 55=25 27|207b14 241l8 241t17 281s7 295s7
+55a25 the_string{string} 27|207b25 212r36 219r36 221r18 225r13 233r36 237m7
+56V14*trim_head{string} 56>25 27|278b13 283l8 283t17
+56a25 the_string{string} 27|278b24 279r30
+58U14*trim_tail 58=25 27|243b14 276l8 276t17 288s7 296s7
+58a25 the_string{string} 27|243b25 248r36 256r36 258r18 262r13 270m27 271m28
+59V14*trim_tail{string} 59>25 27|285b13 290l8 290t17
+59a25 the_string{string} 27|285b24 286r30
+61U14*trim 61=20 27|292b14 300l8 300t12 305s7
+61a20 the_string{string} 27|292b20 295m18 296m18
+62V14*trim{string} 62>20 27|302b13 307l8 307t12
+62a20 the_string{string} 27|302b19 303r30
+64V13*lower_case{string} 64>25 27|309b13 312l8 312t18
+64a25 source{string} 27|309b25 311r48
+65V13*upper_case{string} 65>25 27|314b13 317l8 317t18
+65a25 source{string} 27|314b25 316r48
+X 27 support-strings.adb
+9K12 Real_IO[14|46] 9r84
+10K12 Integer_IO[17|46] 10r84
+15a7 result{string} 20m15 23m18 25m18 27m18 31m18 33m18 35m18 38r14
+44a7 result{string} 51m15 52r17
+45a7 wide_result{string} 48m15 49r22
+60i7 len_src{integer} 64m7 65r10 66r22 66r72
+61a7 tmp_out{string} 66m10 67r17
+62a7 tmp_src{string} 64r30 66r34 66r43 66r58 69r17 69r26 69r41
+76a7 tmp_str{string} 78m7 79r14
+87a7 the_str{string} 89m17 91r13 92m18 96r14
+90i11 i{integer} 91r22 92r27
+100a7 spaces{string} 102r14
+106a7 result{string} 108r14 108r21 108r35 108r59
+117i7 length{integer} 121m10 123r14
+119i11 i{integer} 120r27 121r20
+129i11 i{integer} 130r17
+136i7 last{integer} 138m26
+143i7 last{integer} 145m26
+162i7 len_substr{integer} 173m7 175r34 177r34
+163i7 len_source{integer} 171m7 173r26
+164i7 len_target{integer} 172m7 173r37
+165i7 beg_source{integer} 174m7 178r50
+166i7 end_source{integer} 175m7 178r62
+167i7 beg_target{integer} 176m7 178r15
+168i7 end_target{integer} 177m7 178r27
+184i7 the_string_length{integer} 189m7 190r41 191r55 192r66 193r67
+185a7 the_result{string} 197r10 199r14
+186i7 start{integer} 194m7 196r16 197r42
+186i14 finish{integer} 195m7 196r23
+187i7 left_space{integer} 190m7 191r42 192m7 192r33 194r39
+187i19 right_space{integer} 191m7 193m7 193r33 195r50
+196i11 i{integer} 197r22 197r40
+208i7 j{integer} 226m13 233r47
+209b7 found{boolean} 217m7 227m13 232r10
+210i7 the_string_len{integer} 219m7 222r28
+211i7 the_beg{integer} 221m7 222r18 224r16
+211i16 the_end{integer} 222m7 224r27 233r50
+212a7 tmp_string{string} 233m25 234m28 234r28 237r21
+224i11 i{integer} 225r25 226r22
+244i7 j{integer} 263m13 270r38
+245b7 found{boolean} 253m7 264m13 269r10
+246i7 the_string_len{integer} 256m7 259r28
+247i7 the_beg{integer} 258m7 259r18 261r24
+247i16 the_end{integer} 259m7 261r35
+248a7 tmp_string{string} 254m20 254r20
+261i11 i{integer} 262r25 263r22
+279a7 tmp_string{string} 281m18 281r18 282r19
+286a7 tmp_string{string} 288m18 288r18 289r19
+303a7 tmp_string{string} 305m13 305r13 306r19
+

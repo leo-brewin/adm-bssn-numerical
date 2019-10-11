@@ -1,0 +1,44 @@
+The following lines record the progression of symbol names from the Cadabra source to the
+final Ada code. Each line documents a single object.
+
+The changes are required to accomodate the syntactic limitations of the various languages.
+Cadabra use a LaTeX like syntax for tensors that is not supported in Python and Ada. The
+first stage of the translation is to export the Cadabra names to Python. Though Python
+does understand the underscore symbol, it appears that the current version of Cadabra
+(2.1.9) does not support underscores in Python names (presumably because the underscore
+is reserved exclusively for tensor subscripts). As tempting as it might be to create a
+Python symbol such as N_ab for the second derivatives of N this will cause Cadabra much
+grief. In contrast, Ada is quite happy to accept underscores in symbol names. So I have
+introduced the underscore in the Ada names to separate the object name from the tensor
+indices. Note that this use of underscore does not denote subscripts but rather as way to
+separate the object name from the indices. Python does not understand \partial so I have
+chosen the "d" symbol to denote partial derivatives.
+
+Note that the intermediate symbols are not all that important. The important symbols are
+the Cadabra (first) and Ada (last) symbols.
+
+The following lines were copied from the file code/template/include/local-data.ad.
+
+   -- R_{a b}      --> Rab --> Rab (ab)
+
+   -- gBar_{a b}   --> gBarab --> gBar_ab --> gBar (ab)
+   -- gBar^{a b}   --> iBarab --> iBar_ab --> iBar (ab)
+   -- ABar_{a b}   --> ABarab --> ABar_ab --> ABar (ab)
+   -- ABar^{a b}   --> BBarab --> BBar_ab --> BBar (ab)
+   -- GammaBar^{a} --> Gia    --> Gi_a    --> Gi (a)
+
+   -- \partial_{a}{trK} --> d1trK_{a} --> trKa --> trK_a --> d1trK (a)
+
+   -- \partial_{a}{\phi}   --> dphi_{a}   --> phia  --> phi_a  --> d1phi (a)
+   -- \partial_{a b}{\phi} --> dphi_{a b} --> phiab --> phi_ab --> d2phi (ab)
+
+   -- \partial_{a}{N}   --> dN_{a}   --> Na  --> N_a  --> d1N (a)
+   -- \partial_{a b}{N} --> dN_{a b} --> Nab --> N_ab --> d2N (ab)
+
+   -- \partial_{a}{gBar_{b c}}   --> dgBar_{b c a}   --> gBarbca  --> gBar_bca  --> d1gBar (a)(bc)
+   -- \partial_{a}{gBar^{b c}}   --> dgBar^{b c}_{a} --> iBarbca  --> iBar_bca  --> d1iBar (a)(bc)
+   -- \partial_{a b}{gBar_{c d}} --> dgBar_{c d a b} --> gBarcdab --> gBar_cdab --> d2gBar (ab)(cd)
+
+   -- \partial_{a}{ABar_{b c}} --> dABar_{b c a} --> ABarbca --> ABar_bca --> d1ABar (a)(bc)
+
+   -- \partial_{a}{GammaBar^{b}} --> dGi^{b}_{a} --> Giba --> Gi_ba --> d1Gi (a)(b)

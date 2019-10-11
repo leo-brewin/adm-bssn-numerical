@@ -1,0 +1,47 @@
+Procedure set_3d_hessian is
+   x0,  x1,  x2,  x3,  x4,  x5,  x6,  x7,  x8,  x9,  x10, x11, x12, x13, x14, x15, x16, 
+   x17, x18, x19, x20, x21, x22, x23, x24, x25, x26, x27, x28, x29, x30, x31, x32 : Real;
+begin
+   x0  := Nx*ixx;
+   x1  := (1.0/2.0)*gxxx;
+   x2  := Ny*ixy;
+   x3  := Nz*ixz;
+   x4  := (1.0/2.0)*gxxy;
+   x5  := gxyx - x4;
+   x6  := Nx*ixy;
+   x7  := (1.0/2.0)*gxxz;
+   x8  := gxzx - x7;
+   x9  := Nx*ixz;
+   x10 := Ny*iyy;
+   x11 := Ny*iyz;
+   x12 := Nz*iyz;
+   x13 := Nz*izz;
+   x14 := (1.0/2.0)*gyyx;
+   x15 := (1.0/2.0)*gxyz;
+   x16 := (1.0/2.0)*gxzy;
+   x17 := (1.0/2.0)*gyzx;
+   x18 := -x15 + x16 + x17;
+   x19 := Nxy - x0*x4 - x10*x14 - x11*x18 - x12*x14 - x13*x18 - x14*x6 - x18*x9 - x2*x4 - x3*x4;
+   x20 := (1.0/2.0)*gzzx;
+   x21 := x15 - x16 + x17;
+   x22 := Nxz - x0*x7 - x10*x21 - x11*x20 - x12*x21 - x13*x20 - x2*x7 - x20*x9 - x21*x6 - x3*x7;
+   x23 := (1.0/2.0)*gyyy;
+   x24 := gxyy - x14;
+   x25 := (1.0/2.0)*gyyz;
+   x26 := gyzy - x25;
+   x27 := (1.0/2.0)*gzzy;
+   x28 := x15 + x16 - x17;
+   x29 := Nyz - x0*x28 - x10*x25 - x11*x27 - x12*x25 - x13*x27 - x2*x28 - x25*x6 - x27*x9 - x28*x3;
+   x30 := (1.0/2.0)*gzzz;
+   x31 := gxzz - x20;
+   x32 := gyzz - x27;
+   Hess (xx) := Nxx - x0*x1 - x1*x2 - x1*x3 - x10*x5 - x11*x8 - x12*x5 - x13*x8 - x5*x6 - x8*x9;
+   Hess (xy) := x19;
+   Hess (xz) := x22;
+   Hess (xy) := x19;
+   Hess (yy) := Nyy - x0*x24 - x10*x23 - x11*x26 - x12*x23 - x13*x26 - x2*x24 - x23*x6 - x24*x3 - x26*x9;
+   Hess (yz) := x29;
+   Hess (xz) := x22;
+   Hess (yz) := x29;
+   Hess (zz) := Nzz - x0*x31 - x10*x32 - x11*x30 - x12*x32 - x13*x30 - x2*x31 - x3*x31 - x30*x9 - x32*x6;
+end set_3d_hessian;

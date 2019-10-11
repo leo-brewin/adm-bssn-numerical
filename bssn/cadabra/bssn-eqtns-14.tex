@@ -1,0 +1,158 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\section*{PhysRevD.62.044034 equation (14)}
+
+The advice given by Miguel Alcubierre, Bernd Brugmann etal (Phys Rev D (67) 084023,
+2nd-3rd paragraph on pg. 084023-4)
+
+\begin{quote}
+... if one wants to achieve numerical stability. In the computer code we do not use the numerically
+evolved ${\bar{\Gamma}}^i$ in all places, but we follow this rule:
+
+Partial derivatives $\partial_j {\bar{\Gamma}}^i$ are computed as finite differences
+of the independent variables ${\bar{\Gamma}}^i$ that are evolved using ...
+\end{quote}
+
+The Einstein Toolkit code uses the same rule -- the only place where the \emph{evolved} ${\bar{\Gamma}}^i$
+are used is in computing the $\partial_j {\bar{\Gamma}}^i$ terms in the equation
+for ${\bar{R}}_{ij}$, that is equation (18) of the Phys Rev D (62) 044034 paper.
+
+\clearpage
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'bssn-eqtns-14.json'
+   cdblib.create (jsonfile)
+
+   # --------------------------------------------------------------------------
+
+   Rphi := -2 DBar_{a b}{\phi} - 2 gBar_{a b} gBar^{c d} DBar_{c d}{\phi}
+           +4 DBar_{a}{\phi} DBar_{b}{\phi} - 4 gBar_{a b} gBar^{c d} DBar_{c}{\phi} DBar_{d}{\phi}.
+
+                                                           # cdb(eq15.prd,Rphi)
+
+   RBar := - (1/2) gBar^{l m} \partial_{l m}{gBar_{a b}}
+           + (1/2) gBar_{k a} \partial_{b}{GammaBar^{k}}
+           + (1/2) gBar_{k b} \partial_{a}{GammaBar^{k}}
+           + (1/2) GammaBar^{k} GammaBar_{a b k}
+           + (1/2) GammaBar^{k} GammaBar_{b a k}
+           + gBar^{l m} gBar^{k e} (  GammaBar_{e l a} GammaBar_{b k m}
+                                    + GammaBar_{e l b} GammaBar_{a k m}
+                                    + GammaBar_{k a m} GammaBar_{e l b}).
+
+                                                           # cdb(eq18.prd,RBar)
+
+   defRab := R_{a b} -> @(Rphi) + @(RBar).
+
+   Rab := RBar_{a b} + Rphi_{a b}.                         # cdb(eq14.01,Rab)
+   Rab := R_{a b}.                                         # cdb(eq14.00,Rab)
+
+   substitute (Rab, defRab)                                # cdb(eq14.02,Rab)
+   substitute (Rab, defDBar1)                              # cdb(eq14.03,Rab)
+   substitute (Rab, defDBar2)                              # cdb(eq14.04,Rab)
+   substitute (Rab, defGamma2GammaBar)                     # cdb(eq14.05,Rab)
+   distribute (Rab)                                        # cdb(eq14.06,Rab)
+   eliminate_kronecker (Rab)                               # cdb(eq14.07,Rab)
+
+   Rab = product_sort (Rab)                                # cdb(eq14.08,Rab)
+
+   rename_dummies (Rab)                                    # cdb(eq14.09,Rab)
+   canonicalise   (Rab)                                    # cdb(eq14.10,Rab)
+
+   foo := GammaBar^{a} GammaBar_{b c a} -> gBar^{d e} GammaBar^{a}_{d e} GammaBar_{b c a}.
+
+   substitute (Rab, foo)                                   # cdb(eq14.11,Rab)
+   substitute (Rab, defGBarSq)                             # cdb(eq14.12,Rab)
+   substitute (Rab, defGammaBarD)                          # cdb(eq14.13,Rab)
+   substitute (Rab, defGammaBarU)                          # cdb(eq14.14,Rab)
+   distribute (Rab)                                        # cdb(eq14.15,Rab)
+
+   foo := \partial_{a}{gBar_{b c}} gBar^{b c} -> 0.   # follows from det(g) = 1
+
+   substitute   (Rab,foo)                                  # cdb(eq14.16,Rab)
+   canonicalise (Rab)                                      # cdb(eq14.17,Rab)
+
+   foo := gBar^{b e} gBar^{c f} \partial_{a}{gBar_{b c}}  -> - \partial_{a}{gBar^{e f}}.
+   bah := gBar^{e b} gBar^{f c} \partial_{a}{gBar_{b c}}  -> - \partial_{a}{gBar^{e f}}.
+   moo := gBar^{e b} gBar^{c f} \partial_{a}{gBar_{b c}}  -> - \partial_{a}{gBar^{e f}}.
+
+   substitute (Rab,foo)                                    # cdb(eq14.18,Rab)
+   substitute (Rab,bah)                                    # cdb(eq14.19,Rab)
+   substitute (Rab,moo)                                    # cdb(eq14.20,Rab)
+
+   Rab = product_sort (Rab)                                # cdb(eq14.21,Rab)
+                                                           # cdb(eq14.99,Rab)
+
+   defRab := R_{a b} -> @(Rab).   # used later in bssn-ricci-scalar.tex
+
+   cdblib.put ('Rab',Rab,jsonfile)
+   cdblib.put ('defRab',defRab,jsonfile)
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq14.00} = \Cdb*{eq14.01}
+                    = \Cdb*{eq14.02}
+                    = \Cdb*{eq14.03}
+                    = \Cdb*{eq14.04}
+                    = \Cdb*{eq14.05}
+                    = \Cdb*{eq14.06}
+                    = \Cdb*[\hskip 2cm\hfill]{eq14.07}
+                    = \Cdb*{eq14.08}
+                    = \Cdb*{eq14.09}
+                    = \Cdb*{eq14.10}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq14.00} = \Cdb*{eq14.11}
+                    = \Cdb*{eq14.12}
+                    = \Cdb*{eq14.13}
+                    = \Cdb*[\hskip 2cm\hfill]{eq14.14}
+                    = \Cdb*{eq14.15}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{eq14.00} = \Cdb*[\hskip 2cm\hfill]{eq14.16}
+                    = \Cdb*[\hskip 2cm\hfill]{eq14.17}
+                    = \Cdb*{eq14.18}
+                    = \Cdb*{eq14.19}
+                    = \Cdb*{eq14.20}
+                    = \Cdb*{eq14.21}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\def\gBar{{\bar{g}}}
+\def\dgBar#1{{\partial_{#1}}\gBar}
+
+There is a single term in this final expression that appears to be neither symmetric in $ab$ nor part of a symmetric pair, namely
+\begin{gather*}
+   \dgBar{b}_{cd} \dgBar{a}^{cd}
+\end{gather*}
+It is, however, easy to show that this term is symmetric in $ab$. Start by noting that, for any $\gBar_{ab}$,
+\begin{align*}
+   \dgBar{a}^{cd} = -\gBar^{ce}\gBar^{df}\dgBar{a}_{ef}
+\end{align*}
+Now contract both sides with $\dgBar{b}_{cd}$ to obtain
+\begin{align*}
+   \dgBar{a}^{cd}\dgBar{b}_{cd} = -\gBar^{ce}\gBar^{df}\dgBar{a}_{ef}\dgBar{b}_{cd}
+\end{align*}
+The right hand side is clearly symmetric in $ab$ and thus the left hand must also be symmtric in $ab$.
+
+\end{document}

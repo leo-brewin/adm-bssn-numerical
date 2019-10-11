@@ -1,0 +1,231 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-code}
+
+\begin{document}
+
+\input{bssn-eqtns-09.cdbtex}
+\input{bssn-eqtns-10.cdbtex}
+\input{bssn-eqtns-11.cdbtex}
+\input{bssn-eqtns-12.cdbtex}
+\input{bssn-eqtns-14.cdbtex}
+\input{bssn-eqtns-20.cdbtex}
+
+\input{bssn-constraints.cdbtex}
+\input{bssn-ricci-scalar.cdbtex}
+
+% =======================================================================================
+\section*{The BSSN evolution equations. Code generation.}
+
+Finally, the actual BSSN equations used in the computer code. Yeah.
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb{eq09.00} = \Cdb*{eq09.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq10.00} = \Cdb*{eq10.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq11.00} = \Cdb*{eq11.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq12.00} = \Cdb*{eq12.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq20.00} = \Cdb*{eq20.99} \end{dmath*}
+   \begin{dmath*} \cdb{eq14.00} = \Cdb*{eq14.99} \end{dmath*}
+\end{dgroup*}
+
+The last job for Cadabra is to convert the right hand sides into C-code.
+And then it's goodnight from Cadabra and time to send the hounds out for Ada and
+friends (last seen lingering in a quiet corner of GitHub).
+
+\clearpage
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   Rscalar  = cdblib.get ('Rscalar',  'bssn-ricci-scalar.json')
+   Rab      = cdblib.get ('Rab',      'bssn-eqtns-14.json')
+   DphiDt   = cdblib.get ('DphiDt',   'bssn-eqtns-10.json')
+   DtrKDt   = cdblib.get ('DtrKDt',   'bssn-eqtns-11.json')
+   DgBarDt  = cdblib.get ('DgBarDt',  'bssn-eqtns-09.json')
+   DABarDt  = cdblib.get ('DABarDt',  'bssn-eqtns-12.json')
+   DGiBarDt = cdblib.get ('DGiBarDt', 'bssn-eqtns-20.json')
+   DNDt     = cdblib.get ('DNDt',     'bssn-lapse.json')
+   Ham      = cdblib.get ('Ham',      'bssn-constraints.json')
+   confMom  = cdblib.get ('confMom',  'bssn-constraints.json')
+
+   # ----------------------------------------------------------------
+   # Replace partial derivs with indices
+   # why? because evaluate() on \partial produces zero
+
+   def substitute_deriv (ex):
+       substitute (ex, $ \partial_{a b}{gBar_{c d}} -> dgBar_{c d a b} $)
+       substitute (ex, $ \partial_{a}{gBar_{b c}}   -> dgBar_{b c a}   $)
+       substitute (ex, $ \partial_{a}{gBar^{b c}}   -> dgBar^{b c}_{a} $)
+       substitute (ex, $ \partial_{a}{ABar_{b c}}   -> dABar_{b c a}   $)
+       substitute (ex, $ \partial_{a b}{\phi}       -> dphi_{a b}      $)
+       substitute (ex, $ \partial_{a}{\phi}         -> dphi_{a}        $)
+       substitute (ex, $ \partial_{a}{GammaBar^{b}} -> dGi^{b}_{a}     $)
+       substitute (ex, $ \partial_{a b}{N}          -> dN_{a b}        $)
+       substitute (ex, $ \partial_{a}{N}            -> dN_{a}          $)
+       substitute (ex, $ \partial_{a}{trK}          -> dtrK_{a}        $)
+       return ex
+
+   Rscalar  = substitute_deriv (Rscalar)
+   Rab      = substitute_deriv (Rab)
+   DphiDt   = substitute_deriv (DphiDt)
+   DtrKDt   = substitute_deriv (DtrKDt)
+   DgBarDt  = substitute_deriv (DgBarDt)
+   DABarDt  = substitute_deriv (DABarDt)
+   DGiBarDt = substitute_deriv (DGiBarDt)
+   DNDt     = substitute_deriv (DNDt)
+   Ham      = substitute_deriv (Ham)
+   confMom  = substitute_deriv (confMom)
+
+   # ----------------------------------------------------------------
+   # build rules to export Cadabra expressions to Python
+   # use known symmetries for g_{ab}, dg_{ab,c,d} etc.
+   # note: replacements must not contain underscores (reserved for subscripts),
+   #       so gBar_{x x} -> gBar_xx is not allowed
+
+   gBarRule := {gBar_{x x} -> gBarxx, gBar_{x y} -> gBarxy, gBar_{x z} -> gBarxz,
+                gBar_{y x} -> gBarxy, gBar_{y y} -> gBaryy, gBar_{y z} -> gBaryz,
+                gBar_{z x} -> gBarxz, gBar_{z y} -> gBaryz, gBar_{z z} -> gBarzz}.
+
+   iBarRule := {gBar^{x x} -> iBarxx, gBar^{x y} -> iBarxy, gBar^{x z} -> iBarxz,
+                gBar^{y x} -> iBarxy, gBar^{y y} -> iBaryy, gBar^{y z} -> iBaryz,
+                gBar^{z x} -> iBarxz, gBar^{z y} -> iBaryz, gBar^{z z} -> iBarzz}.
+
+   ABarRule := {ABar_{x x} -> ABarxx, ABar_{x y} -> ABarxy, ABar_{x z} -> ABarxz,
+                ABar_{y x} -> ABarxy, ABar_{y y} -> ABaryy, ABar_{y z} -> ABaryz,
+                ABar_{z x} -> ABarxz, ABar_{z y} -> ABaryz, ABar_{z z} -> ABarzz}.
+
+   BBarRule := {ABar^{x x} -> BBarxx, ABar^{x y} -> BBarxy, ABar^{x z} -> BBarxz,
+                ABar^{y x} -> BBarxy, ABar^{y y} -> BBaryy, ABar^{y z} -> BBaryz,
+                ABar^{z x} -> BBarxz, ABar^{z y} -> BBaryz, ABar^{z z} -> BBarzz}.
+
+   RRule := {R_{x x} -> Rxx, R_{x y} -> Rxy, R_{x z} -> Rxz,
+             R_{y x} -> Rxy, R_{y y} -> Ryy, R_{y z} -> Ryz,
+             R_{z x} -> Rxz, R_{z y} -> Ryz, R_{z z} -> Rzz}.
+
+   trKRule := {dtrK_{x} -> trKx, dtrK_{y} -> trKy, dtrK_{z} -> trKz}.
+
+   GiRule := {GammaBar^{x} -> Gix, GammaBar^{y} -> Giy, GammaBar^{z} -> Giz}.
+
+   d1GiRule := {dGi^{x}_{x} -> Gixx, dGi^{x}_{y} -> Gixy, dGi^{x}_{z} -> Gixz,
+                dGi^{y}_{x} -> Giyx, dGi^{y}_{y} -> Giyy, dGi^{y}_{z} -> Giyz,
+                dGi^{z}_{x} -> Gizx, dGi^{z}_{y} -> Gizy, dGi^{z}_{z} -> Gizz}.
+
+   d1NRule := {dN_{x} -> Nx, dN_{y} -> Ny, dN_{z} -> Nz}.
+
+   d2NRule := {dN_{x x} -> Nxx, dN_{x y} -> Nxy, dN_{x z} -> Nxz,
+               dN_{y x} -> Nxy, dN_{y y} -> Nyy, dN_{y z} -> Nyz,
+               dN_{z x} -> Nxz, dN_{z y} -> Nyz, dN_{z z} -> Nzz}.
+
+   d1phiRule := {dphi_{x} -> phix, dphi_{y} -> phiy, dphi_{z} -> phiz}.
+
+   d2phiRule := {dphi_{x x} -> phixx, dphi_{x y} -> phixy, dphi_{x z} -> phixz,
+                 dphi_{y x} -> phixy, dphi_{y y} -> phiyy, dphi_{y z} -> phiyz,
+                 dphi_{z x} -> phixz, dphi_{z y} -> phiyz, dphi_{z z} -> phizz}.
+
+   d1ABarRule := {dABar_{x x x} -> ABarxxx, dABar_{x y x} -> ABarxyx, dABar_{x z x} -> ABarxzx,
+                  dABar_{y x x} -> ABarxyx, dABar_{y y x} -> ABaryyx, dABar_{y z x} -> ABaryzx,
+                  dABar_{z x x} -> ABarxzx, dABar_{z y x} -> ABaryzx, dABar_{z z x} -> ABarzzx,
+
+                  dABar_{x x y} -> ABarxxy, dABar_{x y y} -> ABarxyy, dABar_{x z y} -> ABarxzy,
+                  dABar_{y x y} -> ABarxyy, dABar_{y y y} -> ABaryyy, dABar_{y z y} -> ABaryzy,
+                  dABar_{z x y} -> ABarxzy, dABar_{z y y} -> ABaryzy, dABar_{z z y} -> ABarzzy,
+
+                  dABar_{x x z} -> ABarxxz, dABar_{x y z} -> ABarxyz, dABar_{x z z} -> ABarxzz,
+                  dABar_{y x z} -> ABarxyz, dABar_{y y z} -> ABaryyz, dABar_{y z z} -> ABaryzz,
+                  dABar_{z x z} -> ABarxzz, dABar_{z y z} -> ABaryzz, dABar_{z z z} -> ABarzzz}.
+
+   d1gBarRule := {dgBar_{x x x} -> gBarxxx, dgBar_{x y x} -> gBarxyx, dgBar_{x z x} -> gBarxzx,
+                  dgBar_{y x x} -> gBarxyx, dgBar_{y y x} -> gBaryyx, dgBar_{y z x} -> gBaryzx,
+                  dgBar_{z x x} -> gBarxzx, dgBar_{z y x} -> gBaryzx, dgBar_{z z x} -> gBarzzx,
+
+                  dgBar_{x x y} -> gBarxxy, dgBar_{x y y} -> gBarxyy, dgBar_{x z y} -> gBarxzy,
+                  dgBar_{y x y} -> gBarxyy, dgBar_{y y y} -> gBaryyy, dgBar_{y z y} -> gBaryzy,
+                  dgBar_{z x y} -> gBarxzy, dgBar_{z y y} -> gBaryzy, dgBar_{z z y} -> gBarzzy,
+
+                  dgBar_{x x z} -> gBarxxz, dgBar_{x y z} -> gBarxyz, dgBar_{x z z} -> gBarxzz,
+                  dgBar_{y x z} -> gBarxyz, dgBar_{y y z} -> gBaryyz, dgBar_{y z z} -> gBaryzz,
+                  dgBar_{z x z} -> gBarxzz, dgBar_{z y z} -> gBaryzz, dgBar_{z z z} -> gBarzzz}.
+
+   d1iBarRule := {dgBar^{x x}_{x} -> iBarxxx, dgBar^{x y}_{x} -> iBarxyx, dgBar^{x z}_{x} -> iBarxzx,
+                  dgBar^{y x}_{x} -> iBarxyx, dgBar^{y y}_{x} -> iBaryyx, dgBar^{y z}_{x} -> iBaryzx,
+                  dgBar^{z x}_{x} -> iBarxzx, dgBar^{z y}_{x} -> iBaryzx, dgBar^{z z}_{x} -> iBarzzx,
+
+                  dgBar^{x x}_{y} -> iBarxxy, dgBar^{x y}_{y} -> iBarxyy, dgBar^{x z}_{y} -> iBarxzy,
+                  dgBar^{y x}_{y} -> iBarxyy, dgBar^{y y}_{y} -> iBaryyy, dgBar^{y z}_{y} -> iBaryzy,
+                  dgBar^{z x}_{y} -> iBarxzy, dgBar^{z y}_{y} -> iBaryzy, dgBar^{z z}_{y} -> iBarzzy,
+
+                  dgBar^{x x}_{z} -> iBarxxz, dgBar^{x y}_{z} -> iBarxyz, dgBar^{x z}_{z} -> iBarxzz,
+                  dgBar^{y x}_{z} -> iBarxyz, dgBar^{y y}_{z} -> iBaryyz, dgBar^{y z}_{z} -> iBaryzz,
+                  dgBar^{z x}_{z} -> iBarxzz, dgBar^{z y}_{z} -> iBaryzz, dgBar^{z z}_{z} -> iBarzzz}.
+
+   d2gBarRule := {dgBar_{x x x x} -> gBarxxxx, dgBar_{x y x x} -> gBarxyxx, dgBar_{x z x x} -> gBarxzxx,
+                  dgBar_{y x x x} -> gBarxyxx, dgBar_{y y x x} -> gBaryyxx, dgBar_{y z x x} -> gBaryzxx,
+                  dgBar_{z x x x} -> gBarxzxx, dgBar_{z y x x} -> gBaryzxx, dgBar_{z z x x} -> gBarzzxx,
+                  dgBar_{x x y x} -> gBarxxxy, dgBar_{x y y x} -> gBarxyxy, dgBar_{x z y x} -> gBarxzxy,
+                  dgBar_{y x y x} -> gBarxyxy, dgBar_{y y y x} -> gBaryyxy, dgBar_{y z y x} -> gBaryzxy,
+                  dgBar_{z x y x} -> gBarxzxy, dgBar_{z y y x} -> gBaryzxy, dgBar_{z z y x} -> gBarzzxy,
+                  dgBar_{x x z x} -> gBarxxxz, dgBar_{x y z x} -> gBarxyxz, dgBar_{x z z x} -> gBarxzxz,
+                  dgBar_{y x z x} -> gBarxyxz, dgBar_{y y z x} -> gBaryyxz, dgBar_{y z z x} -> gBaryzxz,
+                  dgBar_{z x z x} -> gBarxzxz, dgBar_{z y z x} -> gBaryzxz, dgBar_{z z z x} -> gBarzzxz,
+
+                  dgBar_{x x x y} -> gBarxxxy, dgBar_{x y x y} -> gBarxyxy, dgBar_{x z x y} -> gBarxzxy,
+                  dgBar_{y x x y} -> gBarxyxy, dgBar_{y y x y} -> gBaryyxy, dgBar_{y z x y} -> gBaryzxy,
+                  dgBar_{z x x y} -> gBarxzxy, dgBar_{z y x y} -> gBaryzxy, dgBar_{z z x y} -> gBarzzxy,
+                  dgBar_{x x y y} -> gBarxxyy, dgBar_{x y y y} -> gBarxyyy, dgBar_{x z y y} -> gBarxzyy,
+                  dgBar_{y x y y} -> gBarxyyy, dgBar_{y y y y} -> gBaryyyy, dgBar_{y z y y} -> gBaryzyy,
+                  dgBar_{z x y y} -> gBarxzyy, dgBar_{z y y y} -> gBaryzyy, dgBar_{z z y y} -> gBarzzyy,
+                  dgBar_{x x z y} -> gBarxxyz, dgBar_{x y z y} -> gBarxyyz, dgBar_{x z z y} -> gBarxzyz,
+                  dgBar_{y x z y} -> gBarxyyz, dgBar_{y y z y} -> gBaryyyz, dgBar_{y z z y} -> gBaryzyz,
+                  dgBar_{z x z y} -> gBarxzyz, dgBar_{z y z y} -> gBaryzyz, dgBar_{z z z y} -> gBarzzyz,
+
+                  dgBar_{x x x z} -> gBarxxxz, dgBar_{x y x z} -> gBarxyxz, dgBar_{x z x z} -> gBarxzxz,
+                  dgBar_{y x x z} -> gBarxyxz, dgBar_{y y x z} -> gBaryyxz, dgBar_{y z x z} -> gBaryzxz,
+                  dgBar_{z x x z} -> gBarxzxz, dgBar_{z y x z} -> gBaryzxz, dgBar_{z z x z} -> gBarzzxz,
+                  dgBar_{x x y z} -> gBarxxyz, dgBar_{x y y z} -> gBarxyyz, dgBar_{x z y z} -> gBarxzyz,
+                  dgBar_{y x y z} -> gBarxyyz, dgBar_{y y y z} -> gBaryyyz, dgBar_{y z y z} -> gBaryzyz,
+                  dgBar_{z x y z} -> gBarxzyz, dgBar_{z y y z} -> gBaryzyz, dgBar_{z z y z} -> gBarzzyz,
+                  dgBar_{x x z z} -> gBarxxzz, dgBar_{x y z z} -> gBarxyzz, dgBar_{x z z z} -> gBarxzzz,
+                  dgBar_{y x z z} -> gBarxyzz, dgBar_{y y z z} -> gBaryyzz, dgBar_{y z z z} -> gBaryzzz,
+                  dgBar_{z x z z} -> gBarxzzz, dgBar_{z y z z} -> gBaryzzz, dgBar_{z z z z} -> gBarzzzz}.
+
+   allRules =  gBarRule + d1gBarRule + d2gBarRule \
+             + iBarRule + d1iBarRule \
+             + ABarRule + d1ABarRule \
+             + BBarRule \
+             + GiRule + d1GiRule \
+             + RRule \
+             + trKRule \
+             + d1NRule + d2NRule \
+             + d1phiRule + d2phiRule
+
+   evaluate (Rscalar,  allRules, simplify=False)
+   evaluate (Rab,      allRules, simplify=False)
+   evaluate (DphiDt,   allRules, simplify=False)
+   evaluate (DtrKDt,   allRules, simplify=False)
+   evaluate (DgBarDt,  allRules, simplify=False)
+   evaluate (DABarDt,  allRules, simplify=False)
+   evaluate (DGiBarDt, allRules, simplify=False)
+   evaluate (DNDt,     allRules, simplify=False)
+   evaluate (Ham,      allRules, simplify=False)
+   evaluate (confMom,  allRules, simplify=False)
+
+   # ----------------------------------------------------------------
+   # export to C-code
+
+   import writecode
+
+   writecode.cdb_write_code (Rscalar,  'R',         'ricci-scalar.c', 0)
+   writecode.cdb_write_code (Rab,      'Rab',       'ricci.c',        2)
+   writecode.cdb_write_code (DphiDt,   'dot_phi',   'dot-phi.c',      0)
+   writecode.cdb_write_code (DtrKDt,   'dot_trK',   'dot-trK.c',      0)
+   writecode.cdb_write_code (DgBarDt,  'dot_gBar',  'dot-gBar.c',     2)
+   writecode.cdb_write_code (DABarDt,  'dot_ABar',  'dot-ABar.c',     2)
+   writecode.cdb_write_code (DGiBarDt, 'dot_Gi',    'dot-Gi.c',       1)
+   writecode.cdb_write_code (DNDt,     'dot_N',     'dot-N.c',        0)
+
+   writecode.cdb_write_code (Ham,      'Ham',       'hamiltonian.c',  0)
+   writecode.cdb_write_code (confMom,  'Mom',       'momentum.c',     1)
+
+\end{cadabra}
+
+\end{document}

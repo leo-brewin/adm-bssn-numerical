@@ -1,0 +1,30 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\section*{PhysRevD.62.044034 equation (9)}
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'bssn-eqtns-09.json'
+   cdblib.create (jsonfile)
+
+   # --------------------------------------------------------------------------
+
+   DgBarDt := \partial_{t}{gBar_{ij}}.           # cdb(eq09.00,DgBarDt)
+   DgBarDt := -2 N ABar_{i j}.                   # cdb(eq09.01,DgBarDt)
+
+   canonicalise (DgBarDt)                        # cdb(eq09.02,DgBarDt)  # no change
+                                                 # cdb(eq09.99,DgBarDt)  # no change
+
+   cdblib.put ('DgBarDt',DgBarDt,jsonfile)
+\end{cadabra}
+
+\begin{dgroup*}
+   \begin{dmath*} \cdb{eq09.00} = \Cdb*{eq09.02}\end{dmath*}
+\end{dgroup*}
+
+\end{document}

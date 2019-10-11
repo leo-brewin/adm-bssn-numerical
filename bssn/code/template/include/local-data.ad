@@ -1,0 +1,284 @@
+   -- these are local variables used by the basic codes such as dot-gab.ad, dot-kab.ad etc.
+   -- renames are good as they don't involve a memory copy
+
+   ----------------------------------------------------------------------
+   -- basic local data
+
+   N         : Real;                                     -- lapse
+   phi       : Real;                                     -- conformal factor
+   trK       : Real;                                     -- trace of K
+   Gi        : GammaPointArray;                          -- trace of conformal connection, GammaBar^{i}
+   gBar      : MetricPointArray;                         -- gBar_{ab}
+   iBar      : MetricPointArray;                         -- gBar^{ab}
+   ABar      : ExtcurvPointArray;                        -- ABar_{ab}
+   BBar      : ExtcurvPointArray;                        -- ABar^{ab}
+
+   ----------------------------------------------------------------------
+   -- time derivatives of local data
+
+   dot_N     : Real;
+   dot_phi   : Real;
+   dot_trK   : Real;
+   dot_Gi    : GammaPointArray;
+   dot_gBar  : MetricPointArray;
+   dot_ABar  : ExtcurvPointArray;
+
+   ----------------------------------------------------------------------
+   -- partial derivatives of local data
+
+   d1N       : Array (1..3) of Real;                     -- 1st & 2nd derivs of N
+   d2N       : Array (symmetric) of Real;
+
+   d1phi     : Array (1..3) of Real;                     -- 1st & 2nd derivs of phi
+   d2phi     : Array (symmetric) of Real;
+
+   d1trK     : Array (1..3) of Real;                     -- 1st derivs of trK
+
+   d1Gi      : Array (1..3) of GammaPointArray;          -- 1st derivs of GammaBar^i
+
+   d1gBar    : Array (1..3) of MetricPointArray;         -- 1st & 2nd derivs of gBar_{ab}
+   d2gBar    : Array (symmetric) of MetricPointArray;
+
+   d1iBar    : Array (1..3) of MetricPointArray;         -- 1st derivs of gBar^{ab}
+
+   d1ABar    : Array (1..3) of ExtcurvPointArray;        -- 1st derivs of ABar_{ab}
+
+   ----------------------------------------------------------------------
+   -- miscellaneous data
+
+   R         : Real;                                     -- Ricci scalar
+   Rab       : Array (symmetric) of Real;                -- Ricci tensor
+
+   ----------------------------------------------------------------------
+   -- constraints
+
+   Ham       : Real;                                     -- Hamiltonian constraint
+   Mom       : MomConstraintPointArray;                  -- Momentum constraints
+
+   ----------------------------------------------------------------------
+   -- mappings between the Cadabra and Ada objects
+   -- LCB: the following renames could be eliminated by using a set of sed-scripts
+   --      to substitute the symbols in the foo.ad files
+
+   -- \partial_{a}{\phi} --> dphi_{a} --> phia --> phi_a --> d1phi (a)
+
+   phi_x : Real renames d1phi (1);
+   phi_y : Real renames d1phi (2);
+   phi_z : Real renames d1phi (3);
+
+   -- \partial_{a b}{\phi} --> dphi_{a b} --> phiab --> phi_ab --> d2phi (ab)
+
+   phi_xx : Real renames d2phi (xx);
+   phi_xy : Real renames d2phi (xy);
+   phi_xz : Real renames d2phi (xz);
+   phi_yy : Real renames d2phi (yy);
+   phi_yz : Real renames d2phi (yz);
+   phi_zz : Real renames d2phi (zz);
+
+   -- \partial_{a}{trK} --> d1trK_{a} --> trKa --> trK_a --> d1trK (a)
+
+   trK_x : Real renames d1trK (1);
+   trK_y : Real renames d1trK (2);
+   trK_z : Real renames d1trK (3);
+
+   -- GammaBar^{a} --> Gia --> Gi_a --> Gi (a)
+
+   Gi_x : Real renames Gi (1);
+   Gi_y : Real renames Gi (2);
+   Gi_z : Real renames Gi (3);
+
+   -- \partial_{a}{GammaBar^{b}} --> dGi^{b}_{a} --> Giba --> Gi_ba --> d1Gi (a)(b)
+
+   Gi_xx : Real renames d1Gi (1)(1);
+   Gi_xy : Real renames d1Gi (2)(1);
+   Gi_xz : Real renames d1Gi (3)(1);
+
+   Gi_yx : Real renames d1Gi (1)(2);
+   Gi_yy : Real renames d1Gi (2)(2);
+   Gi_yz : Real renames d1Gi (3)(2);
+
+   Gi_zx : Real renames d1Gi (1)(3);
+   Gi_zy : Real renames d1Gi (2)(3);
+   Gi_zz : Real renames d1Gi (3)(3);
+
+   -- \partial_{a}{N} --> dN_{a} --> Na --> N_a --> d1N (a)
+
+   N_x : Real renames d1N (1);
+   N_y : Real renames d1N (2);
+   N_z : Real renames d1N (3);
+
+   -- \partial_{a b}{N} --> dN_{a b} --> Nab --> N_ab --> d2N (ab)
+
+   N_xx : Real renames d2N (xx);
+   N_xy : Real renames d2N (xy);
+   N_xz : Real renames d2N (xz);
+   N_yy : Real renames d2N (yy);
+   N_yz : Real renames d2N (yz);
+   N_zz : Real renames d2N (zz);
+
+   -- R_{a b} --> Rab --> Rab (ab)
+
+   Rxx : Real renames Rab (xx);
+   Rxy : Real renames Rab (xy);
+   Rxz : Real renames Rab (xz);
+   Ryy : Real renames Rab (yy);
+   Ryz : Real renames Rab (yz);
+   Rzz : Real renames Rab (zz);
+
+   -- ABar_{a b} --> ABarab --> ABar_ab --> ABar (ab)
+
+   ABar_xx : Real Renames ABar (xx);
+   ABar_xy : Real Renames ABar (xy);
+   ABar_xz : Real Renames ABar (xz);
+   ABar_yy : Real Renames ABar (yy);
+   ABar_yz : Real Renames ABar (yz);
+   ABar_zz : Real Renames ABar (zz);
+
+   -- ABar^{a b} --> BBarab --> BBar_ab --> BBar (ab)
+
+   BBar_xx : Real Renames BBar (xx);
+   BBar_xy : Real Renames BBar (xy);
+   BBar_xz : Real Renames BBar (xz);
+   BBar_yy : Real Renames BBar (yy);
+   BBar_yz : Real Renames BBar (yz);
+   BBar_zz : Real Renames BBar (zz);
+
+   -- gBar_{a b} --> gBarab --> gBar_ab --> gBar (ab)
+
+   gBar_xx : Real Renames gBar (xx);
+   gBar_xy : Real Renames gBar (xy);
+   gBar_xz : Real Renames gBar (xz);
+   gBar_yy : Real Renames gBar (yy);
+   gBar_yz : Real Renames gBar (yz);
+   gBar_zz : Real Renames gBar (zz);
+
+   -- gBar^{a b} --> iBarab --> iBar_ab --> iBar (ab)
+
+   iBar_xx : Real renames iBar (xx);
+   iBar_xy : Real renames iBar (xy);
+   iBar_xz : Real renames iBar (xz);
+   iBar_yy : Real renames iBar (yy);
+   iBar_yz : Real renames iBar (yz);
+   iBar_zz : Real renames iBar (zz);
+
+   -- \partial_{a}{gBar_{b c}} --> dgBar_{b c a} --> gBarbca --> gBar_bca --> d1gBar(a)(bc)
+
+   gBar_xxx : Real renames d1gBar (1)(xx);
+   gBar_xxy : Real renames d1gBar (2)(xx);
+   gBar_xxz : Real renames d1gBar (3)(xx);
+
+   gBar_xyx : Real renames d1gBar (1)(xy);
+   gBar_xyy : Real renames d1gBar (2)(xy);
+   gBar_xyz : Real renames d1gBar (3)(xy);
+
+   gBar_xzx : Real renames d1gBar (1)(xz);
+   gBar_xzy : Real renames d1gBar (2)(xz);
+   gBar_xzz : Real renames d1gBar (3)(xz);
+
+   gBar_yyx : Real renames d1gBar (1)(yy);
+   gBar_yyy : Real renames d1gBar (2)(yy);
+   gBar_yyz : Real renames d1gBar (3)(yy);
+
+   gBar_yzx : Real renames d1gBar (1)(yz);
+   gBar_yzy : Real renames d1gBar (2)(yz);
+   gBar_yzz : Real renames d1gBar (3)(yz);
+
+   gBar_zzx : Real renames d1gBar (1)(zz);
+   gBar_zzy : Real renames d1gBar (2)(zz);
+   gBar_zzz : Real renames d1gBar (3)(zz);
+
+   -- \partial_{a}{gBar^{b c}} --> dgBar^{b c}_{a} --> iBarbca --> iBar_bca --> d1iBar(a)(bc)
+
+   iBar_xxx : Real renames d1iBar (1)(xx);
+   iBar_xxy : Real renames d1iBar (2)(xx);
+   iBar_xxz : Real renames d1iBar (3)(xx);
+
+   iBar_xyx : Real renames d1iBar (1)(xy);
+   iBar_xyy : Real renames d1iBar (2)(xy);
+   iBar_xyz : Real renames d1iBar (3)(xy);
+
+   iBar_xzx : Real renames d1iBar (1)(xz);
+   iBar_xzy : Real renames d1iBar (2)(xz);
+   iBar_xzz : Real renames d1iBar (3)(xz);
+
+   iBar_yyx : Real renames d1iBar (1)(yy);
+   iBar_yyy : Real renames d1iBar (2)(yy);
+   iBar_yyz : Real renames d1iBar (3)(yy);
+
+   iBar_yzx : Real renames d1iBar (1)(yz);
+   iBar_yzy : Real renames d1iBar (2)(yz);
+   iBar_yzz : Real renames d1iBar (3)(yz);
+
+   iBar_zzx : Real renames d1iBar (1)(zz);
+   iBar_zzy : Real renames d1iBar (2)(zz);
+   iBar_zzz : Real renames d1iBar (3)(zz);
+
+   -- \partial_{a}{ABar_{b c}} --> dABar_{b c a} --> ABarbca --> ABar_bca --> d1ABar(a)(bc)
+
+   ABar_xxx : Real renames d1ABar (1)(xx);
+   ABar_xxy : Real renames d1ABar (2)(xx);
+   ABar_xxz : Real renames d1ABar (3)(xx);
+
+   ABar_xyx : Real renames d1ABar (1)(xy);
+   ABar_xyy : Real renames d1ABar (2)(xy);
+   ABar_xyz : Real renames d1ABar (3)(xy);
+
+   ABar_xzx : Real renames d1ABar (1)(xz);
+   ABar_xzy : Real renames d1ABar (2)(xz);
+   ABar_xzz : Real renames d1ABar (3)(xz);
+
+   ABar_yyx : Real renames d1ABar (1)(yy);
+   ABar_yyy : Real renames d1ABar (2)(yy);
+   ABar_yyz : Real renames d1ABar (3)(yy);
+
+   ABar_yzx : Real renames d1ABar (1)(yz);
+   ABar_yzy : Real renames d1ABar (2)(yz);
+   ABar_yzz : Real renames d1ABar (3)(yz);
+
+   ABar_zzx : Real renames d1ABar (1)(zz);
+   ABar_zzy : Real renames d1ABar (2)(zz);
+   ABar_zzz : Real renames d1ABar (3)(zz);
+
+   -- \partial_{a b}{gBar_{c d}} --> dgBar_{c d a b} --> gBarcdab --> gBar_cdab --> d2gBar(ab)(cd)
+
+   gBar_xxxx : Real renames d2gBar (xx)(xx);
+   gBar_xyxx : Real renames d2gBar (xx)(xy);
+   gBar_xzxx : Real renames d2gBar (xx)(xz);
+   gBar_yyxx : Real renames d2gBar (xx)(yy);
+   gBar_yzxx : Real renames d2gBar (xx)(yz);
+   gBar_zzxx : Real renames d2gBar (xx)(zz);
+
+   gBar_xxxy : Real renames d2gBar (xy)(xx);
+   gBar_xyxy : Real renames d2gBar (xy)(xy);
+   gBar_xzxy : Real renames d2gBar (xy)(xz);
+   gBar_yyxy : Real renames d2gBar (xy)(yy);
+   gBar_yzxy : Real renames d2gBar (xy)(yz);
+   gBar_zzxy : Real renames d2gBar (xy)(zz);
+
+   gBar_xxxz : Real renames d2gBar (xz)(xx);
+   gBar_xyxz : Real renames d2gBar (xz)(xy);
+   gBar_xzxz : Real renames d2gBar (xz)(xz);
+   gBar_yyxz : Real renames d2gBar (xz)(yy);
+   gBar_yzxz : Real renames d2gBar (xz)(yz);
+   gBar_zzxz : Real renames d2gBar (xz)(zz);
+
+   gBar_xxyy : Real renames d2gBar (yy)(xx);
+   gBar_xyyy : Real renames d2gBar (yy)(xy);
+   gBar_xzyy : Real renames d2gBar (yy)(xz);
+   gBar_yyyy : Real renames d2gBar (yy)(yy);
+   gBar_yzyy : Real renames d2gBar (yy)(yz);
+   gBar_zzyy : Real renames d2gBar (yy)(zz);
+
+   gBar_xxyz : Real renames d2gBar (yz)(xx);
+   gBar_xyyz : Real renames d2gBar (yz)(xy);
+   gBar_xzyz : Real renames d2gBar (yz)(xz);
+   gBar_yyyz : Real renames d2gBar (yz)(yy);
+   gBar_yzyz : Real renames d2gBar (yz)(yz);
+   gBar_zzyz : Real renames d2gBar (yz)(zz);
+
+   gBar_xxzz : Real renames d2gBar (zz)(xx);
+   gBar_xyzz : Real renames d2gBar (zz)(xy);
+   gBar_xzzz : Real renames d2gBar (zz)(xz);
+   gBar_yyzz : Real renames d2gBar (zz)(yy);
+   gBar_yzzz : Real renames d2gBar (zz)(yz);
+   gBar_zzzz : Real renames d2gBar (zz)(zz);

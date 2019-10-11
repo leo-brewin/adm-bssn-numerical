@@ -1,0 +1,233 @@
+   -- these are local variables used by the basic codes such as dot-gab.ad, dot-kab.ad etc.
+   -- renames are good as they don't involve a memory copy
+
+   ----------------------------------------------------------------------
+   -- basic local data
+
+   N       : Real;                                     -- lapse
+   gab     : MetricPointArray;                         -- 3-metric g_{ab}
+   iab     : MetricPointArray;                         -- 3-metric g^{ab}
+   Kab     : ExtcurvPointArray;                        -- extrinsic curvature K_{ab}
+
+   ----------------------------------------------------------------------
+   -- time derivatives of local data
+
+   dot_N   : Real;
+   dot_gab : MetricPointArray;
+   dot_Kab : ExtcurvPointArray;
+
+   ----------------------------------------------------------------------
+   -- partial derivatives of local data
+
+   d1N     : Array (1..3) of Real;                     -- 1st & 2nd derivs of N
+   d2N     : Array (symmetric) of Real;
+
+   d1iab   : Array (1..3) of MetricPointArray;         -- 1st derivs of iab
+
+   d1gab   : Array (1..3) of MetricPointArray;         -- 1st & 2nd derivs of N
+   d2gab   : Array (symmetric) of MetricPointArray;
+
+   d1Kab   : Array (1..3) of ExtcurvPointArray;        -- 1st derivs of Kab
+
+   ----------------------------------------------------------------------
+   -- miscellaneous data
+
+   trK     : Real;
+
+   R       : Real;                                     -- Ricci scalar
+
+   Rab     : Array (symmetric) of Real;                -- Ricci tensor
+   Hess    : Array (symmetric) of Real;                -- Hessian, N_{;ab}
+
+   ----------------------------------------------------------------------
+   -- constraints
+
+   Ham    : Real;                                      -- Hamiltonian constraint
+   Mom    : MomConstraintPointArray;                   -- Momentum constraints
+
+   ----------------------------------------------------------------------
+   -- mappings between the Cadabra and Ada objects
+   -- LCB: the following renames could be eliminated by using a set of sed-scripts
+   --      to substitute the symbols in the foo.ad files
+
+   -- \partial_{a}{N} --> dN_{a} --> Na --> d1N (a)
+
+   Nx : Real renames d1N (1);
+   Ny : Real renames d1N (2);
+   Nz : Real renames d1N (3);
+
+   -- \partial_{a b}{N} --> dN_{a b} --> Nab --> d2N (ab)
+
+   Nxx : Real renames d2N (xx);
+   Nxy : Real renames d2N (xy);
+   Nxz : Real renames d2N (xz);
+   Nyy : Real renames d2N (yy);
+   Nyz : Real renames d2N (yz);
+   Nzz : Real renames d2N (zz);
+
+   -- Rab_{p q} --> Rpq --> Rab (pq)
+
+   Rxx : Real renames Rab (xx);
+   Rxy : Real renames Rab (xy);
+   Rxz : Real renames Rab (xz);
+   Ryy : Real renames Rab (yy);
+   Ryz : Real renames Rab (yz);
+   Rzz : Real renames Rab (zz);
+
+   -- Kab_{p q} --> Kpq --> Kab (pq)
+
+   Kxx : Real Renames Kab (xx);
+   Kxy : Real Renames Kab (xy);
+   Kxz : Real Renames Kab (xz);
+   Kyy : Real Renames Kab (yy);
+   Kyz : Real Renames Kab (yz);
+   Kzz : Real Renames Kab (zz);
+
+   -- g_{p q} --> gpq --> gab (pq)
+
+   gxx : Real Renames gab (xx);
+   gxy : Real Renames gab (xy);
+   gxz : Real Renames gab (xz);
+   gyy : Real Renames gab (yy);
+   gyz : Real Renames gab (yz);
+   gzz : Real Renames gab (zz);
+
+   -- g^{p q} --> ipq --> iab (pq)
+
+   ixx : Real renames iab (xx);
+   ixy : Real renames iab (xy);
+   ixz : Real renames iab (xz);
+   iyy : Real renames iab (yy);
+   iyz : Real renames iab (yz);
+   izz : Real renames iab (zz);
+
+   -- \partial_{p}{Kab_{q r}} --> dKab_{q r p} --> Kqrp --> d1Kab (p)(qr)
+
+   Kxxx : Real renames d1Kab (1)(xx);
+   Kxxy : Real renames d1Kab (2)(xx);
+   Kxxz : Real renames d1Kab (3)(xx);
+
+   Kxyx : Real renames d1Kab (1)(xy);
+   Kxyy : Real renames d1Kab (2)(xy);
+   Kxyz : Real renames d1Kab (3)(xy);
+
+   Kxzx : Real renames d1Kab (1)(xz);
+   Kxzy : Real renames d1Kab (2)(xz);
+   Kxzz : Real renames d1Kab (3)(xz);
+
+   Kyyx : Real renames d1Kab (1)(yy);
+   Kyyy : Real renames d1Kab (2)(yy);
+   Kyyz : Real renames d1Kab (3)(yy);
+
+   Kyzx : Real renames d1Kab (1)(yz);
+   Kyzy : Real renames d1Kab (2)(yz);
+   Kyzz : Real renames d1Kab (3)(yz);
+
+   Kzzx : Real renames d1Kab (1)(zz);
+   Kzzy : Real renames d1Kab (2)(zz);
+   Kzzz : Real renames d1Kab (3)(zz);
+
+   -- \partial_{p}{gab_{q r}} --> d1gab_{q r p} --> gqrp --> d1gab (p)(qr)
+
+   gxxx : Real renames d1gab (1)(xx);
+   gxxy : Real renames d1gab (2)(xx);
+   gxxz : Real renames d1gab (3)(xx);
+
+   gxyx : Real renames d1gab (1)(xy);
+   gxyy : Real renames d1gab (2)(xy);
+   gxyz : Real renames d1gab (3)(xy);
+
+   gxzx : Real renames d1gab (1)(xz);
+   gxzy : Real renames d1gab (2)(xz);
+   gxzz : Real renames d1gab (3)(xz);
+
+   gyyx : Real renames d1gab (1)(yy);
+   gyyy : Real renames d1gab (2)(yy);
+   gyyz : Real renames d1gab (3)(yy);
+
+   gyzx : Real renames d1gab (1)(yz);
+   gyzy : Real renames d1gab (2)(yz);
+   gyzz : Real renames d1gab (3)(yz);
+
+   gzzx : Real renames d1gab (1)(zz);
+   gzzy : Real renames d1gab (2)(zz);
+   gzzz : Real renames d1gab (3)(zz);
+
+   -- \partial_{p}{gab^{q r}} --> d1gab^{q r}_{p} --> iqrp --> d1iab (p)(qr)
+
+   ixxx : Real renames d1iab (1)(xx);
+   ixxy : Real renames d1iab (2)(xx);
+   ixxz : Real renames d1iab (3)(xx);
+
+   ixyx : Real renames d1iab (1)(xy);
+   ixyy : Real renames d1iab (2)(xy);
+   ixyz : Real renames d1iab (3)(xy);
+
+   ixzx : Real renames d1iab (1)(xz);
+   ixzy : Real renames d1iab (2)(xz);
+   ixzz : Real renames d1iab (3)(xz);
+
+   iyyx : Real renames d1iab (1)(yy);
+   iyyy : Real renames d1iab (2)(yy);
+   iyyz : Real renames d1iab (3)(yy);
+
+   iyzx : Real renames d1iab (1)(yz);
+   iyzy : Real renames d1iab (2)(yz);
+   iyzz : Real renames d1iab (3)(yz);
+
+   izzx : Real renames d1iab (1)(zz);
+   izzy : Real renames d1iab (2)(zz);
+   izzz : Real renames d1iab (3)(zz);
+
+   -- \partial_{p q}{gab_{r s}} --> d1gab_{r s p q} --> grspq --> d2gab (pq)(rs)
+
+   gxxxx : Real renames d2gab (xx)(xx);
+   gxyxx : Real renames d2gab (xx)(xy);
+   gxzxx : Real renames d2gab (xx)(xz);
+   gyyxx : Real renames d2gab (xx)(yy);
+   gyzxx : Real renames d2gab (xx)(yz);
+   gzzxx : Real renames d2gab (xx)(zz);
+
+   gxxxy : Real renames d2gab (xy)(xx);
+   gxyxy : Real renames d2gab (xy)(xy);
+   gxzxy : Real renames d2gab (xy)(xz);
+   gyyxy : Real renames d2gab (xy)(yy);
+   gyzxy : Real renames d2gab (xy)(yz);
+   gzzxy : Real renames d2gab (xy)(zz);
+
+   gxxxz : Real renames d2gab (xz)(xx);
+   gxyxz : Real renames d2gab (xz)(xy);
+   gxzxz : Real renames d2gab (xz)(xz);
+   gyyxz : Real renames d2gab (xz)(yy);
+   gyzxz : Real renames d2gab (xz)(yz);
+   gzzxz : Real renames d2gab (xz)(zz);
+
+   gxxyy : Real renames d2gab (yy)(xx);
+   gxyyy : Real renames d2gab (yy)(xy);
+   gxzyy : Real renames d2gab (yy)(xz);
+   gyyyy : Real renames d2gab (yy)(yy);
+   gyzyy : Real renames d2gab (yy)(yz);
+   gzzyy : Real renames d2gab (yy)(zz);
+
+   gxxyz : Real renames d2gab (yz)(xx);
+   gxyyz : Real renames d2gab (yz)(xy);
+   gxzyz : Real renames d2gab (yz)(xz);
+   gyyyz : Real renames d2gab (yz)(yy);
+   gyzyz : Real renames d2gab (yz)(yz);
+   gzzyz : Real renames d2gab (yz)(zz);
+
+   gxxzz : Real renames d2gab (zz)(xx);
+   gxyzz : Real renames d2gab (zz)(xy);
+   gxzzz : Real renames d2gab (zz)(xz);
+   gyyzz : Real renames d2gab (zz)(yy);
+   gyzzz : Real renames d2gab (zz)(yz);
+   gzzzz : Real renames d2gab (zz)(zz);
+
+   -- Hess_{a b} --> hessab --> hess (ab)
+
+   Hessxx : Real renames hess (xx);
+   Hessxy : Real renames hess (xy);
+   Hessxz : Real renames hess (xz);
+   Hessyy : Real renames hess (yy);
+   Hessyz : Real renames hess (yz);
+   Hesszz : Real renames hess (zz);

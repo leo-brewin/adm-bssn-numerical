@@ -1,0 +1,119 @@
+\documentclass[12pt]{cdblatex}
+\usepackage{bssn-eqtns}
+
+\begin{document}
+
+\section*{Ricci scalar}
+
+Here we compute the Ricci scalar $R$ in terms of the BSSN data.
+
+Note that this expression for $R$ will only be used when evaluating the constraints. It
+will \emph{not} be used in the evolution equations so the advice that the evolved
+${\bar\Gamma}^{i}$ should be expressed in terms of ${\bar g}_{ij}$ does not apply here.
+
+\begin{cadabra}
+   from shared import *
+   import cdblib
+
+   jsonfile = 'bssn-ricci-scalar.json'
+   cdblib.create (jsonfile)
+
+   defRab = cdblib.get ('defRab','bssn-eqtns-14.json')
+
+   # --------------------------------------------------------------------------
+
+   defG2GBarU := g^{a b} -> \exp(-4\phi) gBar^{a b}.
+
+   Rscalar := R.                                      # cdb(Rscalar.00,Rscalar)
+   Rscalar := g^{a b} R_{a b}.                        # cdb(Rscalar.01,Rscalar)
+
+   substitute (Rscalar, defRab)                       # cdb(Rscalar.02,Rscalar)
+   substitute (Rscalar, defG2GBarU)                   # cdb(Rscalar.03,Rscalar)
+   distribute (Rscalar)                               # cdb(Rscalar.04,Rscalar)
+
+   Rscalar = product_sort (Rscalar)                   # cdb(Rscalar.05,Rscalar)
+
+   rename_dummies (Rscalar)                           # cdb(Rscalar.06,Rscalar)
+   canonicalise   (Rscalar)                           # cdb(Rscalar.07,Rscalar)
+
+   foo := gBar^{b c} \partial_{a}{gBar_{b c}} -> 0.   # follows from det(g) = 1
+
+   substitute (Rscalar, foo)                          # cdb(Rscalar.08,Rscalar)
+
+   foo := gBar_{a b} gBar^{a b} -> 3.
+   bah := gBar_{a b} gBar^{a c} -> gBar_{b}^{c}.
+   moo := gBar^{c d} gBar^{e f} \partial_{a}{gBar_{c e}} -> - \partial_{a}{gBar^{d f}}.
+
+   substitute (Rscalar, foo)                          # cdb(Rscalar.09,Rscalar)
+   substitute (Rscalar, bah)                          # cdb(Rscalar.10,Rscalar)
+   substitute (Rscalar, moo)                          # cdb(Rscalar.11,Rscalar)
+   eliminate_kronecker (Rscalar)                      # cdb(Rscalar.12,Rscalar)
+   rename_dummies (Rscalar)                           # cdb(Rscalar.13,Rscalar)
+   canonicalise   (Rscalar)                           # cdb(Rscalar.14,Rscalar)
+
+   foo := gBar^{a b} gBar^{c d} \partial_{c}{gBar_{b d}} -> - \partial_{c}{gBar^{a c}}.
+   bah := \partial_{b}{gBar^{a b}} -> - GammaBar^{a}.  # prd62.eqn17
+
+   substitute (Rscalar, foo)                          # cdb(Rscalar.15,Rscalar)
+   substitute (Rscalar, bah)                          # cdb(Rscalar.16,Rscalar)
+
+   Rscalar = product_sort (Rscalar)                   # cdb(Rscalar.17,Rscalar)
+
+   rename_dummies (Rscalar)                           # cdb(Rscalar.18,Rscalar)
+   canonicalise   (Rscalar)                           # cdb(Rscalar.19,Rscalar)
+
+   foo := gBar^{a b} gBar^{c d} \partial_{a b}{gBar_{c d}} ->
+        - gBar^{a b} \partial_{a}{gBar_{c d}} \partial_{b}{gBar^{c d}}. # follows from det(g) = 1
+
+   substitute (Rscalar, foo)                          # cdb(Rscalar.20,Rscalar)
+   factor_out (Rscalar, $\exp(-4\phi)$)               # cdb(Rscalar.21,Rscalar)
+
+   cdblib.put ('Rscalar',Rscalar,jsonfile)
+\end{cadabra}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{Rscalar.00}
+         = \Cdb*{Rscalar.01}
+         = \Cdb*[\hskip2.0cm\hfill]{Rscalar.02}
+         = \Cdb*[\hskip2.5cm\hfill]{Rscalar.03}
+         = \Cdb*{Rscalar.04}
+         = \Cdb*{Rscalar.05}
+         = \Cdb*{Rscalar.06}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{Rscalar.00}
+         = \Cdb*{Rscalar.07}
+         = \Cdb*{Rscalar.08}
+         = \Cdb*{Rscalar.09}
+         = \Cdb*{Rscalar.10}
+         = \Cdb*{Rscalar.11}
+         = \Cdb*{Rscalar.12}
+   \end{dmath*}
+\end{dgroup*}
+
+\clearpage
+
+\begin{dgroup*}
+   \begin{dmath*}
+      \cdb{Rscalar.00}
+         = \Cdb*[\hskip2.5cm\hfill]{Rscalar.13}
+         = \Cdb*[\hskip2.5cm\hfill]{Rscalar.14}
+         = \Cdb*{Rscalar.15}
+         = \Cdb*{Rscalar.16}
+         = \Cdb*{Rscalar.17}
+         = \Cdb*{Rscalar.18}
+         = \Cdb*{Rscalar.19}
+         = \Cdb*{Rscalar.20}
+         = \Cdb*{Rscalar.21}
+   \end{dmath*}
+\end{dgroup*}
+
+\end{document}
