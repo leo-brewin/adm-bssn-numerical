@@ -18,7 +18,7 @@ adm-eqtns:
 .adm-eqtns: adm-eqtns.tex shared.py
 	@ echo "> cadabra adm-eqtns ..."
 	@ cdblatex.sh -sx -i adm-eqtns &> adm-eqtns.cdblog
-	@ echo "> pdflatex.sh adm-eqtns ..."
+	@ echo "> pdflatex adm-eqtns ..."
 	@ pdflatex -halt-on-error -interaction=batchmode adm-eqtns &> /dev/null
 	@ touch .adm-eqtns
 #-------------------------------------------------------------------------------

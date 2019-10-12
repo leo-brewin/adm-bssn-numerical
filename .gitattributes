@@ -1,6 +1,5 @@
 doc/* linguist-documentation
 pdf/* linguist-documentation
-gnatdoc/* linguist-vendored
 textmate/* linguist-vendored
 adm/code/gnatdoc/* linguist-vendored
 bssn/code/gnatdoc/* linguist-vendored

@@ -1,4 +1,0 @@
-Procedure set_3d_dot_phi is
-begin
-   dot_phi := -1.0/6.0*N*trK;
-end set_3d_dot_phi;

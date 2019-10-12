@@ -1,4 +1,0 @@
-Procedure set_3d_dot_N is
-begin
-   dot_N := 0.0;
-end set_3d_dot_N;

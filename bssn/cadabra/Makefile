@@ -42,7 +42,7 @@ bssn-eqtns:
 	          .bssn-eqtns-09 .bssn-eqtns-10 .bssn-eqtns-11\
 	          .bssn-eqtns-12 .bssn-eqtns-14 .bssn-eqtns-20\
 				 .bssn-lapse .bssn-ricci-scalar .bssn-constraints
-	@ echo "> pdflatex.sh bssn-eqtns ..."
+	@ echo "> pdflatex bssn-eqtns ..."
 	@ pdflatex -halt-on-error -interaction=batchmode bssn-eqtns &> /dev/null
 	@ touch .bssn-eqtns
 #-------------------------------------------------------------------------------
