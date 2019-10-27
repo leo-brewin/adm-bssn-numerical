@@ -33,7 +33,7 @@ Project Common is
    --    gnatpp -P build.gpr"
 
    package Pretty_Printer is
-      for Default_Switches ("ada") use ("-M128","--par_threshold=2","--output-dir=pretty");
+      for Default_Switches ("ada") use ("--max-line-length=128","--par_threshold=2","--output-dir=pretty");
    end Pretty_Printer;
 
 end Common;

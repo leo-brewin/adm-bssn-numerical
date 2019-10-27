@@ -21,6 +21,7 @@ procedure Ada_Merge is
 
    silent        : Boolean := find_command_arg ('S');  -- true: do not wrap include text in beg/end pairs
    markup        : Boolean := not silent;              -- true:     do wrap include text in beg/end pairs
+   indent        : Boolean := find_command_arg ('I');  -- true: match indent to indent of {$include...}
 
    max_file_len  : Constant := 255;
    initial_path  : String (1 .. max_file_len);
@@ -29,14 +30,20 @@ procedure Ada_Merge is
 
    function File_Exists (the_file_name : string) return boolean renames Ada.Directories.Exists;
 
-   procedure include_files (file_path : in out String; file_name : in out String) is
+   procedure include_files (file_path  : in out String;
+                            file_name  : in out String;
+                            the_indent : in     Integer)
+   is
 
-      src      : File_Type;
-      j        : Integer;
-      found    : Boolean;
-      the_path : String (1 .. max_file_len);
-      the_file : String (1 .. max_file_len);
-      inc_file : String (1 .. max_file_len);
+      src        : File_Type;
+      j          : Integer;
+      found      : Boolean;
+      new_indent : Integer;
+      the_path   : String (1 .. max_file_len);
+      the_file   : String (1 .. max_file_len);
+      inc_file   : String (1 .. max_file_len);
+
+      num_dash_max : Integer := 91;  -- line width for beg/end comment lines
 
       function not_comment (the_line : String) return Boolean is
          re_comment : String := "^\s*--";
@@ -50,6 +57,18 @@ procedure Ada_Merge is
       begin
          grep (file_name,found,the_line,re_file_name,1);
       end read_include_name;
+
+      function read_include_indent (the_line : String) return Integer is
+      begin
+         if indent then
+            for i in 1 .. the_line'last loop
+               if the_line(i) = '{' then
+                  return i-1;
+               end if;
+            end loop;
+         end if;
+         return 0;
+      end read_include_indent;
 
       procedure standard_form (the_path : in out String; the_file : in out String)
       is
@@ -77,6 +96,7 @@ procedure Ada_Merge is
                if not_comment (the_line) then
                   read_include_name (inc_file, found, the_line);
                   if found then
+                     new_indent := the_indent + read_include_indent (the_line);
                      writestr (the_file, inc_file);
                      writestr (the_path, file_path);
                      standard_form (the_path, the_file);
@@ -84,26 +104,38 @@ procedure Ada_Merge is
                         Put_Line ("> ada-merge: Include file "&cut(the_path)&cut(the_file)&" not found, exit.");
                         halt(1);
                      end if;
-                     j := 91 - get_strlen (the_path) - get_strlen (the_file);
+                     j := num_dash_max - get_strlen (the_path) - get_strlen (the_file) - the_indent;
                      if markup then
+                        for i in 1 .. new_indent loop
+                           Put (txt, ' ');
+                        end loop;
                         Put (txt, comment&" beg: " & cut (the_path) & cut (the_file) & ' ');
                         for i in 1 .. j loop
                            Put (txt, '-');
                         end loop;
                         New_Line (txt);
-                        include_files (the_path, the_file);
+                        include_files (the_path, the_file, new_indent);
+                        for i in 1 .. new_indent loop
+                           Put (txt, ' ');
+                        end loop;
                         Put (txt, comment&" end: " & cut (the_path) & cut (the_file) & ' ');
                         for i in 1 .. j loop
                            Put (txt, '-');
                         end loop;
                         New_Line (txt);
                      else
-                        include_files (the_path, the_file);
+                        include_files (the_path, the_file, new_indent);
                      end if;
                   else
+                     for i in 1 .. the_indent loop
+                        Put (txt, ' ');
+                     end loop;
                      Put_Line (txt, cut (the_line));
                   end if;
                else
+                  for i in 1 .. the_indent loop
+                     Put (txt, ' ');
+                  end loop;
                   Put_Line (txt, cut (the_line));
                end if;
             end;
@@ -128,6 +160,7 @@ procedure Ada_Merge is
       Put_Line ("    <output> : the merged file");
       Put_Line (" Options:");
       Put_Line ("    -h : help, show this help message, then exit");
+      Put_Line ("    -I : indent, add indentation to match ident of {$include ...}");
       Put_Line ("    -S : silent, do not wrap included text in beg/end pairs");
       Put_Line ("    -Ctext : Use 'text' as a comment marker, the default is --");
       Put_Line (" Example:");
@@ -167,6 +200,8 @@ procedure Ada_Merge is
 
    end initialize;
 
+   first_indent : Integer := 0;
+
 begin
 
    initialize;
@@ -200,11 +235,11 @@ begin
       end if;
 
       Put_Line (txt, cut(first_line));
-      include_files (initial_path, src_file_name);
+      include_files (initial_path, src_file_name, first_indent);
       Put_Line (txt, cut(last_line));
 
    else
-      include_files (initial_path, src_file_name);
+      include_files (initial_path, src_file_name, first_indent);
    end if;
 
    Close (txt);
