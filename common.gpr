@@ -30,7 +30,7 @@ Project Common is
    end Linker;
 
    -- run this in the directory that contains build.gpr:
-   --    gnatpp -p -P build.gpr"
+   --    gnatpp -P build.gpr"
 
    package Pretty_Printer is
       for Default_Switches ("ada") use ("-M128","--par_threshold=2","--output-dir=pretty");

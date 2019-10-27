@@ -13,8 +13,6 @@ Project Build is
    package Binder   renames Common.Binder;
    package Linker   renames Common.Linker;
 
-   -- use: "gnat pp -P bssnbuild.gpr" to run the pretty printer
-   -- but I get a host of GNAT BUG DETECTED errors, so no go for the time being
    package Pretty_Printer renames Common.Pretty_Printer;
 
 end Build;
