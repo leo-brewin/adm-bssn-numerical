@@ -51,7 +51,7 @@ Ada compilers are available for a wide variety of platforms. A popular free comp
 
 Cadabra is easy to compile and install. Full details on how to install Cadabra can be found on the [Cadabra repository][8].
 
-## Installing the codes foo
+## Installing the codes
 
 To build everything from scratch just run
 
