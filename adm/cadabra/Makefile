@@ -58,7 +58,7 @@ code:
 %:
 	@ echo "> cdblatex.sh $@ ..."
 	@ cdblatex.sh -T -s -i $@ &> $@.cdblog
-	@ # echo " -->"`cdbstats -i $@.cdblog`
+	@ # echo " -->"`cputime -i $@.cdblog`
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
 	@ touch .$@
 #-------------------------------------------------------------------------------
