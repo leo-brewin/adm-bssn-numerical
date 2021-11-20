@@ -32,9 +32,9 @@ all:
 .bssn-constraints: bssn-constraints.tex shared.py
 	@ make bssn-constraints
 #-------------------------------------------------------------------------------
-shared.py: shared.cdb
+shared.py: hide/shared.cdb
 	@ echo "> cadabra2python shared ..."
-	@ cadabra2python shared.cdb shared.py
+	@ cadabra2python hide/shared.cdb shared.py
 #-------------------------------------------------------------------------------
 bssn-eqtns:
 	@ make .bssn-eqtns

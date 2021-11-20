@@ -1,0 +1,44 @@
+-- 21 nov 2021
+
+adm-bssn-numerical
+------------------
+
+1. Updated python/writecode.py to suit changes introduced in symp 1.7.
+   Between Sympy 1.1 and Sympy 1.7 the modules C99CodePrinter and Assignment have
+   been relocated. This forced changes to the import statements for each module.
+
+2. Corrected a bug in the code C-code generation in the ADM and BSSN numerical codes.
+   This is a silly bug on my part (and I'm not sure why I didn't see it sooner). The
+   code generators used a shared library, shared.py, that is generated from
+   shared.cdb. My mistake was to leave both files in the same directory. This caused
+   Cadabra to ignore the shared.py file and read shared.cdb. For some reason (a
+   Cadabra issue, not mine) the information in shared.cdb was not visible to the
+   other modules. Hence Cadabra reported that certain objects were not defined. I
+   fixed this problem by moving shared.cdb into a private directory hide/. The
+   shared.py file remains outside of hide/.
+
+3. Non-trivial refactoring of the build/install scripts.
+   This was both to tidy the file structure as well as to simplify the installation
+   process. The default install is now as simple as "source SETPATHS; make install".
+   Almost all install/build/test/clean actions are now controlled by Makefiles.
+
+4. Updated cdbpreproc.py.
+   The Cadabra preprocessor will strip any in-line comments (such as cdb tags) from
+   what it thinks are short lines. This failed for some of the examples (some in line
+   comments were not deleted). This was fixed by changing how long a short line should be,
+   from 100 to 200. If the line is longer than 200 characters it is deemed to be a long line
+   even if the comment begins well before the 200 character limit.
+
+5. Replaced merge-tex.py with merge-src.py.
+   5.1 The new code preserves the indentation level for each included file.
+       This is essential for Python and Cadabra sources.
+   5.2 Expanded the syntax for Input statements.
+       Can now include a file using any of
+          \Input{file}
+          $Input{file}
+          @Input{file}
+
+6. Updated ada-merge.adb and ada-split.adb
+   The file ada-merge.adb is an Ada version of the Python script merge-src.py.
+   They do the same job. The file ada-split.abd is not used here. Its job is
+   to split a previously merged set of sources.

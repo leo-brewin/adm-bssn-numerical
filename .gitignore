@@ -12,6 +12,7 @@
 *.cdblog
 *.cdbtxt
 *.synctex.gz
+LCB.txt
 private
 sync.sh
 diff.sh

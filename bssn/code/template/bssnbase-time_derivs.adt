@@ -6,16 +6,16 @@ package body BSSNBase.Time_Derivs is
 
    procedure set_time_derivatives (point : GridPoint) is
 
-      {$include "include/local-data.ad"}
+      $Input{"include/local-data.ad"}
 
-      {$include "cadabra/ricci.ad"}
+      $Input{"cadabra/ricci.ad"}
 
-      {$include "cadabra/dot-N.ad"}
-      {$include "cadabra/dot-Gi.ad"}
-      {$include "cadabra/dot-phi.ad"}
-      {$include "cadabra/dot-trK.ad"}
-      {$include "cadabra/dot-gBar.ad"}
-      {$include "cadabra/dot-ABar.ad"}
+      $Input{"cadabra/dot-N.ad"}
+      $Input{"cadabra/dot-Gi.ad"}
+      $Input{"cadabra/dot-phi.ad"}
+      $Input{"cadabra/dot-trK.ad"}
+      $Input{"cadabra/dot-gBar.ad"}
+      $Input{"cadabra/dot-ABar.ad"}
 
       procedure set_data is
          i, j, k : Integer;

@@ -6,13 +6,13 @@ package body BSSNBase.Constraints is
 
    procedure set_constraints (point : GridPoint) is
 
-      {$include "include/local-data.ad"}
+      $Input{"include/local-data.ad"}
 
-      {$include "cadabra/ricci.ad"}
-      {$include "cadabra/ricci-scalar.ad"}
+      $Input{"cadabra/ricci.ad"}
+      $Input{"cadabra/ricci-scalar.ad"}
 
-      {$include "cadabra/hamiltonian.ad"}
-      {$include "cadabra/momentum.ad"}
+      $Input{"cadabra/hamiltonian.ad"}
+      $Input{"cadabra/momentum.ad"}
 
       procedure set_data is
          det : Real;

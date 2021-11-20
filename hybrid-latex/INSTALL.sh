@@ -2,11 +2,13 @@
 
 # defaults, edit to suit
 
-# these must be visible on the respective paths
+if [[ $HERE = '' ]]; then
+   HERE=$HOME/local/adm-bssn/
+fi;
 
-MyBin=$HOME/local/adm-bssn/bin/
-MyLib=$HOME/local/adm-bssn/lib/
-MyTex=$HOME/local/adm-bssn/tex/
+MyBin=$HERE/bin/
+MyLib=$HERE/lib/
+MyTex=$HERE/tex/
 
 # Parse the command-line options
 

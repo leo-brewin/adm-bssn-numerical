@@ -16,7 +16,7 @@ This philosophy (of having computers do all the work) is not new. See for exampl
 
 ### Why Cadabra?
 
-Cadabra is a symbolic algebra system ideally suited to tensor computations in General Relativity. The core software is written in C++ while its native syntax is a subset of LaTeX for the tensor equations and Python to control the computations. Cadabra is mostly used to do abstract tensor computations (e.g., showing that the Levi-Civita connection is metric compatible) as well as component computations (e.g., computing the Riemann components for a Schwarzschild metric in isotropic coordinates).
+Cadabra is a symbolic algebra system ideally suited to tensor computations in General Relativity. The core software is written in C++. Cadabra uses a subset of LaTeX for the tensor equations and Python to control the computations. Cadabra is mostly used to do abstract tensor computations (e.g., showing that the Levi-Civita connection is metric compatible) as well as component computations (e.g., computing the Riemann components for a Schwarzschild metric in isotropic coordinates).
 
 Using familiar tools like LaTeX and Python means that the learning curve for Cadabra is very gentle (and that's a big plus).
 
@@ -35,8 +35,7 @@ Easily catch and handle any exceptions (array bounds error, floating point error
 * __Platform agnostic.__
 Ada codes can be ported from one platform to another without change. The usual #ifdef constructs in C/C++ have no counterparts in Ada. All platform dependencies are resolved in the compiler.
 * __Interface with C and Fortran.__
-Ada has precisely defined rules for communicating with C and Fortran codes. This makes it easy to access
-external libraries.
+Ada has precisely defined rules for communicating with C and Fortran codes. This makes it easy to access external libraries.
 
 
 ## Dependencies
@@ -45,17 +44,17 @@ You will need an Ada compiler and the Cadabra software.
 
 ### Ada
 
-Ada compilers are available for a wide variety of platforms. A popular free compiler is the gnat community edition provided by AdaCore. The installer can be downloaded from the [Adacore website][7]. Other Ada compilers could also be used (for example the GCC compiler from the Free Software Foundation).
+Ada is part of the GNU compiler collection and compilers are available for a wide variety of platforms (including macOS, Linux and Windows). The compiler can be installed using standard package tools (e.g., `sudo apt install gnat` on Debian and friends) or by downloading the gnat community edition from the [Adacore website][7].
 
 ### Cadabra
 
 Cadabra is easy to compile and install. Full details on how to install Cadabra can be found on the [Cadabra repository][8].
 
-## Installing the codes
+## Installation
 
 To build everything from scratch just run
 
-    $ make
+    $ source SETPATHS; make
 
 from the top directory. This will build, install and run the Ada, Cadabra and LaTeX codes. The end result will be a pdf file `adm-bssn-plots.pdf` showing the evolution of the Kasner initial data for both the ADM and BSSN equations.
 
@@ -67,9 +66,19 @@ __Note__ that the simple `make` command will install various files before runnin
 | `$HOME/local/adm-bssn/lib/` | Python libraries | `$PYTHONPATH` |
 | `$HOME/local/adm-bssn/tex/` | LaTeX files | `$TEXINPUTS` |
 
-You will need to add these directories to the indicated paths __before__ issuing the `make` command. If you wish to use other directories then you should first edit `INSTALL.sh` and also `hybrid-latex/INSTALL.sh`.
+The command `source SETPATHS` will __prepend__ the directories to the appropriate paths. This ensures that the newly installed files can be found when the subsequent `make` command is run. If you need to recover the original paths, just run `source OLDPATHS`.
+
+If you prefer to install the hybrid latex files in some other directory then you can run the command
+
+    $ source SETPATHS /full/path/to/dir/; make install
+
+where /full/path/to/dir/ is the full path to your prefered directory. The `bin`, `lib` and `tex` directories will be ceated underneath this directory.
 
 You can also compile and install these tools by hand. See the `INSTALL.txt` and `utilities/INSTALL.txt` for full details.
+
+## Uninstall
+
+The hybrid latex tools can be uninstalled by deleting the directory `$HOME/local/hybrid-latex/` (or the approrpriate directory if you chose a non-default installation).
 
 ## Tinkering with the codes
 
@@ -77,7 +86,7 @@ Most of the directories contain a `Makefile` and a `build.sh` file. These are us
 
 You may notice that all of the Ada codes are compiled using `gprbuild`. This is a standard tool for Ada programs. It makes intelligent decisions about which files are out of date and which files need to be recompiled. The nice thing about `gprbuild` is that it determines the dependencies by inspection of the Ada files (compare this with `make` where the dependencies must be explicitly encoded in the `Makefile`).
 
-If you make changes to any of the Cadabra codes in the `bssn` directory you will need to recompile the Cadabra codes then compile and run the Ada codes. This can be done using
+If you make changes to any of the Cadabra codes in the `bssn` directory (for example) you will need to recompile the Cadabra codes then compile and run the Ada codes. This can be done using
 
 ```
 cd bssn/cadabra
@@ -111,12 +120,12 @@ Note that any changes to the ADM codes will have no effect on the BSSN codes and
 
 All files in this collection are distributed under the [MIT][9] license. See the file LICENSE.txt for the full details.
 
-  [1]: http://einsteintoolkit.org
-  [2]: https://cactuscode.org
-  [3]: https://journals.aps.org/prd/abstract/10.1103/PhysRevD.96.024037
-  [4]: https://cadabra.science
-  [5]: http://astro.phys.wvu.edu/bhathome/nrpy.html
-  [6]: https://github.com/leo-brewin/cadabra-tutorial
-  [7]: https://www.adacore.com/download/more/
-  [8]: https://github.com/kpeeters/cadabra2
-  [9]: https://opensource.org/licenses/MIT
+[1]: http://einsteintoolkit.org
+[2]: https://cactuscode.org
+[3]: https://journals.aps.org/prd/abstract/10.1103/PhysRevD.96.024037
+[4]: https://cadabra.science
+[5]: http://astro.phys.wvu.edu/bhathome/nrpy.html
+[6]: https://github.com/leo-brewin/cadabra-tutorial
+[7]: https://www.adacore.com/download/more/
+[8]: https://github.com/kpeeters/cadabra2
+[9]: https://opensource.org/licenses/MIT

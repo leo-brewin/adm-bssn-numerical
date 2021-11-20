@@ -6,14 +6,14 @@ package body ADMBase.Time_Derivs is
 
    procedure set_time_derivatives (point : GridPoint) is
 
-      {$include "include/local-data.ad"}
+      $Input{"include/local-data.ad"}
 
-      {$include "cadabra/hessian.ad"}
-      {$include "cadabra/ricci.ad"}
+      $Input{"cadabra/hessian.ad"}
+      $Input{"cadabra/ricci.ad"}
 
-      {$include "cadabra/dot-N.ad"}
-      {$include "cadabra/dot-gab.ad"}
-      {$include "cadabra/dot-Kab.ad"}
+      $Input{"cadabra/dot-N.ad"}
+      $Input{"cadabra/dot-gab.ad"}
+      $Input{"cadabra/dot-Kab.ad"}
 
       procedure set_data is
          det : Real;

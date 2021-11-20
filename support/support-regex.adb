@@ -144,6 +144,20 @@ package body Support.RegEx is
 
    end grep;
 
+   function regex_match (the_line  : String;
+                         the_regex : String) return Boolean
+   is
+      Regexp  : constant Pattern_Matcher := Compile (the_regex);
+   begin
+
+      Match (Regexp, the_line, Matches);
+      if Matches (0) = No_Match
+         then return false;
+         else return true;
+      end if;
+
+   end regex_match;
+
    procedure grep (the_match : out String;
                    found     : out Boolean;
                    the_line  : String;

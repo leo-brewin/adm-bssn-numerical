@@ -1,4 +1,4 @@
-The Ada files ada-merge and cdb2ada must be comiled and isnatlled befire any of the ADM or BSSN codes can be compiled.
+The Ada files ada-merge and cdb2ada must be compiled and installed before any of the ADM or BSSN codes can be compiled.
 
 Once the Ada compiler is installed you can compile all of the Ada files in this directory by running
 

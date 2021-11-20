@@ -17,6 +17,8 @@ package Support.Strings is
    function str (source : character;
                  width  : integer := 1) return string;
 
+	function str (source : in string) return String;
+
    function fill_str (the_num  : Integer;            -- the number to print
                       width    : Integer;            -- width of the printed number
                       fill_chr : Character := ' ')   -- the leading fill character
@@ -32,6 +34,9 @@ package Support.Strings is
 
 	procedure set_strlen (source : in out string;
 		                   length :        Integer);
+
+   function make_str (n : Integer;
+                      m : Integer) return String;
 
    procedure readstr (source :     string;
                       target : out integer);

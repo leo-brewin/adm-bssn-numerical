@@ -64,8 +64,24 @@ veryclean:
 pristine:
 	@ make rm-dot
 	@ make veryclean
+	@ rm -rf adm-bssn-*.pdf adm-bssn-*.cdbtex
 	@ (cd utilities;    make pristine)
 	@ (cd adm/cadabra;  make pristine)
 	@ (cd adm/code;     make pristine)
 	@ (cd bssn/cadabra; make pristine)
 	@ (cd bssn/code;    make pristine)
+#-------------------------------------------------------------------------------
+github-clean:
+	@ make rm-dot
+	@ make veryclean
+	@ rm -rf adm-bssn-*.cdbtex
+	@ (cd utilities;    make pristine)
+	@ (cd adm/cadabra;  make pristine)
+	@ (cd adm/code;     make pristine)
+	@ (cd bssn/cadabra; make pristine)
+	@ (cd bssn/code;    make pristine)
+#-------------------------------------------------------------------------------
+github:
+	@ make pristine
+	@ make all
+	@ make github-clean

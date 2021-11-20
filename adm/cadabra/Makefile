@@ -9,9 +9,9 @@ all:
 	@ for file in $(TARGETS); do make .$${file}; done;
 	@ make veryclean
 #-------------------------------------------------------------------------------
-shared.py: shared.cdb
+shared.py: hide/shared.cdb
 	@ echo "> cadabra2python shared ..."
-	@ cadabra2python shared.cdb shared.py
+	@ cadabra2python hide/shared.cdb shared.py
 #-------------------------------------------------------------------------------
 adm-eqtns:
 	@ make .adm-eqtns

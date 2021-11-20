@@ -79,6 +79,11 @@ package body Support.Strings is
       return tmp_str;
    end str;
 
+   function str (source : in string) return string is
+   begin
+      return cut(source); -- return the leading part of the string, trailing null's are tiresome
+   end str;
+
    function fill_str (the_num  : Integer;          -- the number to print
                       width    : Integer;          -- width of the printed number
                       fill_chr : Character := ' ') -- the fill character
@@ -130,6 +135,18 @@ package body Support.Strings is
          source(i) := Ada.Characters.Latin_1.NUL;
       end loop;
    end set_strlen;
+
+   function make_str (n : Integer; m : Integer) return String is
+      the_str : String (1 .. m);
+   begin
+      writestr (the_str, str (n, m));
+      for i in 1 .. m loop
+         if the_str (i) = ' ' then
+            the_str (i) := '0';
+         end if;
+      end loop;
+      return the_str;
+   end make_str;
 
    procedure readstr (source :     string;
                       target : out integer) is

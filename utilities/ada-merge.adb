@@ -12,159 +12,185 @@ procedure Ada_Merge is
    txt : File_Type;
 
    max_recurse_depth : Constant := 10;
-   recurse_depth     : Integer;
+   recurse_depth     : Integer  := 0;
 
-   src_file_name : String := read_command_arg ('i',"<no-source>.adt");
-   out_file_name : String := read_command_arg ('o',"<no-output>.adb");
-
-   comment       : String := read_command_arg ('C',"--"); -- the comment marker, default is Ada --
+   src_file_name : String := read_command_arg ('i',"<no-source>");
+   out_file_name : String := read_command_arg ('o',"<no-output>");
 
    silent        : Boolean := find_command_arg ('S');  -- true: do not wrap include text in beg/end pairs
    markup        : Boolean := not silent;              -- true:     do wrap include text in beg/end pairs
-   indent        : Boolean := find_command_arg ('I');  -- true: match indent to indent of {$include...}
-
-   max_file_len  : Constant := 255;
-   initial_path  : String (1 .. max_file_len);
-   first_line    : String (1 .. max_file_len);
-   last_line     : String (1 .. max_file_len);
 
    function File_Exists (the_file_name : string) return boolean renames Ada.Directories.Exists;
 
-   procedure include_files (file_path  : in out String;
-                            file_name  : in out String;
-                            the_indent : in     Integer)
+   procedure include_files
+     (prev_path   : String;
+      this_line   : String;
+      prev_indent : Integer)
    is
 
-      src        : File_Type;
-      j          : Integer;
-      found      : Boolean;
-      new_indent : Integer;
-      the_path   : String (1 .. max_file_len);
-      the_file   : String (1 .. max_file_len);
-      inc_file   : String (1 .. max_file_len);
+      -- allow simple variations of the Input syntax:
+      --    \Input for TeX, use \Input to avoid confusion with \input
+      --    $Input for Ada/Python/Cadabra
+      -- note that this is only for convenience, the comment string will be deduced
+      -- from the file extension of the Input'ed file
+      re_inc_file : String := "^[\t ]*(\\|\$)Input\{""([_a-zA-Z0-9./-]+)""\}";
 
-      num_dash_max : Integer := 91;  -- line width for beg/end comment lines
-
-      function not_comment (the_line : String) return Boolean is
-         re_comment : String := "^\s*--";
-      begin
-         return (not grep (the_line, re_comment));
-      end not_comment;
-
-      procedure read_include_name (file_name : in out String; found : out Boolean; the_line : String)
+      -- this function is not used
+      function not_tex_comment
+        (the_line : String)
+         return     Boolean
       is
-         re_file_name : String := "\{\$include[\t| ]+""([_a-zA-Z0-9./-]+)""\}";
+         re_tex_comment : String := "^\s*%";
       begin
-         grep (file_name,found,the_line,re_file_name,1);
-      end read_include_name;
+         return (not grep (the_line, re_tex_comment));
+      end not_tex_comment;
 
-      function read_include_indent (the_line : String) return Integer is
+      function is_include_file
+        (the_line : String)
+         Return     Boolean
+      is
       begin
-         if indent then
-            for i in 1 .. the_line'last loop
-               if the_line(i) = '{' then
-                  return i-1;
-               end if;
-            end loop;
+         return grep (the_line,re_inc_file);
+      end is_include_file;
+
+      function absolute_path
+        (the_path : String;    -- full path to most recent include file, e.g. foo/bah/cow.tex
+         the_line : String)    -- contains relative path to new include file, e.g., \Input{"cat/dot/fly.tex"}
+         Return     String     -- full path to new include file, e.g., foo/bah/cat/dog/fly.tex
+      is
+         re_dirname  : String := "([_a-zA-Z0-9./-]*\/)";      -- as per dirname in bash
+         tmp_path : String (1..the_path'last+the_line'last);  -- overestimate length of string
+         new_path : String (1..the_path'last+the_line'last);
+      begin
+         -- drop the simple file name from the existing path
+         writestr (tmp_path, trim ( grep (the_path,re_dirname,1,fail => "") ));
+         -- append new file path to the path
+         writestr (new_path, cut(tmp_path)&trim ( grep (the_line,re_inc_file,2,fail => "") ));
+         return cut(new_path);
+      end absolute_path;
+
+      function absolute_indent
+        (indent   : Integer;
+         the_line : String)
+         Return     Integer
+      is
+         start : Integer;
+      begin
+         start := 0;
+         for i in the_line'Range loop
+            if the_line (i) /= ' ' then
+               start := max(0,i-1);
+               exit;
+            end if;
+         end loop;
+         return indent + start;
+      end absolute_indent;
+
+      function set_comment (the_line : String) return String
+      is
+         re_file_ext : String := "(\.[a-z]+)""";
+         the_ext     : String := grep (the_line,re_file_ext,1,fail => "?");
+      begin
+         if markup then
+            if    the_ext = ".tex" then return "%";
+            elsif the_ext = ".py"  then return "#";
+            elsif the_ext = ".cdb" then return "#";
+            elsif the_ext = ".ads" then return "--";
+            elsif the_ext = ".adb" then return "--";
+            elsif the_ext = ".adt" then return "--";
+            elsif the_ext = ".ad"  then return "--";
+            else return "#";
+            end if;
+         else
+            return "#";
          end if;
-         return 0;
-      end read_include_indent;
+      end set_comment;
 
-      procedure standard_form (the_path : in out String; the_file : in out String)
+      function filter (the_line : String) return String
       is
-         re_path_file : String := "[\t ]*([_a-zA-Z0-9./-]*\/)([_a-zA-Z0-9.-]+)";
-         tmp : String (1..the_path'last+the_file'last+1);
+         tmp_line : String := the_line;
+         re_uuid  : String := "(uuid):([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-4[a-fA-F0-9]{3}-[89abAB][a-fA-F0-9]{3}-[a-fA-F0-9]{12})";
+         the_beg, the_end : Integer;
+         found : Boolean;
       begin
-         writestr (tmp,cut(the_path)&cut(the_file));
-         writestr (the_path, trim ( grep (tmp,re_path_file,1,fail => "") ));
-         writestr (the_file, trim ( grep (tmp,re_path_file,2,fail => "<no-file>") ));
-      end standard_form;
+         -- "uuid" is reserved for the original source
+         -- the new file being created by this job must use a prefix other than "uuid"
+         -- replace the prefix "uuid" with "file"
+         if regex_match (the_line, re_uuid) then
+            grep (the_beg, the_end, found, the_line, re_uuid, 1);
+            tmp_line (the_beg..the_end) := "file";
+         end if;
+         return tmp_line;
+      end filter;
 
    begin
+
       recurse_depth := recurse_depth + 1;
+
       if recurse_depth > max_recurse_depth then
-         Put_Line ("> ada-merge: Too many levels of include, exit");
+         Put_Line ("> merge-src: Too many nested Input{...}'s (max = "&str(max_recurse_depth)&"), exit");
          halt(1);
       end if;
-      standard_form (file_path, file_name);
-      Open (src, In_File, cut(file_path) & cut(file_name));
-      loop
-         begin
-            declare
-               the_line : String := Get_Line (src);
+
+      declare
+         src        : File_Type;
+         the_path   : String  := absolute_path (prev_path, this_line);
+         the_indent : Integer := absolute_indent (prev_indent, this_line);
+         comment    : String  := set_comment (this_line);
+      begin
+
+         if markup then
+            Put_Line (txt, spc(the_indent)&comment&" beg"&make_str(recurse_depth,2)&": ./" & the_path);
+         end if;
+
+         if File_Exists (the_path)
+            then Open (src, In_File, the_path);
+            else raise Name_Error with "Could not find the file "&""""&str(the_path)&"""";
+         end if;
+
+         loop
             begin
-               if not_comment (the_line) then
-                  read_include_name (inc_file, found, the_line);
-                  if found then
-                     new_indent := the_indent + read_include_indent (the_line);
-                     writestr (the_file, inc_file);
-                     writestr (the_path, file_path);
-                     standard_form (the_path, the_file);
-                     if not File_Exists (cut(the_path) & cut(the_file)) then
-                        Put_Line ("> ada-merge: Include file "&cut(the_path)&cut(the_file)&" not found, exit.");
-                        halt(1);
-                     end if;
-                     j := num_dash_max - get_strlen (the_path) - get_strlen (the_file) - new_indent;
-                     if markup then
-                        for i in 1 .. new_indent loop
-                           Put (txt, ' ');
-                        end loop;
-                        Put (txt, comment&" beg: " & cut (the_path) & cut (the_file) & ' ');
-                        for i in 1 .. j loop
-                           Put (txt, '-');
-                        end loop;
-                        New_Line (txt);
-                        include_files (the_path, the_file, new_indent);
-                        for i in 1 .. new_indent loop
-                           Put (txt, ' ');
-                        end loop;
-                        Put (txt, comment&" end: " & cut (the_path) & cut (the_file) & ' ');
-                        for i in 1 .. j loop
-                           Put (txt, '-');
-                        end loop;
-                        New_Line (txt);
-                     else
-                        include_files (the_path, the_file, new_indent);
-                     end if;
-                  else
-                     for i in 1 .. the_indent loop
-                        Put (txt, ' ');
-                     end loop;
-                     Put_Line (txt, cut (the_line));
+               declare
+                  the_line : String := filter (Get_Line (src));
+               begin
+                  if is_include_file (the_line)
+                     then include_files (the_path, the_line, the_indent);
+                     else Put_Line (txt, spc(the_indent)&the_line);
                   end if;
-               else
-                  for i in 1 .. the_indent loop
-                     Put (txt, ' ');
-                  end loop;
-                  Put_Line (txt, cut (the_line));
-               end if;
+               end;
+            exception
+               when end_error => exit;
             end;
-         exception
-            when end_error => exit;
-         end;
-      end loop;
-      Close (src);
+         end loop;
+
+         Close (src);
+
+         if markup then
+            Put_Line (txt, spc(the_indent)&comment&" end"&make_str(recurse_depth,2)&": ./" & the_path);
+         end if;
+
+      end;
+
       recurse_depth := recurse_depth - 1;
+
    end include_files;
 
    procedure show_info is
    begin
 
       Put_Line ("------------------------------------------------------------------------------");
-      Put_Line (" Merges a set of Ada files into a single file.");
+      Put_Line (" Merges a set of source files into a single file.");
       Put_Line (" Usage:");
-      Put_Line ("    ada-merge -i <source> -o <output> [-hSC]");
+      Put_Line ("    merge-src -i <source> -o <output> [-hS]");
       Put_Line (" Files:");
       Put_Line ("    <source> : the source that may contain include statements in the form");
-      Put_Line ("               ${include ""file-name""}");
+      Put_Line ("               \Input{file-name}");
       Put_Line ("    <output> : the merged file");
       Put_Line (" Options:");
       Put_Line ("    -h : help, show this help message, then exit");
-      Put_Line ("    -I : indent, add indentation to match ident of {$include ...}");
       Put_Line ("    -S : silent, do not wrap included text in beg/end pairs");
-      Put_Line ("    -Ctext : Use 'text' as a comment marker, the default is --");
       Put_Line (" Example:");
-      Put_Line ("    ada-merge -i driver.adt -o merged.adb");
+      Put_Line ("    merge-src -i driver.tex -o merged.tex");
       Put_Line ("------------------------------------------------------------------------------");
 
    end show_info;
@@ -177,24 +203,14 @@ procedure Ada_Merge is
          halt(0);
       end if;
 
-      if not find_command_arg ('i') then
-         show_info;
-         halt(0);
-      end if;
-
-      if not find_command_arg ('o') then
-         show_info;
-         halt(0);
-      end if;
-
       if src_file_name = out_file_name
       then
-         Put_Line ("> ada-merge: Indentical files names for input and output, exit.");
+         Put_Line ("> merge-src: Indentical files names for input and output, exit.");
          halt(1);
       end if;
 
       if not File_Exists (src_file_name) then
-         Put_Line ("> ada-merge: Source file """ & cut (src_file_name) & """ not found, exit.");
+         Put_Line ("> merge-src: Source file """ & cut (src_file_name) & """ not found, exit.");
          halt(1);
       end if;
 
@@ -204,42 +220,17 @@ begin
 
    initialize;
 
-   -- copy the source to the output, but with {$include ...} fully expanded
+   -- copy the source to the output, but with \Input{...} fully expanded
 
    Create (txt, Out_File, out_file_name);
 
-   if src_file_name (1) = '/'
-      then writestr (initial_path, "");
-      else writestr (initial_path, "./");
-   end if;
-
-   recurse_depth := 0;
-
-   if markup then
-
-      -- use "--!" so that ada-split can ignore these lines
-
-      Put_Line (txt,"--! ------------------------------------------------------------");
-      Put_Line (txt,"--!  Do not edit this file, it was created by ada-merge from:");
-      Put_Line (txt,"--!     "&src_file_name);
-      Put_Line (txt,"--! ------------------------------------------------------------");
-
-      if src_file_name (1) = '/' then
-         writestr (first_line,comment&" src: " & src_file_name);
-         writestr (last_line, comment&" end: " & src_file_name);
-      else
-         writestr (first_line,comment&" src: ./" & src_file_name);
-         writestr (last_line, comment&" end: ./" & src_file_name);
-      end if;
-
-      Put_Line (txt, cut(first_line));
-      include_files (initial_path, src_file_name, 0);
-      Put_Line (txt, cut(last_line));
-
-   else
-      include_files (initial_path, src_file_name, 0);
-   end if;
+   include_files ("", "\Input{"""&src_file_name&"""}", 0);
 
    Close (txt);
+
+   if recurse_depth /= 0 then
+      Put_Line("> merge-src: error during merger");
+      Put_Line("> recursion depth should be zero, actual value: "&str(recurse_depth));
+   end if;
 
 end Ada_Merge;
