@@ -1,8 +1,5 @@
 -- 21 nov 2021
 
-adm-bssn-numerical
-------------------
-
 1. Updated python/writecode.py to suit changes introduced in symp 1.7.
    Between Sympy 1.1 and Sympy 1.7 the modules C99CodePrinter and Assignment have
    been relocated. This forced changes to the import statements for each module.

@@ -37,19 +37,6 @@ Ada codes can be ported from one platform to another without change. The usual #
 * __Interface with C and Fortran.__
 Ada has precisely defined rules for communicating with C and Fortran codes. This makes it easy to access external libraries.
 
-
-## Dependencies
-
-You will need an Ada compiler and the Cadabra software.
-
-### Ada
-
-Ada is part of the GNU compiler collection and compilers are available for a wide variety of platforms (including macOS, Linux and Windows). The compiler can be installed using standard package tools (e.g., `sudo apt install gnat` on Debian and friends) or by downloading the gnat community edition from the [Adacore website][7].
-
-### Cadabra
-
-Cadabra is easy to compile and install. Full details on how to install Cadabra can be found on the [Cadabra repository][8].
-
 ## Installation
 
 To build everything from scratch just run
@@ -116,9 +103,27 @@ All of the above tasks can also be run using selected targets in the `Makefile`.
 
 Note that any changes to the ADM codes will have no effect on the BSSN codes and vice-versa. The single point of connection between the ADM and BSSN codes is that they share the `support` library.
 
+## Dependencies
+
+You will need an Ada compiler and the Cadabra/Python/SymPy software.
+
+### Ada
+
+Ada is part of the GNU compiler collection and compilers are available for a wide variety of platforms (including macOS, Linux and Windows). The compiler can be installed using standard package tools (e.g., `sudo apt install gnat` on Debian and friends) or by downloading the gnat community edition from the [Adacore website][7].
+
+### Cadabra
+
+Cadabra is easy to compile and install. Full details can be found on the [Cadabra repository][8].
+
+### Python/SymPy
+
+The codes have been tested with both Python2 and Python3. Since Python2 is deprecated it would be wise to use Python3. A popular distribution of Python3 can be found at the [Anaconda website][9].
+
+If you are not using the latest Anaconda distribution you may need to check that your version of SymPy is at least 1.7 (this is required only during the Ada code generation). You can install the latest version of SymPy in Anaconda using `conda install sympy`.
+
 ## License
 
-All files in this collection are distributed under the [MIT][9] license. See the file LICENSE.txt for the full details.
+All files in this collection are distributed under the [MIT][10] license. See the file LICENSE.txt for the full details.
 
 [1]: http://einsteintoolkit.org
 [2]: https://cactuscode.org
@@ -128,4 +133,5 @@ All files in this collection are distributed under the [MIT][9] license. See the
 [6]: https://github.com/leo-brewin/cadabra-tutorial
 [7]: https://www.adacore.com/download/more/
 [8]: https://github.com/kpeeters/cadabra2
-[9]: https://opensource.org/licenses/MIT
+[9]: https://www.anaconda.com/products/individual
+[10]: https://opensource.org/licenses/MIT
