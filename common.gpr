@@ -6,7 +6,7 @@ Project Common is
    for Object_Dir  use "obj";
 
    package Compiler is
-      for Default_Switches ("Ada") use ("-O3","-gnatwA","-gnat2012","-dynamic");
+      for Default_Switches ("Ada") use ("-O3","-gnatwA","-gnat2012");
       -- for Switches ("foo.adb") use Compiler'Default_Switches ("Ada") & ("-O1");
       -- for Switches ("bah.adb") use Compiler'Default_Switches ("Ada") &
       --   (
@@ -25,7 +25,8 @@ Project Common is
    end Binder;
 
    package Linker is
-      for Default_Switches ("ada") use ("-dead_strip", "-Wl,-no_pie");
+      for Default_Switches ("ada") use ("-dead_strip", "-no-pie");      -- macOS
+      -- for Default_Switches ("ada") use ("-dead_strip", "-Wl,-no_pie");  -- Intel
       -- for Linker_Options use ("-lblah"); -- link with these libraries
    end Linker;
 

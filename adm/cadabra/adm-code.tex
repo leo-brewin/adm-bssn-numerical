@@ -165,11 +165,11 @@ and to export the right hand sides as C-code. And that will be Cadabra's final c
                 dK_{y x z} -> Kxyz, dK_{y y z} -> Kyyz, dK_{y z z} -> Kyzz,
                 dK_{z x z} -> Kxzz, dK_{z y z} -> Kyzz, dK_{z z z} -> Kzzz}.
 
-   allRules =   gabRule + d1gabRule + d2gabRule \
-              + iabRule + d1iabRule \
-              + KabRule + dKabRule \
-              + RabRule \
-              + HessRule + NaRule + NabRule
+   allRules = JoinLists ([gabRule , d1gabRule , d2gabRule ,
+                          iabRule , d1iabRule ,
+                          KabRule , dKabRule ,
+                          RabRule ,
+                          HessRule , NaRule , NabRule])
 
    evaluate (Rscalar, allRules, simplify=False)
    evaluate (Rab,     allRules, simplify=False)

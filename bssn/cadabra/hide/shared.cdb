@@ -106,6 +106,19 @@ def product_sort (ex):
     return ex
 
 # --------------------------------------------------------------------
+# Cadabra no longer supports (since about Aug 2022 ) the + operator to add lists together.
+# This function uses the new (post Aug 2022) "join" function to add an array of lists.
+# Usage:
+#   foo = JoinLists ([ex1,ex2,ex3,ex4])
+# The single argument for JoinLists is an array (of any length) of Cadabra expressions.
+
+def JoinLists (obj):
+   ans := {}.
+   for i in range (len(obj)):
+      ans = join (ans,obj[i])
+   return ans
+
+# --------------------------------------------------------------------
 # Metric
 
 defGBarSq := gBar_{a b} gBar^{a b} -> 3.

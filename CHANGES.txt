@@ -1,3 +1,13 @@
+-- 09 aug 2022
+
+1. Updated Cadabra codes to suit the new Cadabra syntax (as of 5 Aug 2022).
+   Cadabra now uses the "join" function to add lists. Previousy it used
+   the "+" operator.
+
+2. Small changes to support macOS Silicon.
+   The arm64 chips on macOS Silicon support a maximum of 15 decimal digits.
+   In contrast, the Intel x86_64 chips allow up to 18 decimal digits.
+
 -- 21 nov 2021
 
 1. Updated python/writecode.py to suit changes introduced in symp 1.7.

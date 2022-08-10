@@ -138,18 +138,18 @@ codes that generates the Ada procedures used in the evolution codes).
    # -----------------------------------------------------------------
    # now evaluate the components
 
-   evaluate   (gab,   gabRule+DtRule, rhsonly=True)                     # cdb (gab,gab)
-   evaluate   (Gamma, gabRule+DtRule, rhsonly=True)                     # cdb (Gamma,Gamma)
-   evaluate   (Rabcd, gabRule+DtRule, rhsonly=True)                     # cdb (Rabcd,Rabcd)
-   evaluate   (Rab,   gabRule+DtRule, rhsonly=True)                     # cdb (Rab,Rab)
-   evaluate   (Kab,   gabRule+DtRule, rhsonly=True)                     # cdb (Kab,Kab)
-   evaluate   (trK,   gabRule+DtRule, rhsonly=True)                     # cdb (trK,trK)
+   evaluate   (gab,   join (gabRule,DtRule), rhsonly=True)              # cdb (gab,gab)
+   evaluate   (Gamma, join (gabRule,DtRule), rhsonly=True)              # cdb (Gamma,Gamma)
+   evaluate   (Rabcd, join (gabRule,DtRule), rhsonly=True)              # cdb (Rabcd,Rabcd)
+   evaluate   (Rab,   join (gabRule,DtRule), rhsonly=True)              # cdb (Rab,Rab)
+   evaluate   (Kab,   join (gabRule,DtRule), rhsonly=True)              # cdb (Kab,Kab)
+   evaluate   (trK,   join (gabRule,DtRule), rhsonly=True)              # cdb (trK,trK)
 
-   evaluate   (gBar,  gabRule+DtRule, rhsonly=True)                     # cdb (gBar.02,gBar)
-   evaluate   (Aab,   gabRule+DtRule, rhsonly=True)                     # cdb (Aab.03,Aab)
-   evaluate   (ABar,  gabRule+DtRule, rhsonly=True)                     # cdb (ABar.04,ABar)
+   evaluate   (gBar,  join (gabRule,DtRule), rhsonly=True)              # cdb (gBar.02,gBar)
+   evaluate   (Aab,   join (gabRule,DtRule), rhsonly=True)              # cdb (Aab.03,Aab)
+   evaluate   (ABar,  join (gabRule,DtRule), rhsonly=True)              # cdb (ABar.04,ABar)
 
-   evaluate   (phi,   gabRule+DtRule, rhsonly=True)                     # cdb (phi.02,phi)
+   evaluate   (phi,   join (gabRule,DtRule), rhsonly=True)              # cdb (phi.02,phi)
 
 \end{cadabra}
 

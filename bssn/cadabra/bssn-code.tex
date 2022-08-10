@@ -188,15 +188,15 @@ friends (last seen lingering in a quiet corner of GitHub).
                   dgBar_{y x z z} -> gBarxyzz, dgBar_{y y z z} -> gBaryyzz, dgBar_{y z z z} -> gBaryzzz,
                   dgBar_{z x z z} -> gBarxzzz, dgBar_{z y z z} -> gBaryzzz, dgBar_{z z z z} -> gBarzzzz}.
 
-   allRules =  gBarRule + d1gBarRule + d2gBarRule \
-             + iBarRule + d1iBarRule \
-             + ABarRule + d1ABarRule \
-             + BBarRule \
-             + GiRule + d1GiRule \
-             + RRule \
-             + trKRule \
-             + d1NRule + d2NRule \
-             + d1phiRule + d2phiRule
+   allRules = JoinLists ([ gBarRule , d1gBarRule , d2gBarRule ,
+                           iBarRule , d1iBarRule ,
+                           ABarRule , d1ABarRule ,
+                           BBarRule ,
+                           GiRule , d1GiRule ,
+                           RRule ,
+                           trKRule ,
+                           d1NRule , d2NRule ,
+                           d1phiRule , d2phiRule ])
 
    evaluate (Rscalar,  allRules, simplify=False)
    evaluate (Rab,      allRules, simplify=False)

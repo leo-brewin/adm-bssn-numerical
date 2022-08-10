@@ -14,28 +14,51 @@ package body Support.Strings is
    is
       result : string (1..width) := (others => Ada.Characters.Latin_1.NUL);
    begin
-      -- 4932 = largest exponent for 18 dec. digits
+      ----------------------------------------------------------------------
+      -- Intel x86_64 chips allows 18 decimal digits with 4 digit exponents
+      ----------------------------------------------------------------------
       -- so may need up to 4 digits in the exponent + 1 for the sign = 5
+      -- if source = 0.0 then
+      --    Put (result,source,width-7,3);
+      -- elsif abs (source) < 1.0 then
+      --    if abs (source) >= 1.0e-99 then
+      --       Put (result,source,width-7,3);
+      --    elsif abs (source) >= 1.0e-999 then
+      --       Put (result,source,width-8,4);
+      --    else
+      --       Put (result,source,width-9,5);
+      --    end if;
+      -- else
+      --    if abs (source) < 1.0e100 then
+      --       Put (result,source,width-7,3);
+      --    elsif abs (source) < 1.0e1000 then
+      --       Put (result,source,width-8,4);
+      --    else
+      --       Put (result,source,width-9,5);
+      --    end if;
+      -- end if;
+      -- return result;
+
+      ----------------------------------------------------------------------
+      -- macOS Silicon arm64 allows 15 decimal digits with 3 digit exponents
+      ----------------------------------------------------------------------
       if source = 0.0 then
          Put (result,source,width-7,3);
       elsif abs (source) < 1.0 then
          if abs (source) >= 1.0e-99 then
             Put (result,source,width-7,3);
-         elsif abs (source) >= 1.0e-999 then
-            Put (result,source,width-8,4);
          else
-            Put (result,source,width-9,5);
+            Put (result,source,width-8,4);
          end if;
       else
          if abs (source) < 1.0e100 then
             Put (result,source,width-7,3);
-         elsif abs (source) < 1.0e1000 then
-            Put (result,source,width-8,4);
          else
-            Put (result,source,width-9,5);
+            Put (result,source,width-8,4);
          end if;
       end if;
       return result;
+
    end str;
 
    function str (source : Integer;
