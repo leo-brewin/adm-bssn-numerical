@@ -1,8 +1,8 @@
 doc/* linguist-documentation
 pdf/* linguist-documentation
 textmate/* linguist-vendored
-adm/code/gnatdoc/* linguist-vendored
-bssn/code/gnatdoc/* linguist-vendored
+adm/code/gnatdoc/docs/* linguist-vendored
+bssn/code/gnatdoc/docs/* linguist-vendored
 *.cdb linguist-language=Text
 *.ad linguist-language=Ada
 *.adt linguist-language=Ada
