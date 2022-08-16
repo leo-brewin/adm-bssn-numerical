@@ -12,3 +12,4 @@ bssn/code/gnatdoc/docs/* linguist-vendored
 *.mthtex linguist-generated=true
 *.pytex  linguist-generated=true
 *.pdf    linguist-generated=true
+*.js linguist-vendored
