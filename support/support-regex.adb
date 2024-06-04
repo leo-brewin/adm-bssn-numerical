@@ -1,3 +1,4 @@
+with Ada.Text_IO;                               use Ada.Text_IO;
 with Support.Strings;                           use Support.Strings;
 with GNAT.Regpat;                               use GNAT.Regpat;
 
@@ -28,15 +29,30 @@ package body Support.RegEx is
          end if;
       end loop;
 
+      -- this will return a string with 'first and 'last that match the position in the string
+      --
+      -- if Matches(0).First > 0
+      --    then return the_line (Matches(the_group).first..Matches(the_group).last);  -- will have value'first >= 1
+      --    else return fail;
+      -- end if;
+
+      -- this will return a string with 'first = 1
+
       if Matches(0).First > 0
-         then return the_line (Matches(the_group).first..Matches(the_group).last);
+         then
+            declare
+               sub_str : String := the_line (Matches(the_group).first..Matches(the_group).last);
+               value   : String (1..sub_str'last-sub_str'first+1) := sub_str;
+            begin
+               return value;  -- will have value'first = 1
+            end;
          else return fail;
       end if;
 
       exception
          -- get here when user asked for a group that doesn't exist
          when others =>
-            return "<no such group>";
+            return "<"&str(the_group)&": no such group>";
 
    end grep;
 
@@ -80,7 +96,7 @@ package body Support.RegEx is
                   the_regex : String;
                   the_group : Integer;
                   the_match : Integer := 1;
-                  fail      : Real := -333.3e33) return Real
+                  fail      : Real := -half_huge_real) return Real
    is
       result  : Real;
       the_beg : Integer := the_line'first;
@@ -108,15 +124,20 @@ package body Support.RegEx is
       exception
          -- get here when user asked for a group that doesn't exist
          when others =>
-            return -666.6e66;
+            return - huge_real;
 
    end grep;
 
+   -- LCB: use this only to read string like "--target=True" or "--target=False" and versions thereof
+   --      to test if a tring matches a regex use the function regex_match below
    function grep (the_line  : String;
                   the_regex : String;
-                  the_group : Integer := 1;
-                  the_match : Integer := 1) return Boolean
+                  the_group : Integer ; -- := 1;  -- temporary fix to catch codes that use the old version of lcb-regex
+                  the_match : Integer ; -- := 1;  -- for those codes that fail, replace grep (...) with regex_match (...)
+                                                  -- after I've found and fixed all codes I will return to the optional args
+                  fail      : Boolean := False) return Boolean
    is
+      result  : Boolean;
       the_beg : Integer := the_line'first;
       the_end : Integer := the_line'last;
       Regexp  : constant Pattern_Matcher := Compile (the_regex);
@@ -128,14 +149,16 @@ package body Support.RegEx is
          Match (Regexp, the_line (the_beg..the_end), Matches); -- find the first match in this window (if it exists)
          if Matches(0).First > 0
             then the_beg := Matches(0).Last + 1;               -- skip over this match, shrink the search window
-            else return False;                                 -- no match, so bail out
+            else return fail;                                  -- no match, so bail out
          end if;
       end loop;
 
       if Matches(0).First > 0
-         then return True;
-         else return False;
+         then readstr (the_line (Matches(the_group).first..Matches(the_group).last),result);
+         else result := fail;
       end if;
+
+      return result;
 
       exception
          -- get here when user asked for a group that doesn't exist
@@ -144,6 +167,7 @@ package body Support.RegEx is
 
    end grep;
 
+   -- LCB: use this to match a target against a regex
    function regex_match (the_line  : String;
                          the_regex : String) return Boolean
    is

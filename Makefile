@@ -10,7 +10,7 @@ all:
 	@ make adm
 	@ make bssn
 	@ cdblatex.sh -s -i adm-bssn-eqtns &> adm-bssn-eqtns.cdblog
-	@ pdflatex -halt-on-error -interaction=batchmode adm-bssn-plots &> /dev/null
+	@ pdflatex -halt-on-error -interaction=batchmode adm-bssn-plots &> adm-bssn-eqtns.texlog
 	@ make veryclean
 #-------------------------------------------------------------------------------
 adm:
@@ -49,7 +49,7 @@ rm-dot:
 clean:
 	@ for file in $(TARGETS); \
 	  do \
-	     rm -rf $${file}.aux $${file}.log $${file}.out $${file}.synctex.gz; \
+	     rm -rf $${file}.aux $${file}.log $${file}.out $${file}.texlog $${file}.synctex.gz; \
 	  done
 #-------------------------------------------------------------------------------
 veryclean:
@@ -65,6 +65,7 @@ pristine:
 	@ make rm-dot
 	@ make veryclean
 	@ rm -rf adm-bssn-*.pdf adm-bssn-*.cdbtex
+	@ (cd support;      make pristine)
 	@ (cd utilities;    make pristine)
 	@ (cd adm/cadabra;  make pristine)
 	@ (cd adm/code;     make pristine)
@@ -72,9 +73,11 @@ pristine:
 	@ (cd bssn/code;    make pristine)
 #-------------------------------------------------------------------------------
 github-clean:
+	@ # same as "pristine" but keep the final pdf's
 	@ make rm-dot
 	@ make veryclean
 	@ rm -rf adm-bssn-*.cdbtex
+	@ (cd support;      make pristine)
 	@ (cd utilities;    make pristine)
 	@ (cd adm/cadabra;  make pristine)
 	@ (cd adm/code;     make pristine)

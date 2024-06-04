@@ -8,14 +8,14 @@ package body BSSNBase.Time_Derivs is
 
       $Input{"include/local-data.ad"}
 
-      $Input{"cadabra/ricci.ad"}
+      $Input{"code-ada/ricci.ad"}
 
-      $Input{"cadabra/dot-N.ad"}
-      $Input{"cadabra/dot-Gi.ad"}
-      $Input{"cadabra/dot-phi.ad"}
-      $Input{"cadabra/dot-trK.ad"}
-      $Input{"cadabra/dot-gBar.ad"}
-      $Input{"cadabra/dot-ABar.ad"}
+      $Input{"code-ada/dot-N.ad"}
+      $Input{"code-ada/dot-Gi.ad"}
+      $Input{"code-ada/dot-phi.ad"}
+      $Input{"code-ada/dot-trK.ad"}
+      $Input{"code-ada/dot-gBar.ad"}
+      $Input{"code-ada/dot-ABar.ad"}
 
       procedure set_data is
          i, j, k : Integer;

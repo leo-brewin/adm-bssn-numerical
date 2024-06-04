@@ -11,5 +11,7 @@ fi
 gprbuild -p -P bssnevolve.gpr || exit
 
 rm -rf results
+mkdir -p results
+touch results/history.txt
 
 bin/bssnevolve $1 -C0.25 -t11.0 -p10 -P11.0 -M40000 -N8 | tee bssnevolve.log

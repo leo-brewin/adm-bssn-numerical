@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # defaults, edit to suit
+# must check here before using UNINSTALL.sh
 
 if [[ $HERE = '' ]]; then
    HERE=$HOME/local/adm-bssn/

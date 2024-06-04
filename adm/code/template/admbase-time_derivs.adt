@@ -8,12 +8,12 @@ package body ADMBase.Time_Derivs is
 
       $Input{"include/local-data.ad"}
 
-      $Input{"cadabra/hessian.ad"}
-      $Input{"cadabra/ricci.ad"}
+      $Input{"code-ada/hessian.ad"}
+      $Input{"code-ada/ricci.ad"}
 
-      $Input{"cadabra/dot-N.ad"}
-      $Input{"cadabra/dot-gab.ad"}
-      $Input{"cadabra/dot-Kab.ad"}
+      $Input{"code-ada/dot-N.ad"}
+      $Input{"code-ada/dot-gab.ad"}
+      $Input{"code-ada/dot-Kab.ad"}
 
       procedure set_data is
          det : Real;

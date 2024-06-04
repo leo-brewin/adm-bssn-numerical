@@ -1,5 +1,8 @@
 #!/bin/bash
 
-mkdir -p ../code/template/cadabra/
+mkdir -p code-c
+mkdir -p code-ada
 
-make bssn-eqtns bssn-code veryclean
+mkdir -p ../code/template/code-ada/
+
+make all

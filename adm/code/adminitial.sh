@@ -10,5 +10,6 @@ fi
 gprbuild -p -P adminitial.gpr || exit
 
 rm -rf data
+mkdir -p data
 
 bin/adminitial $1 -n8x8x8 -d0.1:0.1:0.1 -Ddata | tee adminitial.log

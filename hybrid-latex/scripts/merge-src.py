@@ -53,9 +53,9 @@ def include_files (txt, prev_path, this_line, prev_indent, recurse_depth):
              comment = "#"
           if the_ext == ".cdb":
              comment = "#"
-          if the_ext == ".ads":
+          if the_ext == ".ad":
              comment = "--"
-          if the_ext == ".adb":
+          if the_ext == ".adt":
              comment = "--"
           if the_ext == ".txt":
              comment = "#"

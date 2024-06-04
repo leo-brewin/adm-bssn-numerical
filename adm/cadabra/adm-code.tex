@@ -188,15 +188,15 @@ and to export the right hand sides as C-code. And that will be Cadabra's final c
 
    import writecode
 
-   writecode.cdb_write_code (Rscalar, 'R',       'ricci-scalar.c', 0)
-   writecode.cdb_write_code (Rab,     'Rab',     'ricci.c',        2)
-   writecode.cdb_write_code (DgabDt,  'dot_gab', 'dot-gab.c',      2)
-   writecode.cdb_write_code (DKabDt,  'dot_Kab', 'dot-Kab.c',      2)
-   writecode.cdb_write_code (DNDt,    'dot_N',   'dot-N.c',        0)
-   writecode.cdb_write_code (Nab,     'Hess',    'hessian.c',      2)
+   writecode.cdb_write_code (Rscalar, 'R',       'code-c/ricci-scalar.c', 0)
+   writecode.cdb_write_code (Rab,     'Rab',     'code-c/ricci.c',        2)
+   writecode.cdb_write_code (DgabDt,  'dot_gab', 'code-c/dot-gab.c',      2)
+   writecode.cdb_write_code (DKabDt,  'dot_Kab', 'code-c/dot-Kab.c',      2)
+   writecode.cdb_write_code (DNDt,    'dot_N',   'code-c/dot-N.c',        0)
+   writecode.cdb_write_code (Nab,     'Hess',    'code-c/hessian.c',      2)
 
-   writecode.cdb_write_code (Ham,     'Ham',     'hamiltonian.c',  0)
-   writecode.cdb_write_code (Mom,     'Mom',     'momentum.c',     1)
+   writecode.cdb_write_code (Ham,     'Ham',     'code-c/hamiltonian.c',  0)
+   writecode.cdb_write_code (Mom,     'Mom',     'code-c/momentum.c',     1)
 \end{cadabra}
 
 \end{document}

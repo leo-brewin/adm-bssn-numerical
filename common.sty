@@ -1,0 +1,16 @@
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+%
+\def\clearDate{\gdef\Date{\relax}}
+\def\clearFileID{\gdef\FileID{\relax}}
+\ifdef\Date\relax\clearDate
+\ifdef\FileID\relax\clearFileID
+\def\SetBorderInfo{%
+\renewcommand{\headrulewidth}{0pt}%
+\renewcommand{\footrulewidth}{0pt}%
+\fancyhf{}% clear header and footer, including page number
+\fancyhead[R]{\setlength{\unitlength}{1mm}\begin{picture}(0,0)\put(-10,-7){{\small\Date}}\end{picture}}%
+\fancyfoot[R]{\setlength{\unitlength}{1mm}\begin{picture}(0,0)\put(-70,0){{\tt\small\FileID}}\end{picture}}%
+\thispagestyle{fancy}}
+%
+\AtBeginDocument{\SetBorderInfo}

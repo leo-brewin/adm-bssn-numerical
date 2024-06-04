@@ -1,15 +1,15 @@
 SHELL = /bin/bash
 #-------------------------------------------------------------------------------
-MERGE = ada-merge
+MERGE = merge-src.py
 #-------------------------------------------------------------------------------
 TARGETS = $(sort $(patsubst %.adt,%,$(wildcard *.adt)))
 #-------------------------------------------------------------------------------
 all:
 	@for file in $(TARGETS); do make .$${file}; done;
 #-------------------------------------------------------------------------------
-.%: %.adt cadabra/*.ad include/*.ad
+.%: %.adt code-ada/*.ad include/*.ad
 	@ echo "merge-ada $* ..."
-	@ $(MERGE) -I -i $*.adt -o $*.adb
+	@ $(MERGE) -i $*.adt -o $*.adb
 	@ mv -f $*.adb ../src/.
 	@ touch $@
 #-------------------------------------------------------------------------------
@@ -23,5 +23,5 @@ rm-dot:
 #-------------------------------------------------------------------------------
 pristine:
 	@ rm -rf make.log
-	@ for file in $(TARGETS); do rm -f .$${file}; done
-	@ for file in $(TARGETS); do rm -f  $${file}.adb; done
+	@ for file in $(TARGETS); do rm -rf .$${file}; done
+	@ for file in $(TARGETS); do rm -rf  $${file}.adb; done

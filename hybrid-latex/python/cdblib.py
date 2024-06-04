@@ -19,8 +19,6 @@ def create (file_name):
                                 separators=(',', ': '),
                                 ensure_ascii=False)+'\n')
 
-# put and get based on ~/Python/examples/dict-io/lcb-01.py
-
 def put (key_name,object,file_name):
   import json, io, os
   import cadabra2

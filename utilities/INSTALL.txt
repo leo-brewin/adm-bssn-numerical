@@ -1,6 +1,6 @@
-The Ada files ada-merge and cdb2ada must be compiled and installed before any of the ADM or BSSN codes can be compiled.
+The Ada file cdb2ada must be compiled and installed before any of the ADM or BSSN codes can be compiled.
 
-Once the Ada compiler is installed you can compile all of the Ada files in this directory by running
+Once the Ada compiler is installed you can compile the Ada files in this directory by running
 
    build.sh
 
@@ -14,7 +14,6 @@ Copy ./bin/* to somewhere on your $PATH. That's it, all done for the Ada tools.
 
 You can test the binaries by running
 
-   ada-merge -h
    cdb2ada -h
 
-Both should give you simple help messages.
+This should give you simple help messages.

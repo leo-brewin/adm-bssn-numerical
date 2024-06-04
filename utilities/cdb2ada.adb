@@ -5,21 +5,33 @@ with Support.Cmdline;                           use Support.Cmdline;
 with Support.Strings;                           use Support.Strings;
 with Support.RegEx;                             use Support.RegEx;
 
+with Ada.Characters.Latin_1;
+
 procedure cdb2ada is
 
-   target_line_length : constant := 256;
+   target_line_length : constant := 256;  -- target length of outputlines
+                                          -- will split at whitepace, short overruns possible
 
-   src_file_name  : String := read_command_arg ('i',"foo.c");
-   txt_file_name  : String := read_command_arg ('o',"foo.ad");
-   procedure_name : String := read_command_arg ('n',"foo");
+   src_file_name  : String := read_command_arg ("-i","foo.c");
+   txt_file_name  : String := read_command_arg ("-o","foo.ad");
+   ads_file_name  : String := read_command_arg ("-s","foo.ads");
+   procedure_name : String := read_command_arg ("-P","foo");  -- can embed proc. args in name
+   function_name  : String := read_command_arg ("-F","foo");  -- ditto
+   return_name    : String := read_command_arg ("-r","bah");
+   before_begin   : String := read_command_arg ("-b","");  -- add extra text before the body
 
-   symbol         : Character := read_command_arg ('s','t'); -- the 'x' in vars like x0123 or
-                                                             -- the 't' in t321
+   is_function    : Boolean := find_command_arg ("-F");
+   is_procedure   : Boolean := not is_function;
+
+   write_ada_spec : Boolean := find_command_arg ("-s");  -- write a matching .ads file
+
+   local_var_prefix : Character := read_command_arg ("-v",'x');  -- local vars will be x1, x2, ... x123, ...
 
    -----------------------------------------------------------------------------
 
-   procedure rewrite_cdb is
+   procedure rewrite_code is
       txt          : File_Type;
+      ads          : File_Type;
       src          : File_Type;
       start_line   : Boolean;
       finished     : Boolean;
@@ -35,11 +47,11 @@ procedure cdb2ada is
       rhs_end      : integer;
       tail_beg     : integer;
       tail_end     : integer;
-      max_xvars_width : Integer;
+      max_names_width : Integer;
 
       procedure write_procedure_begin is
          re_name  : String := "([a-zA-Z0-9_-]+)";
-         the_name : String := grep (procedure_name, re_name, 1, fail => "no_name");
+         the_name : String := grep (procedure_name, re_name, 1, fail => "no_procedure_name");
       begin
 
          for i in the_name'range loop
@@ -50,11 +62,15 @@ procedure cdb2ada is
 
          Put_Line (txt, "Procedure "&the_name&" is");
 
+         if write_ada_spec then
+            Put_Line (ads, "Procedure "&the_name&";");
+         end if;
+
       end write_procedure_begin;
 
       procedure write_procedure_end is
          re_name  : String := "([a-zA-Z0-9_-]+)";
-         the_name : String := grep (procedure_name, re_name, 1, fail => "no_name");
+         the_name : String := grep (procedure_name, re_name, 1, fail => "no_procedure_name");
       begin
 
          for i in the_name'range loop
@@ -64,8 +80,56 @@ procedure cdb2ada is
          end loop;
 
          Put_Line (txt, "end "&the_name&";");
+         New_Line (txt);
 
       end write_procedure_end;
+
+      procedure write_function_begin is
+         re_name  : String := "([a-zA-Z0-9_-]+)";
+         -- the_name : String := function_name;   -- was this, but this must be wrong?
+         the_name : String := grep (function_name, re_name, 1, fail => "no_function_name");
+      begin
+
+         for i in the_name'range loop
+            if the_name (i)  = '-' then
+               the_name (i) := '_';
+            end if;
+         end loop;
+
+         Put_Line (txt, "Function "&the_name&" is");
+
+         if write_ada_spec then
+            Put_Line (ads, "Function "&the_name&";");
+         end if;
+
+      end write_function_begin;
+
+      procedure write_function_end is
+         re_name  : String := "([a-zA-Z0-9_-]+)";
+         the_name : String := grep (function_name, re_name, 1, fail => "no_function_name");
+      begin
+
+         for i in the_name'range loop
+            if the_name (i)  = '-' then
+               the_name (i) := '_';
+            end if;
+         end loop;
+
+         -- New_Line (txt);
+         Put_Line (txt, "   return "&return_name&";");
+         -- New_Line (txt);
+         Put_Line (txt, "end "&the_name&";");
+         New_Line (txt);
+
+      end write_function_end;
+
+      function is_local_var (this_name : String) return Boolean is
+      begin
+         if this_name (this_name'First) = local_var_prefix
+            then return True;
+            else return False;
+         end if;
+      end is_local_var;
 
       procedure add_declarations is
 
@@ -76,8 +140,7 @@ procedure cdb2ada is
          target    : integer;
          lead_in   : integer;
          num_chars : integer;
-         tmp_xvars : Integer;
-         num_xvars : Integer;
+         num_names : Integer;
          max_width : Integer;
 
          type action_list is (wrote_xvar, wrote_type, wrote_space);
@@ -85,23 +148,26 @@ procedure cdb2ada is
 
       begin
 
-         -- first pass: count the number of xvars and record max width
+         -- first pass: count the number of names and record max width
 
          Open (src, In_File, src_file_name);
 
-         num_xvars := 0;  -- number of xvars
-         max_width := 0;  -- maximum widt of the xvars
+         num_names := 0;  -- number of local var names (including duplicates)
+         max_width := 0;  -- maximum width of the names
 
          loop
             begin
                declare
-                  re_numb   : String := "^ *"&symbol&"([0-9]+) +=";
+                  re_lhs    : String := "^ *([a-zA-Z0-9_(), ]+) +=";
                   this_line : String := get_line (src);
-                  this_numb : String := grep (this_line, re_numb, 1, fail => "<no-match>");
+                  this_name : String := grep (this_line, re_lhs, 1, fail => "<no-match 1>");
                begin
-                  if this_numb /= "<no-match>" then
-                     num_xvars := num_xvars + 1;
-                     max_width := max (max_width, this_numb'length);
+                  -- count only the local var names
+                  if this_line'length > 0 then
+                     if is_local_var (this_name) then
+                        num_names := num_names + 1;
+                        max_width := max (max_width, this_name'length);
+                     end if;
                   end if;
                end;
             exception
@@ -109,78 +175,140 @@ procedure cdb2ada is
             end;
          end loop;
 
+         max_names_width := max_width+1;
+
          Close (src);
 
-         max_xvars_width := max_width+1;
+         declare
 
-         if num_xvars /= 0 then
+            max_name_length : Integer := 25;
+            num_unique_names : Integer;
 
-            -- second pass, write out declarations for all xvars
+            unique_names : Array (1..num_names) of String (1..max_name_length) := (others => (others => Ada.Characters.Latin_1.NUL));
+
+            function in_list (name : String) return Boolean is
+            begin
+               for i in 1 .. num_unique_names loop
+                  if str_match(name, unique_names (i)) then
+                     return True;
+                  end if;
+               end loop;
+               return False;
+            end in_list;
+
+            procedure add_to_list (name : String) is
+            begin
+               if get_strlen (name) > max_name_length then
+                  raise CONSTRAINT_ERROR with "c2ada: name "&cut(name)&" too long, max = "&str(max_name_length);
+               else
+                  num_unique_names := num_unique_names + 1;
+                  writestr (unique_names (num_unique_names), name);
+               end if;
+            end add_to_list;
+
+         begin
+
+            -- second pass get a list of *unique* var names
 
             Open (src, In_File, src_file_name);
 
-            width   := max_width+3;  -- +3 = +1 for the symbol, +1 for the comma and +1 for the space
-            lead_in := 3;            -- whitespace at start of each line
-
-            target  := 85;           -- max length of a line
-
-            count     := 0;          -- number of xvars written in this block
-            max_count := 250;        -- max number of xvars in any one block
-
-            Put (txt, spc (lead_in));
-            num_chars := lead_in;
-
-            tmp_xvars := 0;          -- total number of xvars processed
+            num_unique_names := 0;
 
             loop
                begin
                   declare
-                     re_numb   : String := "^ *"&symbol&"([0-9]+) +=";
+                     re_lhs    : String := "^ *([a-zA-Z0-9_(), ]+) +=";
                      this_line : String := get_line (src);
-                     this_numb : String := grep (this_line, re_numb, 1, fail => "<no-match>");
+                     this_name : String := grep (this_line, re_lhs, 1, fail => "<no-match 2>");
                   begin
-                     if this_numb /= "<no-match>" then
-
-                        tmp_xvars := tmp_xvars + 1;
-
-                        if (count < max_count) then
-                           if tmp_xvars /= num_xvars
-                              then Put (txt, str (symbol & cut (this_numb) & ",", width, pad=>' '));
-                              else Put (txt, cut (symbol & cut (this_numb)));
-                           end if;
-                           num_chars := num_chars + width;
-                           count := count + 1;
-                           last_action := wrote_xvar;
-                        else
-                           Put (txt, str (symbol & cut (this_numb) & " : Real;", width+6, pad=>' '));
-                           count := 0;
-                           last_action := wrote_type;
-                        end if;
-
-                        if tmp_xvars /= num_xvars then
-                           if (num_chars > target) or (count = 0) then
-                              New_Line (txt);
-                              Put (txt, spc (lead_in));
-                              num_chars := lead_in;
-                              last_action := wrote_space;
+                     -- build a list of unique local var names
+                     if this_line'length > 0 then
+                        if is_local_var (this_name) then
+                           if not in_list (this_name) then
+                              add_to_list (this_name);
                            end if;
                         end if;
-
                      end if;
                   end;
+               exception
+                  when end_error => exit;
                end;
-               exit when tmp_xvars = num_xvars;
             end loop;
-
-            if last_action /= wrote_type then
-               Put_Line (txt, " : Real;");
-            end if;
-
-            -- New_Line (txt);
 
             Close (src);
 
-         end if;
+            -- third pass, write out declarations for all names
+
+            if num_names /= 0 then
+
+               width   := max_width+2;  -- +2 = +1 for the comma and +1 for the space
+               lead_in := 3;            -- whitespace at start of each line
+
+               target  := 85;           -- max length of a line
+
+               count     := 0;          -- number of names written in this block
+               max_count := 250;        -- max number of names in any one block
+                                        -- avoids gant crash -- too many names before the type decalaration
+
+               Put (txt, spc (lead_in));
+               num_chars := lead_in;
+
+               for i in 1 .. num_unique_names loop
+                  begin
+                     declare
+                        this_name : String := cut(unique_names(i));
+                     begin
+                        if is_local_var (this_name) then
+
+                           if (count < max_count) then
+                              if i /= num_unique_names
+                                 then Put (txt, str (cut (this_name) & ",", width, pad=>' '));
+                                 else Put (txt, str (cut (this_name)));
+                              end if;
+                              num_chars := num_chars + width;
+                              count := count + 1;
+                              last_action := wrote_xvar;
+                           else
+                              Put (txt, str (cut (this_name) & " : Real;", width+6 ,pad=>' '));
+                              count := 0;
+                              last_action := wrote_type;
+                           end if;
+
+                           if i /= num_unique_names then
+                              if (num_chars > target) or (count = 0) then
+                                 New_Line (txt);
+                                 Put (txt, spc (lead_in));
+                                 num_chars := lead_in;
+                                 last_action := wrote_space;
+                              end if;
+                           end if;
+
+                        end if;
+
+                     end;
+                  end;
+
+               end loop;
+
+               if last_action /= wrote_type then
+                  Put_Line (txt, " : Real;");
+               end if;
+
+               -- New_Line (txt);  -- new line at end of declarations
+
+            end if;
+
+            -- use -bfoo to add the text "foo" after the declarations
+            -- and just before the begin block
+            -- this can be used to squeeze in extra code
+
+            if find_command_arg ("-b") then
+               Put (txt, spc (lead_in));
+               Put (txt, before_begin);
+               New_Line (txt);
+            end if;
+
+         end;
 
       end add_declarations;
 
@@ -251,7 +379,14 @@ procedure cdb2ada is
 
       Create (txt, Out_File, txt_file_name);
 
-      write_procedure_begin;
+      if write_ada_spec then
+         Create (ads, Out_File, ads_file_name);
+      end if;
+
+      if is_procedure
+         then write_procedure_begin;
+         else write_function_begin;
+      end if;
 
       add_declarations;
 
@@ -262,10 +397,10 @@ procedure cdb2ada is
       loop
          begin
             declare
-               re_numb   : String := "^ *"&symbol&"([0-9]+) +=";
+               re_lhs    : String := "^ *([a-zA-Z0-9_(), ]+) +=";
                this_line : String := get_line (src);
                this_line_len : Integer := this_line'length;
-               this_numb : String := grep (this_line, re_numb, 1, fail => "<no-match>");
+               this_name : String := grep (this_line, re_lhs, 1, fail => "<no-match 3>");
             begin
                find_equal_sign (found,found_at,this_line);
 
@@ -281,9 +416,9 @@ procedure cdb2ada is
                   tail_beg := found_at+1;
                   tail_end := this_line_len;
 
-                  if this_numb = "<no-match>"
-                     then this_lead_in := var_end-var_beg+1;
-                     else this_lead_in := max_xvars_width+1;
+                  if this_name'length >= max_names_width
+                     then this_lead_in := this_name'length + 1;
+                     else this_lead_in := max_names_width;
                   end if;
 
                   start_line := True;
@@ -328,19 +463,38 @@ procedure cdb2ada is
          end;
       end loop;
 
+      if is_procedure
+         then write_procedure_end;
+         else write_function_end;
+      end if;
+
       Close (src);
-
-      write_procedure_end;
-
       Close (txt);
 
-   end rewrite_cdb;
+      if write_ada_spec then
+         Close (ads);
+      end if;
+
+   end rewrite_code;
 
    -----------------------------------------------------------------------------
 
    procedure Show_Usage is
    begin
-      Put_line (" Usage : cdb2ada -i <src-file> -o <out-file> -s 'symbol' -n 'name for the procedure'");
+      Put_line (" Usage : c2ada -i <src-file> -o <out-file> <options>");
+      Put_line (" Options:");
+      Put_line ("   -i foo.c       C input.");
+      Put_line ("   -o foo.ad      Ada body.");
+      Put_line ("   -s foo.ads     Add spec. (optional)");
+      Put_line ("   -P name        Write an Ada Procedure with the given name. May include proc. args in name.");
+      Put_line ("   -F name        Ditto but for an Ada Function. Ditto re args.");
+      Put_line ("   -r var         The return var in the Ada Function.");
+      Put_line ("   -x list        A list of global variables of the form :foo:bah:cat:dog:");
+      Put_line ("   -b snippet     Add a snippet of code before the body of the procedure/function.");
+      Put_line (" Note:");
+      Put_Line ("    The C source should consist of a sequence statements of the form");
+      Put_Line ("       foo = bah");
+      Put_Line ("    with no line breaks in bah.");
       halt;
    end Show_Usage;
 
@@ -349,8 +503,8 @@ procedure cdb2ada is
    procedure initialize is
    begin
 
-      if (not find_command_arg ('i'))
-      or (not find_command_arg ('o')) then
+      if (not find_command_arg ("-i"))
+      or (not find_command_arg ("-o")) then
          Show_Usage;
       end if;
 
@@ -360,6 +514,6 @@ begin
 
    initialize;
 
-   rewrite_cdb;
+   rewrite_code;
 
 end cdb2ada;

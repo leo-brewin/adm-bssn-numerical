@@ -17,34 +17,18 @@ adm-eqtns:
 	@ make .adm-eqtns
 .adm-eqtns: adm-eqtns.tex shared.py
 	@ echo "> cadabra adm-eqtns ..."
-	@ cdblatex.sh -sx -i adm-eqtns &> adm-eqtns.cdblog
-	@ echo "> pdflatex adm-eqtns ..."
-	@ pdflatex -halt-on-error -interaction=batchmode adm-eqtns &> /dev/null
+	@ cdblatex.sh -s -i adm-eqtns &> adm-eqtns.cdblog
 	@ touch .adm-eqtns
 #-------------------------------------------------------------------------------
 adm-code:
 	@ echo "> cadabra adm-code ..."
 	@ make .adm-code
-.adm-code: adm-code.tex
+.adm-code: adm-code.tex shared.py
 	@ echo "> cadabra adm-code ..."
-	@ cdblatex.sh -s -i adm-code &> /tmp/tmp.del
-	@ reformat.sh dot-N.c           set_3d_dot_N
-	@ reformat.sh dot-Kab.c         set_3d_dot_Kab
-	@ reformat.sh dot-gab.c         set_3d_dot_gab
-	@ reformat.sh hessian.c         set_3d_hessian
-	@ reformat.sh ricci.c           set_3d_ricci
-	@ reformat.sh ricci-scalar.c    set_3d_ricci_scalar
-	@ reformat.sh hamiltonian.c     set_hamiltonian
-	@ reformat.sh momentum.c        set_momentum
-	@ mkdir -p                   ../code/template/cadabra
-	@ cp -rf dot-N.ad            ../code/template/cadabra/.
-	@ cp -rf dot-Kab.ad          ../code/template/cadabra/.
-	@ cp -rf dot-gab.ad          ../code/template/cadabra/.
-	@ cp -rf hessian.ad          ../code/template/cadabra/.
-	@ cp -rf ricci.ad            ../code/template/cadabra/.
-	@ cp -rf ricci-scalar.ad     ../code/template/cadabra/.
-	@ cp -rf hamiltonian.ad      ../code/template/cadabra/.
-	@ cp -rf momentum.ad         ../code/template/cadabra/.
+	@ cdblatex.sh -s -i adm-code &> adm-code.cdblog
+	@ reformat.sh
+	@ mkdir -p              ../code/template/code-ada
+	@ cp -rf code-ada/*.ad  ../code/template/code-ada/.
 	@ touch .adm-code
 #-------------------------------------------------------------------------------
 merge:
@@ -59,7 +43,7 @@ code:
 	@ echo "> cdblatex.sh $@ ..."
 	@ cdblatex.sh -T -s -i $@ &> $@.cdblog
 	@ # echo " -->"`cputime -i $@.cdblog`
-	@ pdflatex -halt-on-error -interaction=batchmode $@ &> /dev/null
+	@ pdflatex -halt-on-error -interaction=batchmode $@ &> $@.texlog
 	@ touch .$@
 #-------------------------------------------------------------------------------
 rm-dot:
@@ -73,7 +57,7 @@ rm-dot:
 clean:
 	@ for file in $(TARGETS); \
 	  do \
-	     rm -rf $${file}.aux $${file}.log $${file}.out $${file}.synctex.gz; \
+	     rm -rf $${file}.aux $${file}.log $${file}.texlog $${file}.out $${file}.synctex.gz; \
 	  done
 #-------------------------------------------------------------------------------
 veryclean:
@@ -84,15 +68,8 @@ veryclean:
 		  rm -rf $${file}.cdbidx $${file}.cdbtxt $${file}.cdblog; \
 		  rm -rf $${file}.py; \
 	  done
-	@ rm -rf dot-N.c         dot-N.ad
-	@ rm -rf dot-Kab.c       dot-Kab.ad
-	@ rm -rf dot-gab.c       dot-gab.ad
-	@ rm -rf hessian.c       hessian.ad
-	@ rm -rf ricci.c         ricci.ad
-	@ rm -rf ricci-scalar.c  ricci-scalar.ad
-	@ rm -rf hamiltonian.c   hamiltonian.ad
-	@ rm -rf momentum.c      momentum.ad
-	@ rm -rf .merged.tex     .tmp.txt
+	@ rm -rf code-c/*.c code-ada/*.ad
+	@ rm -rf .merged.tex .tmp.txt
 #-------------------------------------------------------------------------------
 pristine:
 	@ make rm-dot

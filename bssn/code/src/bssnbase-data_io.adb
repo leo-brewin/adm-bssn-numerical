@@ -5,8 +5,8 @@ with Ada.Directories;
 
 package body BSSNBase.Data_IO is
 
-   data_directory    : String := read_command_arg ('D',"data/");
-   results_directory : String := read_command_arg ('O',"results/");
+   data_directory    : String := read_command_arg ("-D","data/");
+   results_directory : String := read_command_arg ("-O","results/");
 
    procedure read_data (file_name : String := "data.txt") is
       use Ada.Directories;

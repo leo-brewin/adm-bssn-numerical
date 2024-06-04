@@ -1,8 +1,8 @@
-with Support.Clock;     use Support.Clock;
-with Support.CmdLine;   use Support.CmdLine;
-with Support.Strings;   use Support.Strings;
+with Support.Clock;          use Support.Clock;
+with Support.CmdLine;        use Support.CmdLine;
+with Support.Strings;        use Support.Strings;
 
-with ADMBase.Coords;    use ADMBase.Coords;
+with ADMBase.Coords;         use ADMBase.Coords;
 with ADMBase.Constraints;    use ADMBase.Constraints;
 
 -- for creation of directories if needed
@@ -10,8 +10,8 @@ with Ada.Directories;
 
 package body ADMBase.Text_IO is
 
-   data_directory    : String := read_command_arg ('D',"data/");
-   results_directory : String := read_command_arg ('O',"results/");
+   data_directory    : String := read_command_arg ("-D","data/");
+   results_directory : String := read_command_arg ("-O","results/");
 
    -- returns 'xx', 'xy' etc. these are the values of type symmetric
    -- used when printing indices of symmetric matrices
@@ -234,7 +234,7 @@ package body ADMBase.Text_IO is
    end write_results;
 
    procedure write_results is
-      num_loop_str : String := fill_str (num_loop, 5, '0');
+      num_loop_str : String := str (num_loop, "%05d");
    begin
 
       set_constraints;
@@ -348,12 +348,12 @@ package body ADMBase.Text_IO is
 
    end write_summary;
 
-   summary_dashes : String (1..83) := (others => '-');
+   dashes : String := dash (83);
 
    procedure write_summary_header is
    begin
 
-      Put_Line (summary_dashes);
+      Put_Line (dash(83));
       Put (" ");
       Put (centre("loop",5));
       Put (centre("time",11));
@@ -364,14 +364,14 @@ package body ADMBase.Text_IO is
       Put (centre("Kzz",11));
       Put (centre("Ham.",11));
       New_Line;
-      Put_Line (summary_dashes);
+      Put_Line (dash(83));
 
    end write_summary_header;
 
    procedure write_summary_trailer is
    begin
 
-      Put_Line (summary_dashes);
+      Put_Line (dash(83));
 
    end write_summary_trailer;
 

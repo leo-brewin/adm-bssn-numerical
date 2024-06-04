@@ -31,7 +31,7 @@ procedure BSSNEvolve is
       re_real_seq_3 : String := re_real&":"&re_real&":"&re_real;
    begin
 
-      if find_command_arg('h') then
+      if find_command_arg("-h") then
 
          Put_Line (" Usage: bssnevolve [-Cc:cmin] [-pNum] [-PInterval] [-Mmax] [-Ncores] \");
          Put_Line ("                   [-tEndTime] [-Fdt] [-Ddata] [-Oresults] [-h]");
@@ -50,16 +50,16 @@ procedure BSSNEvolve is
 
       else
 
-         courant         := grep (read_command_arg ('C',"0.25"),re_real_seq_1,1,fail=>0.25);
-         courant_min     := grep (read_command_arg ('C',"0.25:0.025"),re_real_seq_2,3,fail=>0.025);
+         courant         := grep (read_command_arg ("-C","0.25"),re_real_seq_1,1,fail=>0.25);
+         courant_min     := grep (read_command_arg ("-C","0.25:0.025"),re_real_seq_2,3,fail=>0.025);
 
-         print_cycle     := read_command_arg ('p',10);
-         print_time_step := read_command_arg ('P',0.10);
+         print_cycle     := read_command_arg ("-p",10);
+         print_time_step := read_command_arg ("-P",0.10);
 
-         max_loop        := read_command_arg ('M',1000);
+         max_loop        := read_command_arg ("-M",1000);
 
-         end_time           := read_command_arg ('t',11.0);
-         constant_time_step := read_command_arg ('F',1.0e66);
+         end_time           := read_command_arg ("-t",11.0);
+         constant_time_step := read_command_arg ("-F",1.0e66);
 
       end if;
 

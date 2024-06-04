@@ -1,76 +1,49 @@
+with Ada.Strings.Unbounded;                     use Ada.Strings.Unbounded;
+with Support.Strings;                           use Support.Strings;
+
 package Support.Cmdline is
 
-   procedure get_command_arg
-     (the_arg_string : out String;      -- the unprocessed argument i.e., -xfoo in -xfoo
-      which_arg      :     Integer);    -- which argument
+   function get_command_arg (which_arg : Integer;
+                             default   : String := "???") return String;
 
-   function get_command_arg
-     (which_arg     : Integer;          -- which argument
-      default       : String)           -- default
-      return          String;
+   function get_command_arg (which_arg : Integer;
+                             default   : Real := 0.0) return Real;
 
-   procedure put_command_args
-     (item  : character;
-      value : string);
+   function get_command_arg (which_arg : Integer;
+                             default   : Integer := 0) return Integer;
 
----------------------------------------------------------------------------------------------------------
+   procedure put_command_arg (target_flag : String;
+                              value       : String);
 
-   procedure read_command_arg
-     (value       : out Integer;           -- the foo in -xfoo
-      found       : out Boolean;           -- did we find it?
-      target_flag :     Character;         -- the x in -xfoo
-      default     :     Integer := 0);     -- default
+   function echo_command_name (prefix : String := "") return String;     -- the command name without any arguments
+   function echo_command_line (prefix : String := "") return String;     -- the full command line
+   function echo_command_line_args                    return String;     -- just the command line arguments
 
-   procedure read_command_arg
-     (value       : out Real;              -- the foo in -xfoo
-      found       : out Boolean;           -- did we find it?
-      target_flag :     Character;         -- the x in -xfoo
-      default     :     Real := 0.0);      -- default
+   procedure echo_command_name (prefix : String := "");                  -- the command name without any arguments
+   procedure echo_command_line (prefix : String := "");                  -- the full command line
+   procedure echo_command_line_args;                                     -- just the command line arguments
 
-   procedure read_command_arg
-     (value       : out String;            -- the foo in -xfoo
-      found       : out Boolean;           -- did we find it?
-      target_flag :     Character;         -- the x in -xfoo
-      default     :     String := "null"); -- default
+   function read_command_arg (target_flag : String;
+                              default     : Integer := 0) return Integer;
 
-   procedure read_command_arg
-     (value       : out String;            -- the foo in -xfoo
-      found       : out Boolean;           -- did we find it?
-      target_flag :     Character;         -- the x in -xfoo
-      default     :     Character := '?'); -- default
+   function read_command_arg (target_flag : String;
+                              default     : Real := 0.0) return Real;
 
-   function read_command_arg
-     (target_flag : Character;             -- the x in -xfoo
-      default     : Integer := 0)          -- default
-      return        Integer;
+   function read_command_arg (target_flag : String;
+                              default     : String := "<null>") return String;
 
-   function read_command_arg
-     (target_flag : Character;             -- the x in -xfoo
-      default     : Real := 0.0)           -- default
-      return        Real;
+   function read_command_arg (target_flag : String;
+                              default     : Character := '?') return Character;
 
-   function read_command_arg
-     (target_flag : Character;             -- the x in -xfoo
-      default     : String := "null")      -- default
-      return        String;
+   function read_command_arg (target_flag : String;
+                              default     : Boolean) return Boolean;
 
-   function read_command_arg
-     (target_flag : Character;             -- the x in -xfoo
-      default     : Character := '?')      -- default
-      return        Character;
+   function find_command_arg (target_flag : String) return Boolean;
 
-   function find_command_arg (target_flag : Character) return boolean;
+   function num_command_items return integer;     -- number of command line arguments of any kind, foo bar -i -o = abc.txt
 
-   function num_command_args  return integer;     -- number of command line arguments like -i -o
-   function num_command_items return integer;     -- number of command line arguments of any kind, foo bar -i -o
-   function echo_command_name return String;      -- the command name without any arguments
-   function echo_command_line return String;      -- the full command line
-   function echo_command_line_args return String; -- just the command line arguments
+private
 
-   -- echo details to standard output
-
-   procedure echo_command_name;                   -- the command name without any arguments
-   procedure echo_command_line;                   -- the full command line
-   procedure echo_command_line_args;              -- just the command line arguments
+   extra_cmd_args : Unbounded_String := unb ("");
 
 end Support.Cmdline;

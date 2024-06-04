@@ -101,7 +101,7 @@ package body BSSNBase.Evolve is
       end SlaveTask;
 
       num_cpus     : Integer := Integer (System.Multiprocessors.Number_Of_CPUs);
-      num_slaves   : Integer := read_command_arg ('N',num_cpus);
+      num_slaves   : Integer := read_command_arg ("-N",num_cpus);
       slave_tasks  : array (1..num_slaves) of SlaveTask;
       slave_params : array (1..num_slaves) of SlaveParams;
 

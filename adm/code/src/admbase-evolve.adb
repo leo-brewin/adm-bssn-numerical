@@ -1,4 +1,3 @@
-with Support;                                   use Support;
 with Support.Clock;                             use Support.Clock;
 with Support.CmdLine;                           use Support.CmdLine;
 with Support.Strings;                           use Support.Strings;
@@ -101,7 +100,7 @@ package body ADMBase.Evolve is
       end SlaveTask;
 
       num_cpus     : Integer := Integer (System.Multiprocessors.Number_Of_CPUs);
-      num_slaves   : Integer := read_command_arg ('N',num_cpus);
+      num_slaves   : Integer := read_command_arg ("-N",num_cpus);
       slave_tasks  : array (1..num_slaves) of SlaveTask;
       slave_params : array (1..num_slaves) of SlaveParams;
 
@@ -131,7 +130,7 @@ package body ADMBase.Evolve is
          -- it is *essential* that the every cell appears in *exactly* one sub-list.
          -- if a cell appears in more than one sub-list then it will be processed by more
          -- than one task. doing so wastes time, but far more worrying is that such multiple
-         -- processing may cause data to be overwritten!
+         -- processing may cause data to be overwritten and corrupted!
 
          for i in slave_params'range loop
             slave_params (i)(1) := i;

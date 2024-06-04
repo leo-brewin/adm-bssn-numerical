@@ -2,16 +2,11 @@ with "../common.gpr";
 
 Project build is
 
-   for Main use ("ada-merge.adb","ada-split.adb","cdb2ada.adb");
+   for Main use ("cdb2ada.adb");
 
    for Source_Dirs use (".","../support");
    for Object_Dir  use Common'Object_Dir;
    for Exec_Dir    use Common'Exec_Dir;
-
-   package Naming is
-      for Body ("ada_merge")  use "ada-merge.adb";
-      for Body ("ada_split")  use "ada-split.adb";
-   end Naming;
 
    package Compiler renames Common.Compiler;
    package Builder  renames Common.Builder;

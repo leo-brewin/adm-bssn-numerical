@@ -8,10 +8,10 @@ package body ADMBase.Constraints is
 
       $Input{"include/local-data.ad"}
 
-      $Input{"cadabra/ricci.ad"}
+      $Input{"code-ada/ricci.ad"}
 
-      $Input{"cadabra/hamiltonian.ad"}
-      $Input{"cadabra/momentum.ad"}
+      $Input{"code-ada/hamiltonian.ad"}
+      $Input{"code-ada/momentum.ad"}
 
       procedure set_data is
          i, j, k : Integer;
