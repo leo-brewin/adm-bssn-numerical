@@ -55,7 +55,7 @@ __Note__ that the simple `make` command will install various files before runnin
 
 The command `source SETPATHS` will __prepend__ the directories to the appropriate paths. This ensures that the newly installed files can be found when the subsequent `make` command is run. If you need to recover the original paths, just run `source OLDPATHS`.
 
-If you prefer to install the hybrid latex files in some other directory then you can run the command
+If you prefer to install the files in some other directory then you can run the command
 
     $ source SETPATHS /full/path/to/dir/; make install
 
@@ -65,7 +65,13 @@ You can also compile and install these tools by hand. See the `INSTALL.txt` and 
 
 ## Uninstall
 
-The hybrid latex tools can be uninstalled by deleting the directory `$HOME/local/hybrid-latex/` (or the approrpriate directory if you chose a non-default installation).
+To remove all of the files installed __outside__ of this repo, run
+
+    $ UNINSTALL.sh
+
+However, if you chose to install the files in a location other than the default (`$HOME/local/adm-bssn/bin/`) you should run
+
+    $ UNINSTALL.sh /full/path/to/dir/
 
 ## Tinkering with the codes
 
