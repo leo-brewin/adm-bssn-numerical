@@ -40,6 +40,8 @@ bin:
 %:	%.o
 .TimeStamp:
 	touch .TimeStamp
+$(ADAPKG)/.TimeStamp:
+	@ (cd $(ADAPKG); make)
 bin/%: %.adb .TimeStamp $(ADAPKG)/.TimeStamp
 	@ echo "gnatmake $*.adb ..."
 	@ rm -f bin/$* .fail-$*

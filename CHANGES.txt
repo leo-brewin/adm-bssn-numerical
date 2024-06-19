@@ -1,3 +1,8 @@
+-- 05 jun 2024
+
+   1. Added the simple program numcpu.adb to report the number of CPUs.
+   2. Updated the Makefile's to suit.
+
 -- 02 jun 2024
 
    I made some extensive changes to the tools that convert the c-code created

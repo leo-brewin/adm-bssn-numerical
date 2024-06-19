@@ -10,7 +10,7 @@ all:
 	@ make adm
 	@ make bssn
 	@ cdblatex.sh -s -i adm-bssn-eqtns &> adm-bssn-eqtns.cdblog
-	@ pdflatex -halt-on-error -interaction=batchmode adm-bssn-plots &> adm-bssn-eqtns.texlog
+	@ pdflatex -halt-on-error -interaction=batchmode adm-bssn-plots &> adm-bssn-plots.texlog
 	@ make veryclean
 #-------------------------------------------------------------------------------
 adm:
