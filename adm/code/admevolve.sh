@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [[ $1 = '-h' ]]; then
+if [[ $1 = '--Help' ]]; then
 
-   bin/admevolve -h
+   bin/admevolve --Help
    exit
 
 fi
@@ -15,4 +15,12 @@ rm -rf results
 mkdir -p results
 touch results/history.txt
 
-bin/admevolve $1 -C0.25 -t11.0 -p10 -P11.0 -M40000 -N8 -Oresults -Ddata | tee admevolve.log
+bin/admevolve $* \
+   --Courant 0.25 \
+   --Tfinal 11.0 \
+   --PrintCycle 10 \
+   --PrintTimeStep 11.0 \
+   --MaxTimeSteps 40000 \
+   --NumCores 8 \
+   --OutputDir results \
+   --DataDir data | tee admevolve.log

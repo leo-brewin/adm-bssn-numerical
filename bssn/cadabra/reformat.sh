@@ -1,69 +1,61 @@
 #!/bin/bash
 
+PROGRAM=$(basename $0 ".sh")
+
 HERE=$PWD
 DEST=$PWD/code-ada/
 CSRC=$PWD/code-c/
+TEMPLATES=$PWD/templates/
+TMP=$PWD/tmp/
+
+mkdir -p $DEST
+mkdir -p $TMP
+
+# must use gsed
+# sed scripts reformat.pre and reformat.post
+# use syntax not supported by BSD sed
 
 SED=/opt/homebrew/bin/gsed
 
 function process {
 
-   # echo "> "$1
-
    file=$1
-   name=$2
 
    cd $CSRC
 
-   rm -rf tmp.c
+   if [[ -e ${file}.c ]]; then
 
-   case $file in
+      the_file=${file/.c/}
 
-   	dot-gBar)       cat dot-gBar.c        > tmp.c;;
-   	dot-ABar)       cat dot-ABar.c        > tmp.c;;
-   	dot-N)          cat dot-N.c           > tmp.c;;
-   	dot-Gi)         cat dot-Gi.c          > tmp.c;;
-   	dot-phi)        cat dot-phi.c         > tmp.c;;
-   	dot-trK)        cat dot-trK.c         > tmp.c;;
-   	ricci)          cat ricci.c           > tmp.c;;
-   	ricci-scalar)   cat ricci-scalar.c    > tmp.c;;
-   	hamiltonian)    cat hamiltonian.c     > tmp.c;;
-   	momentum)       cat momentum.c        > tmp.c;;
+      rm -rf $TMP/A.ad $TMP/B.ad $TMP/C.ad $TMP/D.ad $TMP/E.ad
+      cp ${the_file}.c $TMP/A.ad
+      ${SED} -r -f $HERE/reformat.pre $TMP/A.ad > $TMP/B.ad
+      cdb2ada -i$TMP/B.ad -v$TMP/C.ad -b$TMP/D.ad
+      merge-src -i $TEMPLATES/${the_file}.ad -o $TMP/E.ad -S
+      ${SED} -i "1i -- written by $HERE/$PROGRAM.sh" $TMP/E.ad
+      ${SED} -i "2i -- using $TEMPLATES/${the_file}.ad" $TMP/E.ad
+      ${SED} -r -f $HERE/reformat.post $TMP/E.ad > $DEST/${the_file}.ad
+      rm -rf $TMP/A.ad $TMP/B.ad $TMP/C.ad $TMP/D.ad $TMP/E.ad
 
-      *) echo "Huh? I'm confused in reformat.sh, choice: $file"; exit 1 ;;
+   else
 
-   esac
+      echo "> c-source "${file}.c" not found"
 
-   rm -rf tmpA.del tmpB.del tmpC.del
-   cp tmp.c tmpA.del
-   ${SED} -r -f $HERE/reformat.pre tmpA.del > tmpB.del
-   cdb2ada -itmpB.del -otmpC.del -P${name} -vx
-   ${SED} -r -f $HERE/reformat.post tmpC.del > $DEST/${file}.ad
-   rm -rf tmpA.del tmpB.del tmpC.del
-
-   rm -rf tmp.c
+   fi
 
    cd $HERE
 
 }
 
-mkdir -p $DEST
+process dot-gBar
+process dot-ABar
+process dot-N
+process dot-Gi
+process dot-phi
+process dot-trK
+process ricci
+process ricci-scalar
+process hamiltonian
+process momentum
 
-if [[ $1 = '' ]]; then
-
-	process dot-gBar        set_3d_dot_gBar
-	process dot-ABar        set_3d_dot_ABar
-	process dot-N           set_3d_dot_N
-	process dot-Gi          set_3d_dot_Gi
-	process dot-phi         set_3d_dot_phi
-	process dot-trK         set_3d_dot_trK
-	process ricci           set_3d_ricci
-	process ricci-scalar    set_3d_ricci_scalar
-	process hamiltonian     set_hamiltonian
-	process momentum        set_momentum
-
-else
-
-   process $1 $2
-
-fi
+rm -rf $TMP

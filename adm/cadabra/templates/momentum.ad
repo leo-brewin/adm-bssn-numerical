@@ -1,0 +1,8 @@
+Procedure set_momentum is
+   $Input{"../tmp/C.ad"}
+begin
+
+   $Input{"../tmp/D.ad"}
+
+end set_momentum;
+

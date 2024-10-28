@@ -12,8 +12,8 @@ with Ada.Directories;
 
 package body BSSNBase.Text_IO is
 
-   data_directory    : String := read_command_arg ("-D","data/");
-   results_directory : String := read_command_arg ("-O","results/");
+   data_directory    : String := read_command_arg ("--DataDir","data/");
+   results_directory : String := read_command_arg ("--OutputDir","results/");
 
    -- returns 'xx', 'xy' etc. these are the values of type symmetric
    -- used when printing indices of symmetric matrices

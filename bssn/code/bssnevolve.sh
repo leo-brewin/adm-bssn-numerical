@@ -4,6 +4,7 @@ if [[ $1 = '-h' ]]; then
 
    bin/bssnevolve -h
    exit
+
 fi
 
 (cd template; merge.sh > make.log) # only required if changes made to template sources
@@ -14,4 +15,12 @@ rm -rf results
 mkdir -p results
 touch results/history.txt
 
-bin/bssnevolve $1 -C0.25 -t11.0 -p10 -P11.0 -M40000 -N8 | tee bssnevolve.log
+bin/bssnevolve $* \
+   --Courant 0.25 \
+   --Tfinal 11.0 \
+   --PrintCycle 10 \
+   --PrintTimeStep 11.0 \
+   --MaxTimeSteps 40000 \
+   --NumCores 8 \
+   --OutputDir results \
+   --DataDir data | tee bssnevolve.log

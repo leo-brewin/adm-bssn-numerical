@@ -1,0 +1,8 @@
+Procedure set_3d_ricci_scalar is
+   $Input{"../tmp/C.ad"}
+begin
+
+   $Input{"../tmp/D.ad"}
+
+end set_3d_ricci_scalar;
+

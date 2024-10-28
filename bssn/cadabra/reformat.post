@@ -1,20 +1,15 @@
 # post-process the foo.ad file
 #-----------------------------------
-s%pow\(([0-9a-zA-Z/() .*+-]+), *0\.([0-9])+e1\)%(\1 ** \2)%g# convert pow(foo,0.2e1) to (foo ** 2)
-s%pow\(([0-9a-zA-Z/() .*+-]+), *([0-9])\.0\)%(\1 ** \2)%g# convert pow(foo,2.0) to (foo ** 2)
-s%pow\(([0-9a-zA-Z/() .*+-]+), *([0-9])\)%(\1 ** \2)%g# convert pow(foo,2) to (foo ** 2)
+s%pow\((x[0-9]+), *2\)%(\1*\1)%g# catch pow(x123,2) inside other pow(...)
+s%pow\(([xyz]{1}), *([23456789]{1})\)%((\1) ** (~\2))%g# catch pow(x,n) inside other pow(...)
+s%pow\(([^,]+), (-?)([0-9]+)\)%((\1) ** (\2~\3))%g# use a tilde to protect pure integers, removed later
+s%([^\.a-z0-9_~])([0-9]+.?0?e-?)([0-9]+)([^\.a-z0-9_~])%\1\2~\3\4%g# protect the exponent
+s%([^\.a-z0-9_~])([0-9]+.?0?e-?)([0-9]+)([^\.a-z0-9_~])%\1\2~\3\4%g# protect the exponent
+s%([^\.a-z0-9_~])([0-9]+)([^\.a-z0-9_~])%\1\2.0\3%g# two rounds to cover overlapping matches
+s%([^\.a-z0-9_~])([0-9]+)([^\.a-z0-9_~])%\1\2.0\3%g# sed does not recognise \d so must use 0-9
+s%~%%g# kill the tilde
 #-----------------------------------
-# the following are not really needed -- I could rely on overloaded operators in Ada
-# the intenion is to turn all integers into reals except in powers and array indices
-# it works but it's a bit klunky
-s% +([0-9]+) *% \1%g# trim whitespace around integers, allow one leading space
-s%\(([0-9]+)\.0L *\/ *([0-9]+)\.0L\)%(\1.0/\2.0)%g# convert (1.0L/2.0L) to (1.0/2.0)
-s%([0-9]+)\.0L *\/ *([0-9]+)\.0L%(\1.0/\2.0)%g# convert 1.0L/2.0L to (1.0/2.0)
-s%\( *([+-]*)([0-9]+) *\/ *([0-9]+) *\)%\1(\2.0/\3.0)%g# convert (1/2) to (1.0/2.0)
-s%([ *+-]+)([0-9]+) *\/ *([0-9]+)%\1(\2.0/\3.0)%g# convert 1/2 to (1.0/2.0)
-s%([ (/*+-])([0-9]+)([^,.)])%\1\2.0\3%g# convert 123 to 123.0, will fail on (x-3)
-s%([(/*+-])([0-9]+)([^.])%\1\2.0\3%g# convert 123 to 123.0, cathces (x-3)
-s%\.0\.0%.0%g# convert .0.0 to .0 (should be no instances, but just in case)
+s%/+%/%g# replace multiple /'s with a single / this cleans up file names in the header of the generated files
 #-----------------------------------
 # add an underscores to separate the object from its indices
 s%N([xyz])%N_\1%g#

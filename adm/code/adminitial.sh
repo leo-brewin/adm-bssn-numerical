@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [[ $1 = '-h' ]]; then
+if [[ $1 = '--Help' ]]; then
 
-   bin/adminitial -h
+   bin/adminitial --Help
    exit
 
 fi
@@ -12,4 +12,7 @@ gprbuild -p -P adminitial.gpr || exit
 rm -rf data
 mkdir -p data
 
-bin/adminitial $1 -n8x8x8 -d0.1:0.1:0.1 -Ddata | tee adminitial.log
+bin/adminitial $* \
+   --GridNum 8x8x8 \
+   --GridDelta 0.1:0.1:0.1 \
+   --DataDir data | tee adminitial.log

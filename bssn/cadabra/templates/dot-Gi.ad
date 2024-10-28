@@ -1,0 +1,8 @@
+Procedure set_3d_dot_Gi is
+   $Input{"../tmp/C.ad"}
+begin
+
+   $Input{"../tmp/D.ad"}
+
+end set_3d_dot_Gi;
+

@@ -9,6 +9,7 @@ package body Support.Cmdline is
    package Integer_IO is new Ada.Text_IO.Integer_IO (Integer);       use Integer_IO;
    package Boolean_IO is new Ada.Text_IO.Enumeration_IO (Boolean);   use Boolean_IO;
 
+   re_quote : String := """([^""]+)""";  -- any characters inside matching quotes
    re_text  : String := "([^ ]+)";  -- any character except a space
    re_intg  : String := "([-+]?[0-9]+)";
    re_real  : String := "([-+]?[0-9]*[.]?[0-9]+([eE][-+]?[0-9]+)?)"; -- note counts as 2 groups (1.234(e+56))
@@ -150,11 +151,20 @@ package body Support.Cmdline is
    function read_command_arg (target_flag : String;
                               default     : String := "<null>") return String
    is
+      try_again : String := "<try-again>";
    begin
 
       if Argument_Count = 0
          then return default;
-         else return grep (" "&echo_command_line_args," "&target_flag&re_space&re_text,2,fail=>default);
+         else
+            declare
+               tmp : String := grep (" "&echo_command_line_args," "&target_flag&re_space&re_quote,2,fail=>try_again);
+            begin
+               if tmp /= try_again
+                  then return tmp;
+                  else return grep (" "&echo_command_line_args," "&target_flag&re_space&re_text,2,fail=>default);
+               end if;
+            end;
       end if;
 
    end read_command_arg;

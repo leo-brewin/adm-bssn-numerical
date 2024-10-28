@@ -159,6 +159,9 @@ package BSSNBase is
    time_step_min : Real := 0.001;            -- minimum allowed tme step
    constant_time_step : Real := 1.0e66;      -- constant time step, default is to use the courant time step
 
+   num_cpus   : Integer := 1;
+   num_slaves : Integer := 1;
+
    ----------------------------------------------------------------------------
 
    function "-" (Right : MetricPointArray) return MetricPointArray;

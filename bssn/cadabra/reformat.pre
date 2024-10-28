@@ -1,10 +1,12 @@
 # pre-process the foo.c file
 #-----------------------------------
+/\/\//Id# delete lines that begin with // (comments about Not supported in C)
+/\/\*/Id# delete lines that begin with /* (comments about Not supported in C)
+#-----------------------------------
 s!\t!   !g # convert tabs to three spaces
 s/ +,/,/g  # remove leading spaces before ,
 s/\( +/(/g # remove leading spaces after (
 s/ +\)/)/g # remove leading spaces before )
 #-----------------------------------
-s/0\.31415926535897932385e1/Pi/g # default value of Pi in Maple
-#-----------------------------------
-s/sympyN/N/g # recover N (Cadabra replaces N with sympyN to avoid clashing with Python's own N)
+s/sympyN/N/g # Cadabra uses the symbol sympyN to avoid a clash with sympy's N
+# so the above substitution recovers N

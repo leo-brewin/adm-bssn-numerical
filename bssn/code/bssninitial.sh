@@ -12,4 +12,7 @@ gprbuild -p -P bssninitial.gpr || exit
 rm -rf data
 mkdir -p data
 
-bin/bssninitial $1 -n8x8x8 -d0.1:0.1:0.1 -Ddata | tee bssninitial.log
+bin/bssninitial $* \
+   --GridNum 8x8x8 \
+   --GridDelta 0.1:0.1:0.1 \
+   --DataDir data | tee bssninitial.log

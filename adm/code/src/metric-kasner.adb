@@ -12,14 +12,14 @@ package body Metric.Kasner is
 
    package Maths is new Ada.Numerics.Generic_Elementary_Functions (Real); use Maths;
 
-   -- allow the pi to be set on the command line: -p0.666:0.666:-0.333
+   -- allow the pi to be set on the command line: ---KasnerPi 0.666:0.666:-0.333
 
    re_real : String := "([-+]?[0-9]*[.]?[0-9]+([eE][-+]?[0-9]+)?)"; -- note counts as 2 groups (1.234(e+56))
    re_real_seq : String := re_real&":"&re_real&":"&re_real;
 
-   p1 : Real := grep (read_command_arg ("-p","0.666666666666666666:0.666666666666666666:-0.333333333333333333"),re_real_seq,1,fail=>  2.0/3.0);
-   p2 : Real := grep (read_command_arg ("-p","0.666666666666666666:0.666666666666666666:-0.333333333333333333"),re_real_seq,3,fail=>  2.0/3.0);
-   p3 : Real := grep (read_command_arg ("-p","0.666666666666666666:0.666666666666666666:-0.333333333333333333"),re_real_seq,5,fail=> -1.0/3.0);
+   p1 : Real := grep (read_command_arg ("--KasnerPi","0.666666666666666666:0.666666666666666666:-0.333333333333333333"),re_real_seq,1,fail=>  2.0/3.0);
+   p2 : Real := grep (read_command_arg ("--KasnerPi","0.666666666666666666:0.666666666666666666:-0.333333333333333333"),re_real_seq,3,fail=>  2.0/3.0);
+   p3 : Real := grep (read_command_arg ("--KasnerPi","0.666666666666666666:0.666666666666666666:-0.333333333333333333"),re_real_seq,5,fail=> -1.0/3.0);
 
    -- hard wired pi
 
