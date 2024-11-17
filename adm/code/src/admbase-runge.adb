@@ -43,12 +43,12 @@ package body ADMBase.Runge is
    procedure rk_step
      (ct : Real;
       cw : Real;
-      params : SlaveParams)
+      params : slave_params_record)
    is
       i, j, k   : Integer;
-      the_task  : Integer := params (1);
-      beg_point : Integer := params (2);
-      end_point : Integer := params (3);
+      the_task  : Integer := params.slave_id;
+      beg_point : Integer := params.params (1);
+      end_point : Integer := params.params (2);
    begin
 
       for b in beg_point .. end_point loop
@@ -76,12 +76,12 @@ package body ADMBase.Runge is
    end rk_step;
 
    procedure beg_runge_kutta
-     (params : SlaveParams)
+     (params : slave_params_record)
    is
       i, j, k   : Integer;
-      the_task  : Integer := params (1);
-      beg_point : Integer := params (2);
-      end_point : Integer := params (3);
+      the_task  : Integer := params.slave_id;
+      beg_point : Integer := params.params (1);
+      end_point : Integer := params.params (2);
    begin
 
       for b in beg_point .. end_point loop
@@ -113,12 +113,12 @@ package body ADMBase.Runge is
    end beg_runge_kutta;
 
    procedure end_runge_kutta
-     (params : SlaveParams)
+     (params : slave_params_record)
    is
       i, j, k   : Integer;
-      the_task  : Integer := params (1);
-      beg_point : Integer := params (2);
-      end_point : Integer := params (3);
+      the_task  : Integer := params.slave_id;
+      beg_point : Integer := params.params (1);
+      end_point : Integer := params.params (2);
    begin
 
       for b in beg_point .. end_point loop

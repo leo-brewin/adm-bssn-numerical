@@ -18,11 +18,20 @@ package BSSNBase is
 
    max_num_points : Constant := max_num_x * max_num_y * max_num_z;
 
-   type SlaveParams is Array (1..19) of Integer;
+   type params_array is Array (1..18) of Integer;   -- data beg/end pairs for each task
+
+   type slave_params_record is Record
+           slave_id : Integer;        -- unique task identifier
+           params   : params_array;   -- data array limits
+        end record;
+
+   type slave_params_array is Array (Integer range <>) of slave_params_record;
+   -- type slave_tasks_array  is Array (1..num_slaves) of SlaveTask;  -- SlaveTask is defined later in bssnbase-evolve codes
+                                                                      -- num_slaves read from the command line, unknown at this point
 
    ----------------------------------------------------------------------------
 
-   type symmetric         is (xx,xy,xz,yy,yz,zz);
+   type symmetric         is (xx,xy,xz,yy,yz,zz);  -- for symmetric 3x3 arrays
 
    type GammaPointArray   is Array (1..3) of Real;
    type GammaGridArray    is Array (Integer range <>, Integer range <>, Integer range <>) of GammaPointArray;

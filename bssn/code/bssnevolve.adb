@@ -12,8 +12,11 @@ with BSSNBase.Data_IO;
 with Support.RegEx;          use Support.RegEx;
 with Support.CmdLine;        use Support.CmdLine;
 
+-- for time functions
+with Support.Clock;          use Support.Clock;
+
 -- for evolution of initial data
-with BSSNBase;               use BSSNBase;
+with BSSNBase;                use BSSNBase;
 with BSSNBase.Evolve;
 with BSSNBase.Runge;
 
@@ -46,8 +49,9 @@ procedure BSSNEvolve is
          Put_Line ("   --FixedTimeTeps 0.1        : Force fixed time steps.");
          Put_Line ("   --DataDir       data       : Where to find the initial data.");
          Put_Line ("   --OutputDir     results    : Where to save the results.");
-         Put_Line ("   --UseRendezvous             : Use rendezvous calls for multitasking, otherwise");
-         Put_Line ("                                use a protected object.");
+         Put_Line ("   --UseRendezvous            : Use rendezvous calls for multitasking (default)");
+         Put_Line ("   --UseProtObject            : Use protected objects for multitasking");
+         Put_Line ("   --UseTransientTasks        : Use embedded transient tasks for multitasking");
          Put_Line ("   --Help                     : This message.");
 
          Support.Halt (0);
@@ -76,9 +80,10 @@ begin
 
    initialize;
 
+   echo_date;
    echo_command_line;
 
-   -- two data formats: must match choice with that in adminitial.adb
+   -- two data formats: must match choice with that in bssninitial.adb
 
    -- data in binary format
    -- BSSNBase.Data_IO.read_grid;
@@ -88,9 +93,9 @@ begin
    BSSNBase.Data_IO.read_grid_fmt;
    BSSNBase.Data_IO.read_data_fmt;
 
-   if find_command_arg("--UseRendezvous")
-      then BSSNBase.Evolve.evolve_data_rendezvous;
-      else BSSNBase.Evolve.evolve_data_prot_object;
+   if    find_command_arg("--UseProtObject")     then BSSNBase.Evolve.evolve_data_prot_object;
+   elsif find_command_arg("--UseTransientTasks") then BSSNBase.Evolve.evolve_data_transient_tasks;
+   else                                               BSSNBase.Evolve.evolve_data_rendezvous;
    end if;
 
 end BSSNEvolve;

@@ -3,16 +3,16 @@ package ADMBase.Time_Derivs is
    procedure set_finite_diff_factors;
 
    procedure set_time_derivatives_intr
-     (params : SlaveParams);
+     (params : slave_params_record);
 
    procedure set_time_derivatives_bndry_ns
-     (params : SlaveParams);
+     (params : slave_params_record);
 
    procedure set_time_derivatives_bndry_ew
-     (params : SlaveParams);
+     (params : slave_params_record);
 
    procedure set_time_derivatives_bndry_fb
-     (params : SlaveParams);
+     (params : slave_params_record);
 
    procedure set_time_derivatives
      (point : GridPoint);

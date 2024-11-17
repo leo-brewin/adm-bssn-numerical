@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [[ $1 = '-h' ]]; then
+if [[ $1 = '--Help' ]]; then
 
-   bin/bssnevolve -h
+   bin/bssnevolve --Help
    exit
 
 fi
@@ -23,4 +23,27 @@ bin/bssnevolve $* \
    --MaxTimeSteps 40000 \
    --NumCores 8 \
    --OutputDir results \
+   --UseRendezvous \
    --DataDir data | tee bssnevolve.log
+
+# bin/bssnevolve $* \
+#    --Courant 0.25 \
+#    --Tfinal 11.0 \
+#    --PrintCycle 10 \
+#    --PrintTimeStep 11.0 \
+#    --MaxTimeSteps 40000 \
+#    --NumCores 8 \
+#    --OutputDir results \
+#    --UseProtObject \
+#    --DataDir data | tee bssnevolve.log
+
+# bin/bssnevolve $* \
+#    --Courant 0.25 \
+#    --Tfinal 11.0 \
+#    --PrintCycle 10 \
+#    --PrintTimeStep 11.0 \
+#    --MaxTimeSteps 40000 \
+#    --NumCores 8 \
+#    --OutputDir results \
+#    --UseTransientTasks \
+#    --DataDir data | tee bssnevolve.log

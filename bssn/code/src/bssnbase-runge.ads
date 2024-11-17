@@ -6,12 +6,12 @@ package BSSNBase.Runge is
    procedure rk_step
      (ct : Real;
       cw : Real;
-      params : SlaveParams);
+      params : slave_params_record);
 
    procedure beg_runge_kutta
-     (params : SlaveParams);
+     (params : slave_params_record);
 
    procedure end_runge_kutta
-     (params : SlaveParams);
+     (params : slave_params_record);
 
 end BSSNBase.Runge;

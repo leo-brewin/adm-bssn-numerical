@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [[ $1 = '-h' ]]; then
+if [[ $1 = '--Help' ]]; then
 
-   bin/bssninitial -h
+   bin/bssninitial --Help
    exit
 
 fi

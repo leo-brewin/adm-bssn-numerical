@@ -91,6 +91,11 @@ package body Support.Clock is
 
    end get_date;
 
+   procedure echo_date is
+   begin
+      put_line (get_date);
+   end echo_date;
+
    function get_elapsed (beg_clock : Ada.Real_Time.Time;
                          end_clock : Ada.Real_Time.Time) return Real
    is

@@ -7,6 +7,8 @@ package Support.Clock is
 
    function get_date return String;
 
+   procedure echo_date;
+
    function get_elapsed (beg_clock : Ada.Real_Time.Time;
                          end_clock : Ada.Real_Time.Time) return Real;
 

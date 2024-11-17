@@ -7,6 +7,9 @@ with Support;
 with Support.RegEx;           use Support.RegEx;
 with Support.CmdLine;         use Support.CmdLine;
 
+-- for time functions
+with Support.Clock;          use Support.Clock;
+
 -- for setup of initial data
 with BSSNBase;                use BSSNBase;
 with BSSNBase.Initial;
@@ -60,7 +63,9 @@ begin
 
    initialize;
 
+   echo_date;
    echo_command_line;
+
    report_kasner_params;
 
    BSSNBase.Initial.create_grid;

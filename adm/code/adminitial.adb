@@ -7,6 +7,9 @@ with Support;
 with Support.RegEx;          use Support.RegEx;
 with Support.CmdLine;        use Support.CmdLine;
 
+-- for time functions
+with Support.Clock;          use Support.Clock;
+
 -- for setup of initial data
 with ADMBase;                use ADMBase;
 with ADMBase.Initial;
@@ -50,6 +53,7 @@ procedure ADMInitial is
          num_z    := grep (read_command_arg ("--GridNum","20x20x20"),re_intg_seq,3,fail=>20);
 
          the_time := beg_time;
+
          grid_point_num := num_x * num_y * num_z;
 
       end if;
@@ -60,7 +64,9 @@ begin
 
    initialize;
 
+   echo_date;
    echo_command_line;
+
    report_kasner_params;
 
    ADMBase.Initial.create_grid;

@@ -1,15 +1,117 @@
-with Support;                                   use Support;
 with Support.Clock;                             use Support.Clock;
 with Support.CmdLine;                           use Support.CmdLine;
 with Support.Strings;                           use Support.Strings;
-with BSSNBase.Data_IO;                          use BSSNBase.Data_IO;
-with BSSNBase.Text_IO;                          use BSSNBase.Text_IO;
-with BSSNBase.Runge;                            use BSSNBase.Runge;
-with BSSNBase.Time_Derivs;                      use BSSNBase.Time_Derivs;
+with BSSNBase.Data_IO;                           use BSSNBase.Data_IO;
+with BSSNBase.Text_IO;                           use BSSNBase.Text_IO;
+with BSSNBase.Runge;                             use BSSNBase.Runge;
+with BSSNBase.Time_Derivs;                       use BSSNBase.Time_Derivs;
 with Ada.Exceptions;
-with System.Multiprocessors;
 
 package body BSSNBase.Evolve is
+
+   function set_slave_params (num_slaves : Integer) return slave_params_array
+   is
+
+      n_point : constant Integer := grid_point_num;
+      n_intr  : constant Integer := interior_num;
+      n_bndry : constant Integer := boundary_num;
+      n_north : constant Integer := north_bndry_num;
+      n_south : constant Integer := south_bndry_num;
+      n_east  : constant Integer := east_bndry_num;
+      n_west  : constant Integer := west_bndry_num;
+      n_front : constant Integer := front_bndry_num;
+      n_back  : constant Integer := back_bndry_num;
+
+      slave_params : slave_params_array (1..num_slaves);
+
+   begin
+
+      -- case num_slaves is
+      --
+      --    when  1 | 2 | 4 | 8 | 16 => null;
+      --
+      --    when others => Put_Line ("> Error: range error in num_slaves, should be 1,2,4,8 or 16");
+      --                   Put_Line ("> num_slaves = " & str(num_slaves,0));
+      --                   halt (1);
+      --
+      -- end case;
+
+      -- here we sub-divide the list of cells across the tasks.
+      -- it is *essential* that the every cell appears in *exactly* one sub-list.
+      -- if a cell appears in more than one sub-list then it will be processed by more
+      -- than one task. doing so wastes time, but far more worrying is that such multiple
+      -- processing may cause data to be overwritten and corrupted!
+
+      for i in slave_params'Range loop
+         slave_params (i).slave_id := i;
+      end loop;
+
+      slave_params (1).params ( 1) := 1;
+      slave_params (1).params ( 3) := 1;
+      slave_params (1).params ( 5) := 1;
+      slave_params (1).params ( 7) := 1;
+      slave_params (1).params ( 9) := 1;
+      slave_params (1).params (11) := 1;
+      slave_params (1).params (13) := 1;
+      slave_params (1).params (15) := 1;
+      slave_params (1).params (17) := 1;
+
+      for i in 2 .. num_slaves loop
+
+         slave_params (i-1).params ( 2) :=   (i-1)*n_point/num_slaves;
+         slave_params (i)  .params ( 1) := 1 + slave_params (i-1).params (2);
+
+         slave_params (i-1).params ( 4) :=   (i-1)*n_intr/num_slaves;
+         slave_params (i)  .params ( 3) := 1 + slave_params (i-1).params (4);
+
+         slave_params (i-1).params ( 6) :=   (i-1)*n_bndry/num_slaves;
+         slave_params (i)  .params ( 5) := 1 + slave_params (i-1).params (6);
+
+         slave_params (i-1).params ( 8) :=   (i-1)*n_north/num_slaves;
+         slave_params (i)  .params ( 7) := 1 + slave_params (i-1).params (8);
+
+         slave_params (i-1).params (10) :=   (i-1)*n_south/num_slaves;
+         slave_params (i)  .params ( 9) := 1 + slave_params (i-1).params (10);
+
+         slave_params (i-1).params (12) :=   (i-1)*n_east/num_slaves;
+         slave_params (i)  .params (11) := 1 + slave_params (i-1).params (12);
+
+         slave_params (i-1).params (14) :=   (i-1)*n_west/num_slaves;
+         slave_params (i)  .params (13) := 1 + slave_params (i-1).params (14);
+
+         slave_params (i-1).params (16) :=   (i-1)*n_front/num_slaves;
+         slave_params (i)  .params (15) := 1 + slave_params (i-1).params (16);
+
+         slave_params (i-1).params (18) :=   (i-1)*n_back/num_slaves;
+         slave_params (i)  .params (17) := 1 + slave_params (i-1).params (18);
+
+      end loop;
+
+      slave_params (num_slaves).params ( 2) := n_point;
+      slave_params (num_slaves).params ( 4) := n_intr;
+      slave_params (num_slaves).params ( 6) := n_bndry;
+      slave_params (num_slaves).params ( 8) := n_north;
+      slave_params (num_slaves).params (10) := n_south;
+      slave_params (num_slaves).params (12) := n_east;
+      slave_params (num_slaves).params (14) := n_west;
+      slave_params (num_slaves).params (16) := n_front;
+      slave_params (num_slaves).params (18) := n_back;
+
+      -- use this to verify the slave params are set correctly
+
+      -- put_line (str(grid_point_num));
+      -- for i in slave_params'Range loop
+      --    put ("Slave "&str(i,2)&" params: ");
+      --    for j in slave_params(i).params'Range loop
+      --       put (str(slave_params(i).params(j),7)&' ');
+      --    end loop;
+      --    new_line;
+      -- end loop;
+      -- halt;
+
+      return slave_params;
+
+   end set_slave_params;
 
    procedure evolve_data_rendezvous is
 
@@ -17,16 +119,16 @@ package body BSSNBase.Evolve is
          entry resume;
          entry pause;
          entry release;
-         entry set_params (slave_params : SlaveParams);
+         entry set_params (slave_params : slave_params_record);
       end SlaveTask;
 
       task body SlaveTask is
-         params : SlaveParams;
+         params : slave_params_record;
       begin
 
          -- collect parameters for this task ------------------------
 
-         accept set_params (slave_params : SlaveParams) do
+         accept set_params (slave_params : slave_params_record) do
             params := slave_params;
          end;
 
@@ -98,114 +200,27 @@ package body BSSNBase.Evolve is
 
       end SlaveTask;
 
-      slave_tasks  : array (1..num_slaves) of SlaveTask;
-      slave_params : array (1..num_slaves) of SlaveParams;
+      type slave_tasks_array is Array (1..num_slaves) of SlaveTask;
+
+      slave_tasks  : slave_tasks_array;
+      slave_params : slave_params_array := set_slave_params (num_slaves);
 
       procedure prepare_slaves is
-         n_point : constant Integer := grid_point_num;
-         n_intr  : constant Integer := interior_num;
-         n_bndry : constant Integer := boundary_num;
-         n_north : constant Integer := north_bndry_num;
-         n_south : constant Integer := south_bndry_num;
-         n_east  : constant Integer := east_bndry_num;
-         n_west  : constant Integer := west_bndry_num;
-         n_front : constant Integer := front_bndry_num;
-         n_back  : constant Integer := back_bndry_num;
       begin
 
-         case num_slaves is
-
-            when  1 | 2 | 4 | 8 | 16 => null;
-
-            when others => Put_Line ("> Error: range error in num_slaves, should be 1,2,4,8 or 16");
-                           Put_Line ("> num_slaves = " & str(num_slaves,0));
-                           halt (1);
-
-         end case;
-
-         -- here we sub-divide the list of cells across the tasks.
-         -- it is *essential* that the every cell appears in *exactly* one sub-list.
-         -- if a cell appears in more than one sub-list then it will be processed by more
-         -- than one task. doing so wastes time, but far more worrying is that such multiple
-         -- processing may cause data to be overwritten!
-
-         for i in slave_params'range loop
-            slave_params (i)(1) := i;
+         for i in slave_params'Range loop
+            slave_tasks (i).set_params (slave_params(i));
          end loop;
-
-         slave_params (1)( 2) := 1;
-         slave_params (1)( 4) := 1;
-         slave_params (1)( 6) := 1;
-         slave_params (1)( 8) := 1;
-         slave_params (1)(10) := 1;
-         slave_params (1)(12) := 1;
-         slave_params (1)(14) := 1;
-         slave_params (1)(16) := 1;
-         slave_params (1)(18) := 1;
-
-         for i in 2 .. num_slaves loop
-
-            slave_params (i-1)( 3) :=   (i-1)*n_point/num_slaves;
-            slave_params (i)(2)    := 1 + slave_params (i-1)(3);
-
-            slave_params (i-1)( 5) :=   (i-1)*n_intr/num_slaves;
-            slave_params (i)(4)    := 1 + slave_params (i-1)(5);
-
-            slave_params (i-1)( 7) :=   (i-1)*n_bndry/num_slaves;
-            slave_params (i)(6)    := 1 + slave_params (i-1)(7);
-
-            slave_params (i-1)( 9) :=   (i-1)*n_north/num_slaves;
-            slave_params (i)(8)    := 1 + slave_params (i-1)(9);
-
-            slave_params (i-1)(11) :=   (i-1)*n_south/num_slaves;
-            slave_params (i)(10)    := 1 + slave_params (i-1)(11);
-
-            slave_params (i-1)(13) :=   (i-1)*n_east/num_slaves;
-            slave_params (i)(12)   := 1 + slave_params (i-1)(13);
-
-            slave_params (i-1)(15) :=   (i-1)*n_west/num_slaves;
-            slave_params (i)(14)   := 1 + slave_params (i-1)(15);
-
-            slave_params (i-1)(17) :=   (i-1)*n_front/num_slaves;
-            slave_params (i)(16)   := 1 + slave_params (i-1)(17);
-
-            slave_params (i-1)(19) :=   (i-1)*n_back/num_slaves;
-            slave_params (i)(18)   := 1 + slave_params (i-1)(19);
-
-         end loop;
-
-         slave_params (num_slaves)( 3) := n_point;
-         slave_params (num_slaves)( 5) := n_intr;
-         slave_params (num_slaves)( 7) := n_bndry;
-         slave_params (num_slaves)( 9) := n_north;
-         slave_params (num_slaves)(11) := n_south;
-         slave_params (num_slaves)(13) := n_east;
-         slave_params (num_slaves)(15) := n_west;
-         slave_params (num_slaves)(17) := n_front;
-         slave_params (num_slaves)(19) := n_back;
-
-         for i in 1..num_slaves loop
-            slave_tasks(i).set_params (slave_params(i));
-         end loop;
-
-         -- use this to verify the slave params are set correctly
-
-         -- for i in slave_params'Range loop
-         --    put ("Slave "&str(i,2)&" params: ");
-         --    for j in slave_params(i)'Range loop
-         --       put (str(slave_params(i)(j),7)&' ');
-         --    end loop;
-         --    new_line;
-         -- end loop;
-         -- halt;
 
       end prepare_slaves;
 
       procedure release_slaves is
       begin
+
          for i in slave_tasks'Range loop
             slave_tasks(i).release;
          end loop;
+
       end release_slaves;
 
       procedure advance_slaves is
@@ -339,7 +354,7 @@ package body BSSNBase.Evolve is
 
       exception
          when whoops : others =>
-            Put_Line ("> Exception raised in evolve_data");
+            Put_Line ("> Exception raised in evolve_data_rendezvous");
             Put_Line (Ada.Exceptions.Exception_Information (whoops));
             report_elapsed_cpu (grid_point_num, num_loop);
             halt (1);
@@ -393,16 +408,16 @@ package body BSSNBase.Evolve is
       end task_control;
 
       task type SlaveTask is
-         entry set_params (slave_params : SlaveParams);
+         entry set_params (slave_params : slave_params_record);
       end SlaveTask;
 
       task body SlaveTask is
-         params : SlaveParams;
+         params : slave_params_record;
       begin
 
          -- collect parameters for this task ------------------------
 
-         accept set_params (slave_params : SlaveParams) do
+         accept set_params (slave_params : slave_params_record) do
             params := slave_params;
          end;
 
@@ -463,106 +478,17 @@ package body BSSNBase.Evolve is
 
       end SlaveTask;
 
-      slave_tasks  : array (1..num_slaves) of SlaveTask;
-      slave_params : array (1..num_slaves) of SlaveParams;
+      type slave_tasks_array is Array (1..num_slaves) of SlaveTask;
+
+      slave_tasks  : slave_tasks_array;
+      slave_params : slave_params_array := set_slave_params (num_slaves);
 
       procedure prepare_slaves is
-         n_point : constant Integer := grid_point_num;
-         n_intr  : constant Integer := interior_num;
-         n_bndry : constant Integer := boundary_num;
-         n_north : constant Integer := north_bndry_num;
-         n_south : constant Integer := south_bndry_num;
-         n_east  : constant Integer := east_bndry_num;
-         n_west  : constant Integer := west_bndry_num;
-         n_front : constant Integer := front_bndry_num;
-         n_back  : constant Integer := back_bndry_num;
       begin
 
-         case num_slaves is
-
-            when  1 | 2 | 4 | 8 | 16 => null;
-
-            when others => Put_Line ("> Error: range error in num_slaves, should be 1,2,4,8 or 16");
-                           Put_Line ("> num_slaves = " & str(num_slaves,0));
-                           halt (1);
-
-         end case;
-
-         -- here we sub-divide the list of cells across the tasks.
-         -- it is *essential* that the every cell appears in *exactly* one sub-list.
-         -- if a cell appears in more than one sub-list then it will be processed by more
-         -- than one task. doing so wastes time, but far more worrying is that such multiple
-         -- processing may cause data to be overwritten!
-
-         for i in slave_params'range loop
-            slave_params (i)(1) := i;
-         end loop;
-
-         slave_params (1)( 2) := 1;
-         slave_params (1)( 4) := 1;
-         slave_params (1)( 6) := 1;
-         slave_params (1)( 8) := 1;
-         slave_params (1)(10) := 1;
-         slave_params (1)(12) := 1;
-         slave_params (1)(14) := 1;
-         slave_params (1)(16) := 1;
-         slave_params (1)(18) := 1;
-
-         for i in 2 .. num_slaves loop
-
-            slave_params (i-1)( 3) :=   (i-1)*n_point/num_slaves;
-            slave_params (i)(2)    := 1 + slave_params (i-1)(3);
-
-            slave_params (i-1)( 5) :=   (i-1)*n_intr/num_slaves;
-            slave_params (i)(4)    := 1 + slave_params (i-1)(5);
-
-            slave_params (i-1)( 7) :=   (i-1)*n_bndry/num_slaves;
-            slave_params (i)(6)    := 1 + slave_params (i-1)(7);
-
-            slave_params (i-1)( 9) :=   (i-1)*n_north/num_slaves;
-            slave_params (i)(8)    := 1 + slave_params (i-1)(9);
-
-            slave_params (i-1)(11) :=   (i-1)*n_south/num_slaves;
-            slave_params (i)(10)    := 1 + slave_params (i-1)(11);
-
-            slave_params (i-1)(13) :=   (i-1)*n_east/num_slaves;
-            slave_params (i)(12)   := 1 + slave_params (i-1)(13);
-
-            slave_params (i-1)(15) :=   (i-1)*n_west/num_slaves;
-            slave_params (i)(14)   := 1 + slave_params (i-1)(15);
-
-            slave_params (i-1)(17) :=   (i-1)*n_front/num_slaves;
-            slave_params (i)(16)   := 1 + slave_params (i-1)(17);
-
-            slave_params (i-1)(19) :=   (i-1)*n_back/num_slaves;
-            slave_params (i)(18)   := 1 + slave_params (i-1)(19);
-
-         end loop;
-
-         slave_params (num_slaves)( 3) := n_point;
-         slave_params (num_slaves)( 5) := n_intr;
-         slave_params (num_slaves)( 7) := n_bndry;
-         slave_params (num_slaves)( 9) := n_north;
-         slave_params (num_slaves)(11) := n_south;
-         slave_params (num_slaves)(13) := n_east;
-         slave_params (num_slaves)(15) := n_west;
-         slave_params (num_slaves)(17) := n_front;
-         slave_params (num_slaves)(19) := n_back;
-
-         for i in 1..num_slaves loop
+         for i in slave_params'Range loop
             slave_tasks (i).set_params (slave_params(i));
          end loop;
-
-         -- use this to verify the slave params are set correctly
-
-         -- for i in slave_params'Range loop
-         --    put ("Slave "&str(i,2)&" params: ");
-         --    for j in slave_params(i)'Range loop
-         --       put (str(slave_params(i)(j),7)&' ');
-         --    end loop;
-         --    new_line;
-         -- end loop;
-         -- halt;
 
       end prepare_slaves;
 
@@ -712,11 +638,221 @@ package body BSSNBase.Evolve is
 
       exception
          when whoops : others =>
-            Put_Line ("> Exception raised in evolve_data");
+            Put_Line ("> Exception raised in evolve_data_prot_object");
             Put_Line (Ada.Exceptions.Exception_Information (whoops));
             report_elapsed_cpu (grid_point_num, num_loop);
             halt (1);
 
    end evolve_data_prot_object;
+
+   procedure evolve_data_transient_tasks is
+
+      slave_params : slave_params_array := set_slave_params (num_slaves);
+
+      -----------------------------------------------------------------------------
+      -- this version just for the calls other than to RK
+
+      procedure run_parallel (num_slaves : Integer;
+                              run_serial : access procedure (slave_params : slave_params_record))
+      is
+
+         task type SlaveTask is
+            entry start_task (slave_params : slave_params_record);
+         end SlaveTask;
+
+         task body SlaveTask is
+            the_params   : slave_params_record;
+            the_slave_id : Integer;
+         begin
+
+            -- collect parameters for this task ------------------------
+
+            accept start_task (slave_params : slave_params_record) do
+               the_params   := slave_params;
+               the_slave_id := slave_params.slave_id;
+            end;
+
+            run_serial (the_params);
+
+            exception
+               when whoops : others =>
+                  Put_Line ("> Exception raised in task body of task "&str(the_slave_id));
+                  Put_Line (Ada.Exceptions.Exception_Information (whoops));
+                  halt (1);              -- will kill all tasks
+
+         end SlaveTask;
+
+         slave_tasks : array (1..num_slaves) of SlaveTask;
+
+      begin
+
+         for i in slave_params'Range loop
+            slave_tasks(i).start_task (slave_params(i));
+         end loop;
+
+      end run_parallel;
+
+      -----------------------------------------------------------------------------
+      -- this version just for the calls to RK
+
+      procedure run_parallel (num_slaves : Integer;
+                              run_serial : access procedure (ct, cw       : Real;
+                                                             slave_params : slave_params_record);
+                              ct, cw     : Real)
+      is
+
+         task type SlaveTask is
+            entry start_task (slave_params : slave_params_record);
+         end SlaveTask;
+
+         task body SlaveTask is
+            the_params   : slave_params_record;
+            the_slave_id : Integer;
+         begin
+
+            -- collect parameters for this task ------------------------
+
+            accept start_task (slave_params : slave_params_record) do
+               the_params   := slave_params;
+               the_slave_id := slave_params.slave_id;
+            end;
+
+            run_serial (ct, cw, the_params);
+
+            exception
+               when whoops : others =>
+                  Put_Line ("> Exception raised in task body of task "&str(the_slave_id));
+                  Put_Line (Ada.Exceptions.Exception_Information (whoops));
+                  halt (1);              -- will kill all tasks
+
+         end SlaveTask;
+
+         slave_tasks : array (1..num_slaves) of SlaveTask;
+
+      begin
+
+         for i in slave_params'Range loop
+            slave_tasks(i).start_task (slave_params(i));
+         end loop;
+
+      end run_parallel;
+
+      procedure evolve_one_step is
+      begin
+
+         -- 4th order RK ---
+
+         run_parallel (num_slaves, beg_runge_kutta'access);
+
+         -- 1st step of runge-kutta ------------------------------
+
+         run_parallel (num_slaves, set_time_derivatives_intr'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_fb'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_ew'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_ns'access);
+         run_parallel (num_slaves, rk_step'access, 1.0 / 2.0, 1.0 / 6.0);
+
+         -- 2nd step of runge-kutta ------------------------------
+
+         run_parallel (num_slaves, set_time_derivatives_intr'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_fb'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_ew'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_ns'access);
+         run_parallel (num_slaves, rk_step'access, 1.0 / 2.0, 1.0 / 3.0);
+
+         -- 3rd step of runge-kutta ------------------------------
+
+         run_parallel (num_slaves, set_time_derivatives_intr'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_fb'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_ew'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_ns'access);
+         run_parallel (num_slaves, rk_step'access, 1.0, 1.0 / 3.0);
+
+         -- 4th step of runge-kutta ------------------------------
+
+         run_parallel (num_slaves, set_time_derivatives_intr'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_fb'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_ew'access);
+         run_parallel (num_slaves, set_time_derivatives_bndry_ns'access);
+         run_parallel (num_slaves, rk_step'access, 0.0, 1.0 / 6.0);
+
+         -- finish the runge kutta -------------------------------
+
+         run_parallel (num_slaves, end_runge_kutta'access);
+
+      end evolve_one_step;
+
+      looping : Boolean;
+
+   begin
+
+      num_loop := 0;
+      looping  := (num_loop < max_loop);
+
+      print_time := the_time + print_time_step;
+
+      set_time_step;
+      set_time_step_min;
+      set_finite_diff_factors;
+
+      set_time_derivatives;
+
+      create_text_io_lists;
+
+      write_summary_header;
+
+      write_results;
+      write_summary;
+      write_history;
+
+      reset_elapsed_cpu;
+
+      loop
+
+         evolve_one_step;
+
+         num_loop := num_loop + 1;
+         looping  := (num_loop < max_loop) and (the_time < end_time - 0.5*time_step);
+
+         if (print_cycle > 0 and then (num_loop rem print_cycle) = 0)
+         or (abs (the_time-print_time) < 0.5*time_step)
+         or (the_time > print_time)
+         or (not looping)
+         then
+
+            write_results;
+            write_summary;
+            write_history;
+
+            print_time := print_time + print_time_step;
+
+            set_time_step;
+
+            if time_step < time_step_min then
+               raise Constraint_error with "time step too small";
+            end if;
+
+            if print_time_step < time_step then
+               raise Constraint_Error with "print time step < time step";
+            end if;
+
+         end if;
+
+         exit when not looping;
+
+      end loop;
+
+      write_summary_trailer;
+
+      report_elapsed_cpu (grid_point_num, num_loop);
+
+      exception
+         when whoops : others =>
+            Put_Line ("> Exception raised in evolve_data_rendezvous");
+            Put_Line (Ada.Exceptions.Exception_Information (whoops));
+            report_elapsed_cpu (grid_point_num, num_loop);
+            halt (1);
+
+   end evolve_data_transient_tasks;
 
 end BSSNBase.Evolve;

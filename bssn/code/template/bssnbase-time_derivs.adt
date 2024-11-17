@@ -181,13 +181,14 @@ package body BSSNBase.Time_Derivs is
 
    end set_finite_diff_factors;
 
-   procedure set_time_derivatives_intr (params : SlaveParams) is
+   procedure set_time_derivatives_intr (params : slave_params_record) is
 
       b : Integer;
 
-      the_task  : Integer := params (1);
-      beg_point : Integer := params (4);
-      end_point : Integer := params (5);
+      the_task  : Integer := params.slave_id;
+
+      beg_point : Integer := params.params (3);
+      end_point : Integer := params.params (4);
 
    begin
 
@@ -201,16 +202,16 @@ package body BSSNBase.Time_Derivs is
 
    end set_time_derivatives_intr;
 
-   procedure set_time_derivatives_bndry_ns (params : SlaveParams) is
+   procedure set_time_derivatives_bndry_ns (params : slave_params_record) is
 
       b, i, j, k : Integer;
 
-      the_task  : Integer := params (1);
+      the_task  : Integer := params.slave_id;
 
-      beg_north : Integer := params (8);
-      end_north : Integer := params (9);
-      beg_south : Integer := params (10);
-      end_south : Integer := params (11);
+      beg_north : Integer := params.params (7);
+      end_north : Integer := params.params (8);
+      beg_south : Integer := params.params (9);
+      end_south : Integer := params.params (10);
 
    begin
 
@@ -254,16 +255,16 @@ package body BSSNBase.Time_Derivs is
 
    end set_time_derivatives_bndry_ns;
 
-   procedure set_time_derivatives_bndry_ew (params : SlaveParams) is
+   procedure set_time_derivatives_bndry_ew (params : slave_params_record) is
 
       b, i, j, k : Integer;
 
-      the_task  : Integer := params (1);
+      the_task  : Integer := params.slave_id;
 
-      beg_east  : Integer := params (12);
-      end_east  : Integer := params (13);
-      beg_west  : Integer := params (14);
-      end_west  : Integer := params (15);
+      beg_east  : Integer := params.params (11);
+      end_east  : Integer := params.params (12);
+      beg_west  : Integer := params.params (13);
+      end_west  : Integer := params.params (14);
 
    begin
 
@@ -307,16 +308,16 @@ package body BSSNBase.Time_Derivs is
 
    end set_time_derivatives_bndry_ew;
 
-   procedure set_time_derivatives_bndry_fb (params : SlaveParams) is
+   procedure set_time_derivatives_bndry_fb (params : slave_params_record) is
 
       b, i, j, k : Integer;
 
-      the_task  : Integer := params (1);
+      the_task  : Integer := params.slave_id;
 
-      beg_front : Integer := params (16);
-      end_front : Integer := params (17);
-      beg_back  : Integer := params (18);
-      end_back  : Integer := params (19);
+      beg_front : Integer := params.params (15);
+      end_front : Integer := params.params (16);
+      beg_back  : Integer := params.params (17);
+      end_back  : Integer := params.params (18);
 
    begin
 
@@ -362,16 +363,16 @@ package body BSSNBase.Time_Derivs is
 
    procedure set_time_derivatives
    is
-      params : SlaveParams := (1,
-                                   1,grid_point_num,
-                                   1,interior_num,
-                                   1,boundary_num,
-                                   1,north_bndry_num,
-                                   1,south_bndry_num,
-                                   1,east_bndry_num,
-                                   1,west_bndry_num,
-                                   1,front_bndry_num,
-                                   1,back_bndry_num);
+      params : slave_params_record := (1,
+                                       (1,grid_point_num,
+                                        1,interior_num,
+                                        1,boundary_num,
+                                        1,north_bndry_num,
+                                        1,south_bndry_num,
+                                        1,east_bndry_num,
+                                        1,west_bndry_num,
+                                        1,front_bndry_num,
+                                        1,back_bndry_num));
    begin
 
       set_time_derivatives_intr (params);

@@ -15,6 +15,7 @@
 LCB.txt
 private
 sync.sh
+sync-ssd.sh
 diff.sh
 TO-DO.txt
 __pycache__
