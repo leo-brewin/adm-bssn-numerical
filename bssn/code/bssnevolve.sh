@@ -47,3 +47,14 @@ bin/bssnevolve $* \
 #    --OutputDir results \
 #    --UseTransientTasks \
 #    --DataDir data | tee bssnevolve.log
+
+# bin/bssnevolve $* \
+#    --Courant 0.25 \
+#    --Tfinal 11.0 \
+#    --PrintCycle 10 \
+#    --PrintTimeStep 11.0 \
+#    --MaxTimeSteps 40000 \
+#    --NumCores 8 \
+#    --OutputDir results \
+#    --UseSyncBarriers \
+#    --DataDir data | tee bssnevolve.log

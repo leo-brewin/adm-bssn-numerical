@@ -52,6 +52,7 @@ procedure ADMEvolve is
          Put_Line ("   --UseRendezvous            : Use rendezvous calls for multitasking (default)");
          Put_Line ("   --UseProtObject            : Use protected objects for multitasking");
          Put_Line ("   --UseTransientTasks        : Use embedded transient tasks for multitasking");
+         Put_Line ("   --UseSyncBarriers          : Use Ada.Synchronous_Barriers for multitasking");
          Put_Line ("   --Help                     : This message.");
 
          Support.Halt (0);
@@ -95,6 +96,7 @@ begin
 
    if    find_command_arg("--UseProtObject")     then ADMBase.Evolve.evolve_data_prot_object;
    elsif find_command_arg("--UseTransientTasks") then ADMBase.Evolve.evolve_data_transient_tasks;
+   elsif find_command_arg("--UseSyncBarriers")   then ADMBase.Evolve.evolve_data_sync_barrier;
    else                                               ADMBase.Evolve.evolve_data_rendezvous;
    end if;
 

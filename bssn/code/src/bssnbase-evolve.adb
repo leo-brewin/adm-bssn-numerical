@@ -7,6 +7,9 @@ with BSSNBase.Runge;                             use BSSNBase.Runge;
 with BSSNBase.Time_Derivs;                       use BSSNBase.Time_Derivs;
 with Ada.Exceptions;
 
+with Ada.Synchronous_Barriers;
+use  Ada.Synchronous_Barriers;
+
 package body BSSNBase.Evolve is
 
    function set_slave_params (num_slaves : Integer) return slave_params_array
@@ -854,5 +857,232 @@ package body BSSNBase.Evolve is
             halt (1);
 
    end evolve_data_transient_tasks;
+
+   procedure evolve_data_sync_barrier is
+
+      sync_barrier : Synchronous_Barrier (num_slaves);
+      notified     : Boolean := False;
+
+      task type SlaveTask is
+         entry parallel;
+         entry serial;
+         entry release;
+         entry set_params (slave_params : slave_params_record);
+      end SlaveTask;
+
+      task body SlaveTask is
+         params : slave_params_record;
+      begin
+
+         -- collect parameters for this task ------------------------
+
+         accept set_params (slave_params : slave_params_record) do
+            params := slave_params;
+         end;
+
+         loop
+
+            select
+
+               accept parallel;
+
+               -- start the runge kutta --------------------------------
+
+               beg_runge_kutta (params);                  Wait_For_Release (sync_barrier, notified);
+
+               -- 1st step of runge-kutta ------------------------------
+
+               set_time_derivatives_intr (params);        Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_fb (params);    Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_ew (params);    Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_ns (params);    Wait_For_Release (sync_barrier, notified);
+               rk_step (1.0 / 2.0, 1.0 / 6.0, params);    Wait_For_Release (sync_barrier, notified);
+
+               -- 2nd step of runge-kutta ------------------------------
+
+               set_time_derivatives_intr (params);        Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_fb (params);    Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_ew (params);    Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_ns (params);    Wait_For_Release (sync_barrier, notified);
+               rk_step (1.0 / 2.0, 1.0 / 3.0, params);    Wait_For_Release (sync_barrier, notified);
+
+               -- 3rd step of runge-kutta ------------------------------
+
+               set_time_derivatives_intr (params);        Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_fb (params);    Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_ew (params);    Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_ns (params);    Wait_For_Release (sync_barrier, notified);
+               rk_step (1.0, 1.0 / 3.0, params);          Wait_For_Release (sync_barrier, notified);
+
+               -- 4th step of runge-kutta ------------------------------
+
+               set_time_derivatives_intr (params);        Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_fb (params);    Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_ew (params);    Wait_For_Release (sync_barrier, notified);
+               set_time_derivatives_bndry_ns (params);    Wait_For_Release (sync_barrier, notified);
+               rk_step (0.0, 1.0 / 6.0, params);          Wait_For_Release (sync_barrier, notified);
+
+               -- finish the runge kutta -------------------------------
+
+               end_runge_kutta (params);                  -- Wait_For_Release (sync_barrier, notified);
+                                                          -- note: the above Wait_For_Release is redundant
+                                                          --       why? beacuse the following "accept serial"
+                                                          --       will do the same job
+
+               accept serial;
+
+            or
+
+               -- time to release the tasks? ---------------------------
+
+               accept release;
+               exit;
+
+            or
+
+               terminate;  -- a safeguard, just to ensure tasks don't hang
+
+            end select;
+
+         end loop;
+
+         exception
+            when whoops : others =>
+               Put_Line ("> Exception raised in task body");
+               Put_Line (Ada.Exceptions.Exception_Information (whoops));
+               report_elapsed_cpu (grid_point_num, num_loop);
+               halt (1);
+
+      end SlaveTask;
+
+      type slave_tasks_array is Array (1..num_slaves) of SlaveTask;
+
+      slave_tasks  : slave_tasks_array;
+      slave_params : slave_params_array := set_slave_params (num_slaves);
+
+      procedure prepare_slaves is
+      begin
+
+         for i in slave_params'Range loop
+            slave_tasks (i).set_params (slave_params(i));
+         end loop;
+
+      end prepare_slaves;
+
+      procedure release_slaves is
+      begin
+
+         for i in slave_tasks'Range loop
+            slave_tasks(i).release;
+         end loop;
+
+      end release_slaves;
+
+      procedure advance_slaves is
+      begin
+
+         -- will start all slaves working on the body of the Runge-Kutta computations
+
+         for i in slave_tasks'Range loop
+            slave_tasks(i).parallel;
+         end loop;
+
+         -- now all slaves are running in parallel
+
+         -- force the main thread to pause while waiting for all
+         -- slaves to accept this batch of entry calls
+
+         for i in slave_tasks'Range loop
+            slave_tasks(i).serial;
+         end loop;
+
+         -- now running on just the main thread
+         -- all slaves are paused
+
+      end advance_slaves;
+
+      procedure evolve_one_step is
+      begin
+
+         advance_slaves;
+
+      end evolve_one_step;
+
+      looping : Boolean;
+
+   begin
+
+      prepare_slaves;
+
+      num_loop := 0;
+      looping  := (num_loop < max_loop);
+
+      print_time := the_time + print_time_step;
+
+      set_time_step;
+      set_time_step_min;
+      set_finite_diff_factors;
+
+      set_time_derivatives;
+
+      create_text_io_lists;
+
+      write_summary_header;
+
+      write_results;
+      write_summary;
+      write_history;
+
+      reset_elapsed_cpu;
+
+      loop
+
+         evolve_one_step;
+
+         num_loop := num_loop + 1;
+         looping  := (num_loop < max_loop) and (the_time < end_time - 0.5*time_step);
+
+         if (print_cycle > 0 and then (num_loop rem print_cycle) = 0)
+         or (abs (the_time-print_time) < 0.5*time_step)
+         or (the_time > print_time)
+         or (not looping)
+         then
+
+            write_results;
+            write_summary;
+            write_history;
+
+            print_time := print_time + print_time_step;
+
+            set_time_step;
+
+            if time_step < time_step_min then
+               raise Constraint_error with "time step too small";
+            end if;
+
+            if print_time_step < time_step then
+               raise Constraint_Error with "print time step < time step";
+            end if;
+
+         end if;
+
+         exit when not looping;
+
+      end loop;
+
+      release_slaves;
+
+      write_summary_trailer;
+
+      report_elapsed_cpu (grid_point_num, num_loop);
+
+      exception
+         when whoops : others =>
+            Put_Line ("> Exception raised in evolve_data_rendezvous");
+            Put_Line (Ada.Exceptions.Exception_Information (whoops));
+            report_elapsed_cpu (grid_point_num, num_loop);
+            halt (1);
+
+   end evolve_data_sync_barrier;
 
 end BSSNBase.Evolve;
