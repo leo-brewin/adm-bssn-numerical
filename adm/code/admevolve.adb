@@ -44,7 +44,7 @@ procedure ADMEvolve is
          Put_Line ("   --PrintCycle    10         : Report results every this many time steps.");
          Put_Line ("   --PrintTimeStep 0.1        : Report results after this lapse of time. ");
          Put_line ("   --MaxTimeSteps  1000       : Maximum number of time steps.");
-         Put_Line ("   --NumCores      4          : How many cores to use for multi-tasking.");
+         Put_Line ("   --NumTasks      4          : How many tasks to use for multi-tasking.");
          Put_Line ("   --Tfinal        11.0       : Halt at this time.");
          Put_Line ("   --FixedTimeTeps 0.1        : Force fixed time steps.");
          Put_Line ("   --DataDir       data       : Where to find the initial data.");
@@ -71,7 +71,7 @@ procedure ADMEvolve is
          constant_time_step := read_command_arg ("--FixedTimeStep",1.0e66);
 
          num_cpus   := Integer (System.Multiprocessors.Number_Of_CPUs);
-         num_slaves := read_command_arg ("--NumCores",num_cpus);
+         num_slaves := read_command_arg ("--NumTasks",num_cpus);
 
       end if;
 

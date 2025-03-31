@@ -9,7 +9,7 @@ chmod u+x ./adm/cadabra/reformat.sh
 chmod u+x ./adm/code/admevolve.sh
 chmod u+x ./adm/code/adminitial.sh
 chmod u+x ./adm/code/build.sh
-chmod u+x ./adm/code/template/merge.sh
+chmod u+x ./adm/code/templates/merge.sh
 
 chmod u+x ./bssn/build.sh
 chmod u+x ./bssn/cadabra/build.sh
@@ -17,7 +17,7 @@ chmod u+x ./bssn/cadabra/reformat.sh
 chmod u+x ./bssn/code/bssnevolve.sh
 chmod u+x ./bssn/code/bssninitial.sh
 chmod u+x ./bssn/code/build.sh
-chmod u+x ./bssn/code/template/merge.sh
+chmod u+x ./bssn/code/templates/merge.sh
 
 chmod u+x ./support/build.sh
 chmod u+x ./utilities/build.sh

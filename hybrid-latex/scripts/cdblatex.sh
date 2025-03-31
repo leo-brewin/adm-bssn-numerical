@@ -67,13 +67,13 @@ num=$(egrep -c -e'^\s*(\\|\@|\$)Input\{' "$file".tex)
 
 # yes, now merge source files
 if ! [[ $num = 0 ]]; then
-   merge-src.py -i $file.tex -o $file"_.tex"
+   ${MRGSRC} -i $file.tex -o $file"_.tex"
    name=$file"_"
 fi
 
 touch $file.cdbtxt
 
-cdbpreproc.py -i $file -m $name            || exit 1
+${CDBPREP} -i $file -m $name            || exit 1
 
 $CDB/cadabra2python $file"_.cdb" $file.py  || exit 3
 
@@ -81,7 +81,7 @@ $Timer $CDB/cadabra2 $file.py > $file"_.txt"   || exit 5
 
 iconv -c -f UTF-8 -t ASCII//translit $file"_.txt" > $file.cdbtxt
 
-cdbpostproc.py $nowarn -i $file $sty       || exit 7
+${CDBPOSTP} $nowarn -i $file $sty       || exit 7
 
 if [[ $skiplatex = "no" ]]; then
    pdflatex -halt-on-error -interaction=batchmode -synctex=1 $file || exit 9

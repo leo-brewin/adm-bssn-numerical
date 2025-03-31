@@ -1,4 +1,5 @@
 with Support.Clock;                             use Support.Clock;
+with Support.Timer;                             use Support.Timer;
 with Support.CmdLine;                           use Support.CmdLine;
 with Support.Strings;                           use Support.Strings;
 with BSSNBase.Data_IO;                           use BSSNBase.Data_IO;
@@ -116,6 +117,13 @@ package body BSSNBase.Evolve is
 
    end set_slave_params;
 
+   procedure report_elapsed_cpu (num_points, num_loop : Integer) is
+      cpu_time : Real := get_elapsed;
+   begin
+      put_line("> Elapsed time (secs)    : "&str(cpu_time,10));
+      put_line("> Time per node per step : "&str(cpu_time/(Real(num_points)*Real(num_loop)),10));
+   end report_elapsed_cpu;
+
    procedure evolve_data_rendezvous is
 
       task type SlaveTask is
@@ -198,7 +206,6 @@ package body BSSNBase.Evolve is
             when whoops : others =>
                Put_Line ("> Exception raised in task body");
                Put_Line (Ada.Exceptions.Exception_Information (whoops));
-               report_elapsed_cpu (grid_point_num, num_loop);
                halt (1);
 
       end SlaveTask;
@@ -312,7 +319,7 @@ package body BSSNBase.Evolve is
       write_summary;
       write_history;
 
-      reset_elapsed_cpu;
+      beg_timer;
 
       loop
 
@@ -349,6 +356,8 @@ package body BSSNBase.Evolve is
 
       end loop;
 
+      end_timer;
+
       release_slaves;
 
       write_summary_trailer;
@@ -359,7 +368,6 @@ package body BSSNBase.Evolve is
          when whoops : others =>
             Put_Line ("> Exception raised in evolve_data_rendezvous");
             Put_Line (Ada.Exceptions.Exception_Information (whoops));
-            report_elapsed_cpu (grid_point_num, num_loop);
             halt (1);
 
    end evolve_data_rendezvous;
@@ -373,9 +381,9 @@ package body BSSNBase.Evolve is
 
       protected task_control is
          entry pause_task;
-         entry sync_tasks;
+         entry resume_main;
          entry resume_tasks;
-         procedure stop;
+         entry request_stop;
          function  should_stop Return Boolean;
       private
          stop_tasks : Boolean := False;
@@ -393,15 +401,15 @@ package body BSSNBase.Evolve is
             null;
          end resume_tasks;
 
-         entry sync_tasks when pause_task'count = num_tasks is
+         entry resume_main when pause_task'count = num_tasks is
          begin
             null;
-         end sync_tasks;
+         end resume_main;
 
-         procedure stop is
+         entry request_stop when pause_task'count = num_tasks is
          begin
             stop_tasks := True;
-         end stop;
+         end request_stop;
 
          function should_stop Return Boolean is
          begin
@@ -476,7 +484,6 @@ package body BSSNBase.Evolve is
             when whoops : others =>
                Put_Line ("> Exception raised in task body");
                Put_Line (Ada.Exceptions.Exception_Information (whoops));
-               report_elapsed_cpu (grid_point_num, num_loop);
                halt (1);
 
       end SlaveTask;
@@ -495,30 +502,10 @@ package body BSSNBase.Evolve is
 
       end prepare_slaves;
 
-      procedure release_slaves is
-      begin
-
-         -- need this to force all tasks to pause at the very last pause
-         -- before the "exit when ..." line in the main task loop (i.e., after step 14)
-         -- doing so then ensures each task catches the "should_stop" condition
-
-         for i in 1..21 loop          -- there are 22 pause_task's in the SlaveTask main loop
-
-            task_control.sync_tasks;
-            task_control.resume_tasks;
-
-         end loop;
-
-         task_control.sync_tasks;
-         task_control.stop;           -- all tasks sitting on the last pause_task, can now set the stop_task flag
-         task_control.resume_tasks;   -- task restarts and then hits the "exit when" test
-
-      end release_slaves;
-
       procedure advance_slaves is
       begin
 
-         task_control.sync_tasks;
+         task_control.resume_main;
          task_control.resume_tasks;  -- one for each pause in the main task loop
 
       end advance_slaves;
@@ -551,7 +538,7 @@ package body BSSNBase.Evolve is
          --    halt;
          -- end;
 
-         advance_slaves;         -- Runge-Kutta step
+         advance_slaves;               -- do one sub-step of Runge-Kutta
 
       end runge_kutta_step;
 
@@ -560,16 +547,24 @@ package body BSSNBase.Evolve is
 
          -- 4th order RK ---
 
-         advance_slaves;         -- prepare for a new Runge-Kutta step
+         advance_slaves;               -- prepare for a new Runge-Kutta step
 
-         runge_kutta_step;       -- the four Runge-Kutta steps
+         runge_kutta_step;             -- the four sub-steps of one Runge-Kutta step
          runge_kutta_step;
          runge_kutta_step;
          runge_kutta_step;
 
-         advance_slaves;         -- complete the Runge-Kutta step
+         advance_slaves;               -- complete the Runge-Kutta step
 
       end evolve_one_step;
+
+      procedure release_slaves is
+      begin
+
+         task_control.request_stop;
+         evolve_one_step;              -- one extra step to flush out tasks
+
+      end release_slaves;
 
       looping : Boolean;
 
@@ -596,7 +591,7 @@ package body BSSNBase.Evolve is
       write_summary;
       write_history;
 
-      reset_elapsed_cpu;
+      beg_timer;
 
       loop
 
@@ -633,6 +628,8 @@ package body BSSNBase.Evolve is
 
       end loop;
 
+      end_timer;
+
       release_slaves;
 
       write_summary_trailer;
@@ -643,7 +640,6 @@ package body BSSNBase.Evolve is
          when whoops : others =>
             Put_Line ("> Exception raised in evolve_data_prot_object");
             Put_Line (Ada.Exceptions.Exception_Information (whoops));
-            report_elapsed_cpu (grid_point_num, num_loop);
             halt (1);
 
    end evolve_data_prot_object;
@@ -808,7 +804,7 @@ package body BSSNBase.Evolve is
       write_summary;
       write_history;
 
-      reset_elapsed_cpu;
+      beg_timer;
 
       loop
 
@@ -845,6 +841,8 @@ package body BSSNBase.Evolve is
 
       end loop;
 
+      end_timer;
+
       write_summary_trailer;
 
       report_elapsed_cpu (grid_point_num, num_loop);
@@ -853,7 +851,6 @@ package body BSSNBase.Evolve is
          when whoops : others =>
             Put_Line ("> Exception raised in evolve_data_rendezvous");
             Put_Line (Ada.Exceptions.Exception_Information (whoops));
-            report_elapsed_cpu (grid_point_num, num_loop);
             halt (1);
 
    end evolve_data_transient_tasks;
@@ -950,7 +947,6 @@ package body BSSNBase.Evolve is
             when whoops : others =>
                Put_Line ("> Exception raised in task body");
                Put_Line (Ada.Exceptions.Exception_Information (whoops));
-               report_elapsed_cpu (grid_point_num, num_loop);
                halt (1);
 
       end SlaveTask;
@@ -1033,7 +1029,7 @@ package body BSSNBase.Evolve is
       write_summary;
       write_history;
 
-      reset_elapsed_cpu;
+      beg_timer;
 
       loop
 
@@ -1070,6 +1066,8 @@ package body BSSNBase.Evolve is
 
       end loop;
 
+      end_timer;
+
       release_slaves;
 
       write_summary_trailer;
@@ -1080,7 +1078,6 @@ package body BSSNBase.Evolve is
          when whoops : others =>
             Put_Line ("> Exception raised in evolve_data_rendezvous");
             Put_Line (Ada.Exceptions.Exception_Information (whoops));
-            report_elapsed_cpu (grid_point_num, num_loop);
             halt (1);
 
    end evolve_data_sync_barrier;

@@ -5,20 +5,17 @@ package Support is
    type Real is digits 15;  -- on macOS arm64 max. of 15 decimal digits
    -- type Real is digits 18;  -- on Intel x86_64 can have 18 decimal digits
 
-   huge_real      : Constant := 66.6e66;
-   half_huge_real : Constant := 33.3e66;
+   function "+" (Left : Integer; Right : Real) return Real;
+   function "+" (Left : Real; Right : Integer) return Real;
 
-	function "+" (Left : Integer; Right : Real) return Real;
-	function "+" (Left : Real; Right : Integer) return Real;
+   function "-" (Left : Integer; Right : Real) return Real;
+   function "-" (Left : Real; Right : Integer) return Real;
 
-	function "-" (Left : Integer; Right : Real) return Real;
-	function "-" (Left : Real; Right : Integer) return Real;
+   function "*" (Left : Integer; Right : Real) return Real;
+   function "*" (Left : Real; Right : Integer) return Real;
 
-	function "*" (Left : Integer; Right : Real) return Real;
-	function "*" (Left : Real; Right : Integer) return Real;
-
-	function "/" (Left : Integer; Right : Real) return Real;
-	function "/" (Left : Real; Right : Integer) return Real;
+   function "/" (Left : Integer; Right : Real) return Real;
+   function "/" (Left : Real; Right : Integer) return Real;
 
    function "<" (Left : Real; Right : Integer) return Boolean;
    function "<" (Left : Integer; Right : Real) return Boolean;
@@ -26,11 +23,11 @@ package Support is
    function ">" (Left : Real; Right : Integer) return Boolean;
    function ">" (Left : Integer; Right : Real) return Boolean;
 
-	function max (a : in Real; b : in Real) return Real;
-	function min (a : in Real; b : in Real) return Real;
+   function max (a : in Real; b : in Real) return Real;
+   function min (a : in Real; b : in Real) return Real;
 
-	function max (a : in Integer; b : in Integer) return Integer;
-	function min (a : in Integer; b : in Integer) return Integer;
+   function max (a : in Integer; b : in Integer) return Integer;
+   function min (a : in Integer; b : in Integer) return Integer;
 
    function round (item : Real) return Integer;
    function trunc (item : Real) return Integer;

@@ -17,7 +17,7 @@ chosen the "d" symbol to denote partial derivatives.
 Note that the intermediate symbols are not all that important. The important symbols are
 the Cadabra (first) and Ada (last) symbols.
 
-The following lines were copied from the file code/template/include/local-data.ad.
+The following lines were copied from the file code/templates/include/local-data.ad.
 
    -- R_{a b}      --> Rab --> Rab (ab)
 
@@ -42,3 +42,36 @@ The following lines were copied from the file code/template/include/local-data.a
    -- \partial_{a}{ABar_{b c}} --> dABar_{b c a} --> ABarbca --> ABar_bca --> d1ABar (a)(bc)
 
    -- \partial_{a}{GammaBar^{b}} --> dGi^{b}_{a} --> Giba --> Gi_ba --> d1Gi (a)(b)
+
+-------------------------------------------------------------------------------------------------
+
+Note also that all symmetric 3x3 matrics are stored in 1-dimensional arrays.
+This is done using Ada's type system. A symmetric type is created using
+
+   type symmetric is (xx,xy,xz,yy,yz,zz);  -- for symmetric 3x3 arrays
+
+An Ada type for the metric at a point is then defined using
+
+   type MetricPointArray is Array (symmetric) of Real;
+
+An object of that type is created using
+
+   gab : MetricPointArray;
+
+The components of gab can be accessed using gab(xx) for g_ab(x,x) and gab(xy) for g_ab(x,y) etc.
+
+More types are created that allow objects to be stored at all grid points on a 3-dimensional grid.
+So the 3d metric on the grid (not just at a point) can be accessed using
+
+   gab (i,j,k)(xx) or gab (i,j,k)(xz) etc.
+
+where (i,j,k) are the indices of the grid point.
+
+The full definitions of these types and their use in defining objects of those types can be found
+in
+
+   adm/ocde/src/admbase.ads
+   bssn/code/src/bssnnase.ads
+
+The type system is one of Ada's strengths. It's extremely useful in making sure that 'apples' and
+'oranges' are never accidentally mixed (so easy to do in C and Fortran and often very hard to track down).

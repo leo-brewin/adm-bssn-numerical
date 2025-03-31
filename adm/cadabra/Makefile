@@ -17,7 +17,7 @@ adm-eqtns:
 	@ make .adm-eqtns
 .adm-eqtns: adm-eqtns.tex shared.py
 	@ echo "> cadabra adm-eqtns ..."
-	@ cdblatex.sh -s -i adm-eqtns &> adm-eqtns.cdblog
+	@ ${CDBLATEX} -s -i adm-eqtns &> adm-eqtns.cdblog
 	@ touch .adm-eqtns
 #-------------------------------------------------------------------------------
 adm-code:
@@ -25,23 +25,21 @@ adm-code:
 	@ make .adm-code
 .adm-code: adm-code.tex shared.py
 	@ echo "> cadabra adm-code ..."
-	@ cdblatex.sh -s -i adm-code &> adm-code.cdblog
+	@ ${CDBLATEX} -s -i adm-code &> adm-code.cdblog
 	@ reformat.sh
-	@ mkdir -p              ../code/template/code-ada
-	@ cp -rf code-ada/*.ad  ../code/template/code-ada/.
 	@ touch .adm-code
 #-------------------------------------------------------------------------------
 merge:
 	@echo "> merge ..."
-	@(cd ../code/template; merge.sh)
+	@(cd ../code/templates; merge.sh)
 #-------------------------------------------------------------------------------
 code:
 	@echo "> compile ..."
 	@(cd ../code; build.sh)
 #-------------------------------------------------------------------------------
 %:
-	@ echo "> cdblatex.sh $@ ..."
-	@ cdblatex.sh -T -s -i $@ &> $@.cdblog
+	@ echo "> cadabra $@ ..."
+	@ ${CDBLATEX} -T -s -i $@ &> $@.cdblog
 	@ # echo " -->"`cputime -i $@.cdblog`
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> $@.texlog
 	@ touch .$@
@@ -51,8 +49,6 @@ rm-dot:
 	  do \
 	     rm -rf .$${file}; \
 	  done
-	@ rm -rf .[a-z]*.lb
-	@ rm -rf .merged.tex .tmp.txt
 #-------------------------------------------------------------------------------
 clean:
 	@ for file in $(TARGETS); \
@@ -68,8 +64,7 @@ veryclean:
 		  rm -rf $${file}.cdbidx $${file}.cdbtxt $${file}.cdblog; \
 		  rm -rf $${file}.py; \
 	  done
-	@ rm -rf code-c/*.c code-ada/*.ad
-	@ rm -rf .merged.tex .tmp.txt
+	@ rm -rf code-c/*.c
 #-------------------------------------------------------------------------------
 pristine:
 	@ make rm-dot

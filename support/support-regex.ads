@@ -1,5 +1,8 @@
 package Support.RegEx is
 
+   fail_integer : Constant := -333;
+   fail_real    : Constant := -333.3e33;
+
    -- some useful regex's
    --
    -- re_intg  : String := "([-+]?[0-9]+)";
@@ -25,25 +28,24 @@ package Support.RegEx is
                   the_regex : String;
                   the_group : Integer;
                   the_match : Integer := 1;
-                  fail      : Integer := -333) return Integer;
+                  fail      : Integer := fail_integer) return Integer;
 
    -- find a real number within a string
    function grep (the_line  : String;
                   the_regex : String;
                   the_group : Integer;
                   the_match : Integer := 1;
-                  fail      : Real := -half_huge_real) return Real;
+                  fail      : Real := fail_real) return Real;
 
-   -- LCB: use this only to read string like "--target=True" or "--target=False" and versions thereof
-   --      to test if a string matches a regex use the function regex_match below
+   -- use this only to read string like "--target=True" or "--target=False" and versions thereof
+   -- to test if a string matches a regex use the function "regex_match" below
    function grep (the_line  : String;
                   the_regex : String;
-                  the_group : Integer ; -- := 1;  -- temporary fix to catch codes that use the old version of lcb-regex
-                  the_match : Integer ; -- := 1;  -- for those codes that fail, replace grep (...) with regex_match (...)
-                                                  -- after I've found and fixed all codes I will return to the optional args
+                  the_group : Integer;
+                  the_match : Integer := 1;
                   fail      : Boolean := False) return Boolean;
 
-   -- LCB: use this to match a target against a regex
+   -- use this to match a target against a regex
    function regex_match (the_line  : String;
                          the_regex : String) return Boolean;
 

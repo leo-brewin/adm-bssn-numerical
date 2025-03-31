@@ -13,6 +13,4 @@ project BSSNInitial is
    package Binder   renames Common.Binder;
    package Linker   renames Common.Linker;
 
-   package Pretty_Printer renames Common.Pretty_Printer;
-
 end BSSNInitial;

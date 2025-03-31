@@ -3,6 +3,6 @@
 mkdir -p code-c
 mkdir -p code-ada
 
-mkdir -p ../code/template/code-ada/
+mkdir -p ../code/templates/code-ada/
 
 make all

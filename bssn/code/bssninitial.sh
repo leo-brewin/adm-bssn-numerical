@@ -7,7 +7,7 @@ if [[ $1 = '--Help' ]]; then
 
 fi
 
-gprbuild -p -P bssninitial.gpr || exit
+build.sh bssninitial || exit
 
 rm -rf data
 mkdir -p data

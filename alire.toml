@@ -1,0 +1,11 @@
+name = "no_crate"
+description = "A tojan crate just to get the Ada toolchain installed"
+version = "0.1.0-dev"
+
+authors = ["Leo Brewin"]
+maintainers = ["Leo Brewin <Leo.Brewin@monash.edu>"]
+licenses = "MIT OR Apache-2.0 WITH LLVM-exception"
+website = ""
+tags = []
+
+executables = ["no_crate"]

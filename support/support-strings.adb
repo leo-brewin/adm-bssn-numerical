@@ -60,12 +60,6 @@ package body Support.Strings is
       return dashes;
    end dash;
 
-   function rep (source : Character; count : in integer) return string is
-      the_text : constant string(1..count) := (others => source);
-   begin
-      return the_text;
-   end rep;
-
    function str (source : in Real;
                  width  : in Integer := 10) return string is
       result : string(1..width);
@@ -304,7 +298,6 @@ package body Support.Strings is
    end lower_case;
 
    function upper_case (the_string : String) return String is
-      the_uc_string : String := the_string;
    begin
       return Ada.Characters.Handling.To_Upper (the_string);
    end upper_case;
@@ -315,6 +308,7 @@ package body Support.Strings is
    end lower_case;
 
    ------------------------------------------------------------------------------
+
    -- returns true only when the content of the two words are exactly equal
 
    function str_match (left : String; right : String) return Boolean is
@@ -494,157 +488,6 @@ package body Support.Strings is
       return result(result'first..result'first+get_strlen(result)-1);
    end cut;
 
-   function cut(the_char : character) return string is
-      result : string(1..1);
-   begin
-      result(1) := the_char;
-      return result;
-   end cut;
-
-   function "=" (left : string; right : string) return boolean is
-      tmp_left  : constant string := cut(left);
-      tmp_right : constant string := cut(right);
-      len_left  : integer;
-      len_right : integer;
-   begin
-      len_left := get_strlen(tmp_left);
-      len_right := get_strlen(tmp_right);
-      if len_left /= len_right then
-         return false;
-      else
-         -- can't use the following in this "=" function as that would be an infinite recursion
-         -- if tmp_left = tmp_right
-         --    then return true;
-         --    else return false;
-         -- end if;
-         for i in tmp_left'range loop
-            if tmp_left(i) /= tmp_right(i) then -- assume both strings have 'first = 1
-               return false;
-            end if;
-         end loop;
-         return true;
-      end if;
-   end "=";
-
-   ------------------------------------------------------------------------------------------------
-
-   procedure tex_format (result : out String; num : Real; n, m : Integer) is
-   begin
-      writestr (result, str (num, n, m));
-      trim (result);
-   end tex_format;
-
-   procedure tex_format (result : out String; num : Real; n : Integer) is
-      i              : Integer;
-      tmp            : Real;
-   	the_num        : Real;
-   	is_negative    : Boolean := False;
-      log10          : Integer;
-      tmp_01, tmp_02 : String (1 .. 80);
-   begin
-
-   	the_num := num;
-
-   	-- without this test, negative numbers would be returned with the wrong exponent
-   	-- (e.g., -6.7e-2 would be returned as -6.7x10^{-1})
-
-   	if the_num < 0 then
-   		is_negative := True;
-   		the_num := -the_num;
-   	end if;
-
-      -- this routine will only be called very occassionaly so we can aford some
-      -- computational inefficiency
-
-      -- log10 := Integer (Log (abs (the_num)) / Log (10.0e0)); -- no, requires the whole maths library
-      -- log10 := Real'Exponent(the_num); -- no, yields exponent wrt Machine_Radix ie. base 2
-
-      if the_num > 10.0 then
-         tmp := the_num;
-         log10 := 0;
-         while (tmp > 10.0) and (log10 < 4933) loop -- 4932 = largest exponent for 18 dec. digits
-            tmp := tmp/10.0;
-            log10 := log10+1;
-         end loop;
-      elsif the_num < 1.0 then
-         tmp := 1.0e0/the_num;
-         log10 := -1;
-         while (tmp > 10.0) and (log10 > -4933) loop
-            tmp := tmp/10.0;
-            log10 := log10-1;
-         end loop;
-      else
-         log10 := 0;
-      end if;
-      if log10 = -4933 then
-         log10 := 0;
-         the_num := 0.0;
-      end if;
-
-      if log10 = 0 then
-
-   		if is_negative
-            then writestr (tmp_01, str (-the_num, (n + 7)));
-   		   else writestr (tmp_01, str ( the_num, (n + 7)));
-   		end if;
-         trim (tmp_01);
-         i := get_strlen (tmp_01);
-         set_strlen (tmp_01, max (0, i - 4)); --  strips off trailing e+12 exponent
-         writestr (result, cut(tmp_01));
-         trim (result);
-
-      else
-
-   		if is_negative
-            then writestr (tmp_01, str (-the_num, (n + 7)));
-   		   else writestr (tmp_01, str ( the_num, (n + 7)));
-   		end if;
-         if log10 < 0
-            then writestr (tmp_02, '-' & str (-log10, 0));
-            else writestr (tmp_02, '+' & str ( log10, 0));
-         end if;
-         trim (tmp_01);
-         trim (tmp_02);
-         i := get_strlen (tmp_01);
-         set_strlen (tmp_01, max (0, i - 4)); --  strips off trailing e+12 exponent
-         writestr (result, cut(tmp_01) & "\times10^{" & cut(tmp_02) & '}');
-         trim (result);
-
-      end if;
-
-   end tex_format;
-
-   procedure tex_format (result : out String; num : Integer; n : Integer) is
-      tmp : string := spc (n);
-   begin
-
-      Put (tmp,num);
-      set_strlen (result,n);
-      writestr (result, trim(tmp,left));
-
-   end tex_format;
-
-   function tex_format (num : Real; n, m : Integer) return String is
-   begin
-      return trim (str (num, n, m) );
-   end tex_format;
-
-   function tex_format (num : Real; n : Integer) return String is
-      result : String (1..80);
-   begin
-      tex_format (result,num,n);
-      return trim (result);
-   end tex_format;
-
-   function tex_format (num : Integer; n : Integer) return String is
-      tmp : string := spc (n);
-   begin
-
-      Put(tmp,num);
-      return trim(tmp,left);
-
-   end tex_format;
-
    ------------------------------------------------------------------------------------------------
 
    procedure readstr(source :     string;
@@ -703,24 +546,24 @@ package body Support.Strings is
 
    ------------------------------------------------------------------------------------------------
 
-   function readstr (the_string : String) return Integer is
+   function readstr (source : String) return Integer is
       the_integer : Integer;
    begin
-      readstr (the_string,the_integer);
+      readstr (source,the_integer);
       return the_integer;
    end readstr;
 
-   function readstr (the_string : String) return Real is
+   function readstr (source : String) return Real is
       the_real : Real;
    begin
-      readstr (the_string,the_real);
+      readstr (source,the_real);
       return the_real;
    end readstr;
 
-   function readstr (the_string : String) return Boolean is
+   function readstr (source : String) return Boolean is
       the_boolean : Boolean;
    begin
-      readstr (the_string,the_boolean);
+      readstr (source,the_boolean);
       return the_boolean;
    end readstr;
 

@@ -7,6 +7,7 @@ Project Common is
 
    package Compiler is
       for Default_Switches ("Ada") use ("-O3","-gnatwA","-gnat2012");
+      -- for Default_Switches ("Ada") use ("-O0","-g","-gnatwA","-gnat2012");
       -- for Switches ("foo.adb") use Compiler'Default_Switches ("Ada") & ("-O1");
       -- for Switches ("bah.adb") use Compiler'Default_Switches ("Ada") &
       --   (
@@ -29,12 +30,5 @@ Project Common is
       -- for Default_Switches ("ada") use ("-dead_strip", "-Wl,-no_pie");  -- Intel
       -- for Linker_Options use ("-lblah"); -- link with these libraries
    end Linker;
-
-   -- run this in the directory that contains build.gpr:
-   --    gnatpp -P build.gpr"
-
-   package Pretty_Printer is
-      for Default_Switches ("ada") use ("--max-line-length=128","--par_threshold=2","--output-dir=pretty");
-   end Pretty_Printer;
 
 end Common;

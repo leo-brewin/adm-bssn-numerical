@@ -7,9 +7,6 @@ package Support.Strings is
 
    function dash (count : in integer) return string;
 
-   function rep (source : Character;
-                 count  : in integer) return string;
-
    function str (source : in Real;
                  width  : in Integer := 10) return String;
 
@@ -61,18 +58,17 @@ package Support.Strings is
    procedure null_string (source : in out unbounded_string);
    function  get_strlen  (source : in unbounded_string) return integer;
 
-   ------------------------------------------------------------------------------------------------
-
    procedure null_string (source : in out string);
-
    function  get_strlen (source : in string) return Integer;
 
    procedure set_strlen (source : in out string;
-   	                   length : in Integer);
+                         length : in Integer);
 
    function centre (the_string : String;
                     the_length : Integer;
                     the_offset : Integer := 0) return String;
+
+   ------------------------------------------------------------------------------------------------
 
    function upper_case (the_char : Character) return Character;
    function lower_case (the_char : Character) return Character;
@@ -80,11 +76,13 @@ package Support.Strings is
    function upper_case (the_string : String) return String;
    function lower_case (the_string : String) return String;
 
+   ------------------------------------------------------------------------------------------------
+
    function str_match      (left : String; right : String) return Boolean;
    function str_match_head (left : String; right : String) return Boolean;
    function sub_str_match  (left : String; offset : Integer; right : String) return Boolean;
 
-   -- procedure to_string (the_string : in out String; the_char : Character);
+   ------------------------------------------------------------------------------------------------
 
    procedure trim_head (the_string : in out String);
    function  trim_head (the_string : String) return String;
@@ -95,20 +93,7 @@ package Support.Strings is
    procedure trim (the_string : in out String);  -- very slow on long lines, avoid/re-write if possible
    function  trim (the_string : String) return String;
 
-   function cut (the_line : string)    return string;
-   function cut (the_char : character) return string;
-
-   function "=" (left : string; right : string) return boolean;
-
-   ------------------------------------------------------------------------------------------------
-
-   procedure tex_format (result : out String; num : Real; n : Integer);
-   procedure tex_format (result : out String; num : Real; n, m : Integer);
-   procedure tex_format (result : out String; num : Integer; n : Integer);
-
-   function tex_format (num : Real; n : Integer)    return String;
-   function tex_format (num : Real; n, m : Integer) return String;
-   function tex_format (num : Integer; n : Integer) return String;
+   function cut (the_line : string) return string;
 
    ------------------------------------------------------------------------------------------------
 
@@ -130,8 +115,8 @@ package Support.Strings is
    procedure writestr (target : out string;
                        source :     string);
 
-   function readstr (the_string : String) return Integer;
-   function readstr (the_string : String) return Real;
-   function readstr (the_string : String) return Boolean;
+   function readstr (source : String) return Integer;
+   function readstr (source : String) return Real;
+   function readstr (source : String) return Boolean;
 
 end Support.Strings;

@@ -1,8 +1,5 @@
 #!/bin/bash
 
-rm -rf ./adm/code/bin   ./adm/code/obj
-rm -rf ./bssn/code/bin  ./bssn/code/obj
-rm -rf ./support/obj
-
-(cd adm;  build.sh)
-(cd bssn; build.sh)
+(cd support;   echo "> compile support ..."; build.sh)
+(cd adm/code;  echo "> compile adm ...";     build.sh)
+(cd bssn/code; echo "> compile bssn ...";    build.sh)

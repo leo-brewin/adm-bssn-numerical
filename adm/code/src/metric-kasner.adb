@@ -12,7 +12,7 @@ package body Metric.Kasner is
 
    package Maths is new Ada.Numerics.Generic_Elementary_Functions (Real); use Maths;
 
-   -- allow the pi to be set on the command line: ---KasnerPi 0.666:0.666:-0.333
+   -- allow the pi to be set on the command line: --KasnerPi 0.666:0.666:-0.333
 
    re_real : String := "([-+]?[0-9]*[.]?[0-9]+([eE][-+]?[0-9]+)?)"; -- note counts as 2 groups (1.234(e+56))
    re_real_seq : String := re_real&":"&re_real&":"&re_real;

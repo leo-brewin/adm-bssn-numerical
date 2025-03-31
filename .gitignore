@@ -13,6 +13,7 @@
 *.cdbtxt
 *.synctex.gz
 LCB.txt
+alire
 private
 sync.sh
 sync-ssd.sh

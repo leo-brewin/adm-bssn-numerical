@@ -54,24 +54,22 @@ bssn-code:
 	        .bssn-eqtns-09 .bssn-eqtns-10 .bssn-eqtns-11\
 	        .bssn-eqtns-12 .bssn-eqtns-14 .bssn-eqtns-20\
 			  .bssn-lapse    .bssn-ricci-scalar .bssn-constraints
-	@ echo "> cdblatex.sh bssn-code ..."
-	@ cdblatex.sh -s -i bssn-code &> bssn-code.cdblog
+	@ echo "> cadabra bssn-code ..."
+	@ ${CDBLATEX} -s -i bssn-code &> bssn-code.cdblog
 	@ reformat.sh
-	@ mkdir -p              ../code/template/code-ada
-	@ cp -rf code-ada/*.ad  ../code/template/code-ada/.
 	@ touch .bssn-code
 #-------------------------------------------------------------------------------
 merge:
 	@ echo "> merge ..."
-	@ (cd ../code/template; merge.sh)
+	@ (cd ../code/templates; merge.sh)
 #-------------------------------------------------------------------------------
 code:
 	@ echo "> compile ..."
 	@ (cd ../code; build.sh)
 #-------------------------------------------------------------------------------
 %:
-	@ echo "> cdblatex.sh $@ ..."
-	@ cdblatex.sh -T -s -i $@ &> $@.cdblog
+	@ echo "> cadabra $@ ..."
+	@ ${CDBLATEX} -T -s -i $@ &> $@.cdblog
 	@ # echo " -->"`cputime -i $@.cdblog`
 	@ pdflatex -halt-on-error -interaction=batchmode $@ &> $@.texlog
 	@ touch .$@
@@ -81,8 +79,6 @@ rm-dot:
 	  do \
 	     rm -rf .$${file}; \
 	  done
-	@ rm -rf .[a-z]*.lb
-	@ rm -rf .merged.tex .tmp.txt
 #-------------------------------------------------------------------------------
 clean:
 	@ for file in $(TARGETS); \
@@ -98,8 +94,7 @@ veryclean:
 		  rm -rf $${file}.cdbidx $${file}.cdbtxt $${file}.cdblog; \
 		  rm -rf $${file}.py; \
 	  done
-	@ rm -rf code-c/*.c code-ada/*.ad
-	@ rm -rf .merged.tex .tmp.txt
+	@ rm -rf code-c/*.c
 #-------------------------------------------------------------------------------
 pristine:
 	@ make rm-dot

@@ -1,15 +1,15 @@
 SHELL = /bin/bash
 #-------------------------------------------------------------------------------
-.PHONY:	adm bssn utilities
+.PHONY:	all adm bssn utilities
 #-------------------------------------------------------------------------------
 TARGETS = adm-bssn-eqtns adm-bssn-plots
 #-------------------------------------------------------------------------------
 all:
 	@ echo "> make install adm bssn ..."
-	@ make install
+	@ (cd utilities; make)
 	@ make adm
 	@ make bssn
-	@ cdblatex.sh -s -i adm-bssn-eqtns &> adm-bssn-eqtns.cdblog
+	@ ${CDBLATEX} -s -i adm-bssn-eqtns &> adm-bssn-eqtns.cdblog
 	@ pdflatex -halt-on-error -interaction=batchmode adm-bssn-plots &> adm-bssn-plots.texlog
 	@ make veryclean
 #-------------------------------------------------------------------------------
@@ -35,16 +35,11 @@ code:
 	@ echo "> make bssn/code ..."
 	@ (cd bssn/code;    make)
 #-------------------------------------------------------------------------------
-install:
-	@ echo "> make intsall ..."
-	@ INSTALL.sh
-#-------------------------------------------------------------------------------
 rm-dot:
-	@ (cd bssn/code/template; make rm-dot)
-	@ (cd bssn/cadabra;       make rm-dot)
-	@ (cd adm/code/template;  make rm-dot)
-	@ (cd adm/cadabra;        make rm-dot)
-	@ rm -rf .[a-z]*.lb
+	@ (cd bssn/code/templates; make rm-dot)
+	@ (cd bssn/cadabra;        make rm-dot)
+	@ (cd adm/code/templates;  make rm-dot)
+	@ (cd adm/cadabra;         make rm-dot)
 #-------------------------------------------------------------------------------
 clean:
 	@ for file in $(TARGETS); \
@@ -65,7 +60,6 @@ pristine:
 	@ make rm-dot
 	@ make veryclean
 	@ rm -rf adm-bssn-*.pdf adm-bssn-*.cdbtex
-	@ (cd support;      make pristine)
 	@ (cd utilities;    make pristine)
 	@ (cd adm/cadabra;  make pristine)
 	@ (cd adm/code;     make pristine)
@@ -76,8 +70,6 @@ github-clean:
 	@ # same as "pristine" but keep the final pdf's
 	@ make rm-dot
 	@ make veryclean
-	@ rm -rf adm-bssn-*.cdbtex
-	@ (cd support;      make pristine)
 	@ (cd utilities;    make pristine)
 	@ (cd adm/cadabra;  make pristine)
 	@ (cd adm/code;     make pristine)

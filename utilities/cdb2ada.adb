@@ -7,9 +7,6 @@ with Support.RegEx;                             use Support.RegEx;
 
 with Ada.Characters.Latin_1;
 
-
-with Ada.Characters.Latin_1;
-
 procedure cdb2ada is
 
    target_line_length : constant := 256;  -- target length of outputlines

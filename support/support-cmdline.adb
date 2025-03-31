@@ -1,20 +1,16 @@
 with Ada.Text_IO;                               use Ada.Text_IO;
 with Ada.Command_Line;                          use Ada.Command_Line;
-with Support.Strings;                           use Support.Strings;
+
 with Support.RegEx;                             use Support.RegEx;
-with Ada.Characters.Latin_1;
 
 package body Support.Cmdline is
-
-   package Integer_IO is new Ada.Text_IO.Integer_IO (Integer);       use Integer_IO;
-   package Boolean_IO is new Ada.Text_IO.Enumeration_IO (Boolean);   use Boolean_IO;
 
    re_quote : String := """([^""]+)""";  -- any characters inside matching quotes
    re_text  : String := "([^ ]+)";  -- any character except a space
    re_intg  : String := "([-+]?[0-9]+)";
    re_real  : String := "([-+]?[0-9]*[.]?[0-9]+([eE][-+]?[0-9]+)?)"; -- note counts as 2 groups (1.234(e+56))
    re_bool  : String := "(True|False|true|false|TRUE|FALSE)";
-   re_space : String := "( *=? *)";  -- the text between the flag and its value
+   re_space : String := "( *=? *)";  -- the text between the flag and its value, allow spaces or =
    ----------------------------------------------------------------------------
 
    function get_command_arg (which_arg : Integer;
@@ -131,7 +127,7 @@ package body Support.Cmdline is
 
       if Argument_Count = 0
          then return default;
-         else return grep (" "&echo_command_line_args," "&target_flag&re_space&re_intg,2,fail=>default);
+         else return grep (" "&echo_command_line_args," ("&target_flag&")"&re_space&re_intg,3,fail=>default);
       end if;
 
    end read_command_arg;
@@ -143,7 +139,7 @@ package body Support.Cmdline is
 
       if Argument_Count = 0
          then return default;
-         else return grep (" "&echo_command_line_args," "&target_flag&re_space&re_real,2,fail=>default);
+         else return grep (" "&echo_command_line_args," ("&target_flag&")"&re_space&re_real,3,fail=>default);
       end if;
 
    end read_command_arg;
@@ -158,11 +154,11 @@ package body Support.Cmdline is
          then return default;
          else
             declare
-               tmp : String := grep (" "&echo_command_line_args," "&target_flag&re_space&re_quote,2,fail=>try_again);
+               tmp : String := grep (" "&echo_command_line_args," ("&target_flag&")"&re_space&re_quote,3,fail=>try_again);
             begin
                if tmp /= try_again
                   then return tmp;
-                  else return grep (" "&echo_command_line_args," "&target_flag&re_space&re_text,2,fail=>default);
+                  else return grep (" "&echo_command_line_args," ("&target_flag&")"&re_space&re_text,3,fail=>default);
                end if;
             end;
       end if;
@@ -175,9 +171,7 @@ package body Support.Cmdline is
    begin
       if Argument_Count = 0
          then return default;
-         -- LCB: temporary fix while tracking down chnges from grep (...) to regex_match (...), see comments in lcb-regex.ads
-         -- else return grep (" "&echo_command_line_args," "&target_flag&re_space&re_bool,2,fail=>default);
-         else return grep (" "&echo_command_line_args," "&target_flag&re_space&re_bool,2,1,fail=>default);
+         else return grep (" "&echo_command_line_args," ("&target_flag&")"&re_space&re_bool,3,fail=>default);
       end if;
 
    end read_command_arg;
@@ -194,7 +188,7 @@ package body Support.Cmdline is
          then return default;
          else
             declare
-               value : String := grep (" "&echo_command_line_args," "&target_flag&re_space&re_text,2,fail=>default_str);
+               value : String := grep (" "&echo_command_line_args," ("&target_flag&")"&re_space&re_text,3,fail=>default_str);
             begin
                return value (1);
             end;

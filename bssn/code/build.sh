@@ -1,5 +1,7 @@
 #!/bin/bash
 
-(cd template; merge.sh)
+(cd templates; merge.sh)
 
-gprbuild -p -P build.gpr
+source ../../alire.ini
+
+gprbuild -p -P build.gpr $*

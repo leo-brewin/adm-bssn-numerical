@@ -1,0 +1,12 @@
+export CDBCLEAN=$PWD/hybrid-latex/scripts/cdbclean.sh
+export CDBCOPY=$PWD/hybrid-latex/scripts/cdbcopy.py
+export CDBLATEX=$PWD/hybrid-latex/scripts/cdblatex.sh
+export CDBPOSTP=$PWD/hybrid-latex/scripts/cdbpostproc.py
+export CDBPREP=$PWD/hybrid-latex/scripts/cdbpreproc.py
+export MRGSRC=$PWD/hybrid-latex/scripts/merge-src.py
+
+export CDBLIB=$PWD/hybrid-latex/python/cdblib.py
+export WRITEC=$PWD/hybrid-latex/python/writecode.py
+
+export TEXINPUTS=$PWD/hybrid-latex/latex/:$TEXINPUTS:
+export PYTHONPATH=$PWD/hybrid-latex/python/:$PYTHONPATH:
