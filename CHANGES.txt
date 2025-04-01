@@ -1,3 +1,15 @@
+-- 01 apr 2025
+
+   I've made many many chages to the workflow. I've also added in more choices
+   for parallel processing on the evolution code.
+
+   1. All Ada codes are now compiled using gprbuild.
+   2. The Makefile's exist only to coordinate the workflow and for basic housekeeping.
+   3. Now uses 'alr' to manage the Ada toolchain. The compile scripts will download the
+      Ada toolchain if it finds 'alr' but not 'gprbuild'.
+   4. The install process was changed to keep all tools (except Cadabra and gprbuild)
+      within the main directory.
+
 -- 05 jun 2024
 
    1. Added the simple program numcpu.adb to report the number of CPUs.

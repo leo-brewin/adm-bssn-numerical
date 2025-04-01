@@ -4,7 +4,7 @@ The are many interactions between the many files that make up this repository. H
 
 ## cadabra/adm-eqtns.tex
 
-Creates a json file that defines all of the ADM initial data and evolution equations in terms of the metric and extrinsic tensors and their partial derivatives.
+Creates a json file that defines all of the ADM initial data and evolution equations in terms of the metric and extrinsic curvature tensors and their partial derivatives.
 
 ```sh
  reads
