@@ -5,17 +5,13 @@ SHELL = /bin/bash
 TARGETS = adm-eqtns adm-code
 #-------------------------------------------------------------------------------
 all:
-	@ make shared.py
+	@ touch shared.cdb # forces old versions of Cadabra < 2.5.12 to update its cache
 	@ for file in $(TARGETS); do make .$${file}; done;
 	@ make veryclean
 #-------------------------------------------------------------------------------
-shared.py: hide/shared.cdb
-	@ echo "> cadabra2python shared ..."
-	@ cadabra2python hide/shared.cdb shared.py
-#-------------------------------------------------------------------------------
 adm-eqtns:
 	@ make .adm-eqtns
-.adm-eqtns: adm-eqtns.tex shared.py
+.adm-eqtns: adm-eqtns.tex shared.cdb
 	@ echo "> cadabra adm-eqtns ..."
 	@ ${CDBLATEX} -s -i adm-eqtns &> adm-eqtns.cdblog
 	@ touch .adm-eqtns
@@ -23,7 +19,7 @@ adm-eqtns:
 adm-code:
 	@ echo "> cadabra adm-code ..."
 	@ make .adm-code
-.adm-code: adm-code.tex shared.py
+.adm-code: adm-code.tex shared.cdb
 	@ echo "> cadabra adm-code ..."
 	@ ${CDBLATEX} -s -i adm-code &> adm-code.cdblog
 	@ reformat.sh
@@ -69,7 +65,6 @@ veryclean:
 pristine:
 	@ make rm-dot
 	@ make veryclean
-	@ rm -rf shared.py
 	@ rm -rf __pycache__
 	@ for file in $(TARGETS); \
 	  do \

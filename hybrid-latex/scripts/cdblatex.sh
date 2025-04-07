@@ -75,16 +75,14 @@ touch $file.cdbtxt
 
 ${CDBPREP} -i $file -m $name            || exit 1
 
-$CDB/cadabra2python $file"_.cdb" $file.py  || exit 3
-
-$Timer $CDB/cadabra2 $file.py > $file"_.txt"   || exit 5
+$Timer $CDB/cadabra2 $file"_.cdb" > $file"_.txt"   || exit 3
 
 iconv -c -f UTF-8 -t ASCII//translit $file"_.txt" > $file.cdbtxt
 
-${CDBPOSTP} $nowarn -i $file $sty       || exit 7
+${CDBPOSTP} $nowarn -i $file $sty       || exit 5
 
 if [[ $skiplatex = "no" ]]; then
-   pdflatex -halt-on-error -interaction=batchmode -synctex=1 $file || exit 9
+   pdflatex -halt-on-error -interaction=batchmode -synctex=1 $file || exit 7
    echo " " # for some silly reason pdfsync forgets a trailing \n
 else
    silent="yes"

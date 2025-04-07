@@ -9,36 +9,32 @@ TARGETS = \
 		bssn-eqtns bssn-code
 #-------------------------------------------------------------------------------
 all:
-	@ make shared.py
+	@ touch shared.cdb # forces old versions of Cadabra < 2.5.12 to update its cache
 	@ for file in $(TARGETS); do make .$${file}; done;
 	@ make veryclean
 #-------------------------------------------------------------------------------
-.bssn-eqtns-09: bssn-eqtns-09.tex shared.py
+.bssn-eqtns-09: bssn-eqtns-09.tex shared.cdb
 	@ make bssn-eqtns-09
-.bssn-eqtns-10: bssn-eqtns-10.tex shared.py
+.bssn-eqtns-10: bssn-eqtns-10.tex shared.cdb
 	@ make bssn-eqtns-10
-.bssn-eqtns-11: bssn-eqtns-11.tex shared.py
+.bssn-eqtns-11: bssn-eqtns-11.tex shared.cdb
 	@ make bssn-eqtns-11
-.bssn-eqtns-12: bssn-eqtns-12.tex shared.py
+.bssn-eqtns-12: bssn-eqtns-12.tex shared.cdb
 	@ make bssn-eqtns-12
-.bssn-eqtns-14: bssn-eqtns-14.tex shared.py
+.bssn-eqtns-14: bssn-eqtns-14.tex shared.cdb
 	@ make bssn-eqtns-14
-.bssn-eqtns-20: bssn-eqtns-20.tex shared.py
+.bssn-eqtns-20: bssn-eqtns-20.tex shared.cdb
 	@ make bssn-eqtns-20
-.bssn-lapse: bssn-lapse.tex shared.py
+.bssn-lapse: bssn-lapse.tex shared.cdb
 	@ make bssn-lapse
-.bssn-ricci-scalar: bssn-ricci-scalar.tex bssn-eqtns-14.tex shared.py
+.bssn-ricci-scalar: bssn-ricci-scalar.tex bssn-eqtns-14.tex shared.cdb
 	@ make bssn-ricci-scalar
-.bssn-constraints: bssn-constraints.tex shared.py
+.bssn-constraints: bssn-constraints.tex shared.cdb
 	@ make bssn-constraints
-#-------------------------------------------------------------------------------
-shared.py: hide/shared.cdb
-	@ echo "> cadabra2python shared ..."
-	@ cadabra2python hide/shared.cdb shared.py
 #-------------------------------------------------------------------------------
 bssn-eqtns:
 	@ make .bssn-eqtns
-.bssn-eqtns: bssn-eqtns.tex  shared.py\
+.bssn-eqtns: bssn-eqtns.tex  shared.cdb\
 	          .bssn-eqtns-09 .bssn-eqtns-10 .bssn-eqtns-11\
 	          .bssn-eqtns-12 .bssn-eqtns-14 .bssn-eqtns-20\
 				 .bssn-lapse .bssn-ricci-scalar .bssn-constraints
@@ -50,7 +46,7 @@ bssn-eqtns:
 bssn-code:
 	@ echo "> cadabra bssn-code ..."
 	@ make .bssn-code
-.bssn-code: bssn-code.tex  shared.py\
+.bssn-code: bssn-code.tex  shared.cdb\
 	        .bssn-eqtns-09 .bssn-eqtns-10 .bssn-eqtns-11\
 	        .bssn-eqtns-12 .bssn-eqtns-14 .bssn-eqtns-20\
 			  .bssn-lapse    .bssn-ricci-scalar .bssn-constraints
@@ -99,7 +95,6 @@ veryclean:
 pristine:
 	@ make rm-dot
 	@ make veryclean
-	@ rm -rf shared.py
 	@ rm -rf __pycache__
 	@ for file in $(TARGETS); \
 	  do \
