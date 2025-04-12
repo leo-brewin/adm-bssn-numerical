@@ -5,7 +5,7 @@ SHELL = /bin/bash
 TARGETS = adm-bssn-eqtns adm-bssn-plots
 #-------------------------------------------------------------------------------
 all:
-	@ echo "> make install adm bssn ..."
+	@ echo "> make adm bssn ..."
 	@ (cd utilities; make)
 	@ make adm
 	@ make bssn

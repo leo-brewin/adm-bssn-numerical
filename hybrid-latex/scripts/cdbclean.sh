@@ -29,4 +29,4 @@ if [[ $file = "<none>" ]]; then
    exit 1;
 fi;
 
-rm -rf $file.log $file.out $file.py $file"_.cdb" $file.cdbidx $file.cdbtxt
+rm -rf $file.log $file.out $file.py $file"_.cdb" $file"_.tex" $file"_.txt" $file.cdbidx $file.cdbtxt
